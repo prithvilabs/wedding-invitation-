@@ -8,28 +8,20 @@ export default function MusicPlayer() {
   const isAudible = isPlaying && !isMuted;
 
   return (
-    <aside className="floating-music-dock" aria-label="Wedding Music Player">
+    <aside className="floating-music-dock" aria-label="Music Control">
       <button
         type="button"
-        className={`floating-music-btn ${isAudible ? 'is-playing' : ''}`}
+        className={`floating-music-icon-btn ${isAudible ? 'is-playing' : 'is-paused'}`}
         id="floatingMusicBtn"
         onClick={toggleMusic}
-        aria-label={isAudible ? "Pause wedding background music" : "Play wedding background music"}
+        aria-label={isAudible ? "Pause wedding music" : "Resume wedding music"}
         aria-pressed={isAudible}
       >
-        <span className="music-icon-pod" aria-hidden="true">
-          {isAudible ? (
-            <Volume2 size={16} strokeWidth={1.75} className="music-svg-icon" />
-          ) : (
-            <VolumeX size={16} strokeWidth={1.75} className="music-svg-icon" />
-          )}
-        </span>
-        <span className="music-equalizer" aria-hidden="true">
-          <i /><i /><i /><i />
-        </span>
-        <span className="music-label">
-          {isAudible ? 'Nadaswaram Playing' : 'Nadaswaram Ambience'}
-        </span>
+        {isAudible ? (
+          <Volume2 size={22} strokeWidth={2} className="music-svg-icon" />
+        ) : (
+          <VolumeX size={22} strokeWidth={2} className="music-svg-icon" />
+        )}
       </button>
     </aside>
   );
