@@ -1,16 +1,21 @@
 import React, { useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
+import { useMusic } from '../../context/MusicContext';
 import openingVideo from '../../assets/wedding-opening.mp4';
 import envelopePoster from '../../assets/envelope_frame_1.jpg';
 
 export default function OpeningVideo({ onComplete, onFallback }) {
   const videoRef = useRef(null);
+  const { playMusic } = useMusic();
   const [isPlaying, setIsPlaying] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
   const [videoError, setVideoError] = useState(false);
 
   const handleStartPlay = () => {
+    // 1. Immediately trigger global background music on first user gesture
+    playMusic();
+
     if (!videoRef.current) return;
     
     setHasStarted(true);
@@ -40,6 +45,7 @@ export default function OpeningVideo({ onComplete, onFallback }) {
   };
 
   const handleVideoEnded = () => {
+    playMusic();
     setTimeout(() => {
       if (onComplete) {
         onComplete();

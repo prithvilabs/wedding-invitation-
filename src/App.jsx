@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { MusicProvider } from './context/MusicContext';
 import OpeningVideo from './components/invitation/OpeningVideo';
 import StaticBackground from './components/invitation/StaticBackground';
 import FloatingRosePetals from './components/invitation/FloatingRosePetals';
@@ -14,7 +15,7 @@ import Events from './sections/Events';
 import RSVP from './sections/RSVP';
 import Footer from './sections/Footer';
 
-export default function App() {
+function WeddingApp() {
   const [sessionKey, setSessionKey] = useState(0);
   const [showVideoIntro, setShowVideoIntro] = useState(true);
 
@@ -57,7 +58,7 @@ export default function App() {
       {/* 3. Top Navigation Bar (Visible after video intro or immediately when navigating) */}
       <Navigation isVisible={!showVideoIntro} />
 
-      {/* 4. Floating Music Controller (Mangala Vathiyam / Tambura Drone) */}
+      {/* 4. Floating Music Controller (Global Audio Controller) */}
       <MusicPlayer />
 
       {/* 5. Main Invitation Content */}
@@ -86,5 +87,13 @@ export default function App() {
         </motion.div>
       </main>
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <MusicProvider>
+      <WeddingApp />
+    </MusicProvider>
   );
 }
