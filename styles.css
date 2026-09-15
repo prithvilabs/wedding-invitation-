@@ -147,6 +147,44 @@ body {
 }
 
 /* ==========================================================================
+   FLOATING FLORAL PARTICLE ANIMATION LAYER (Continuous Delicate Petals)
+   ========================================================================== */
+.floating-petals-stage {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.floating-petal-item {
+  position: absolute;
+  top: 0;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-style: preserve-3d;
+  backface-visibility: visible;
+  will-change: transform, opacity;
+}
+
+.floating-petal-item .petal-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+  filter: drop-shadow(0 4px 8px rgba(35, 5, 12, 0.3));
+}
+
+#mainWebsite {
+  position: relative;
+  z-index: 10;
+}
+
+/* ==========================================================================
    0. CINEMATIC FULLSCREEN OPENING VIDEO INTRO LAYER
    ========================================================================== */
 .opening-video-stage.fullscreen-video-stage {
