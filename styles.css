@@ -147,7 +147,7 @@ body {
 }
 
 /* ==========================================================================
-   FLOATING FLORAL PARTICLE ANIMATION LAYER (Continuous Delicate Petals)
+   FLOATING FLORAL PARTICLE ANIMATION LAYER (Realistic Falling Rose Petals)
    ========================================================================== */
 .floating-petals-stage {
   position: fixed;
@@ -157,6 +157,8 @@ body {
   pointer-events: none;
   z-index: 2;
   overflow: hidden;
+  perspective: 1200px;
+  -webkit-perspective: 1200px;
 }
 
 .floating-petal-item {
@@ -167,7 +169,9 @@ body {
   align-items: center;
   justify-content: center;
   transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
   backface-visibility: visible;
+  -webkit-backface-visibility: visible;
   will-change: transform, opacity;
 }
 
@@ -176,7 +180,7 @@ body {
   height: 100%;
   display: block;
   overflow: visible;
-  filter: drop-shadow(0 4px 8px rgba(35, 5, 12, 0.3));
+  filter: drop-shadow(0 6px 12px rgba(25, 3, 7, 0.45));
 }
 
 #mainWebsite {
