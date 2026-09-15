@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Send, MapPin, ArrowUpRight } from 'lucide-react';
+import { Send, MapPin, ArrowUpRight, Check, X } from 'lucide-react';
 import AnimatedSection from '../animations/AnimatedSection';
 import weddingLogo from '../assets/wedding-logo.png';
 
