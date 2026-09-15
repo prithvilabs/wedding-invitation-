@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { backgroundArtworkVariants, backgroundVeilVariants } from '../../animations/variants';
+import templeGarlandBackdrop from '../../assets/temple-garland-backdrop.png';
 
 /**
  * StaticBackground Layer
@@ -14,6 +15,7 @@ export default function StaticBackground({ sessionKey = 0 }) {
       <motion.div
         key={`artwork-${sessionKey}`}
         className="wedding-artwork-layer"
+        style={{ backgroundImage: `url(${templeGarlandBackdrop})` }}
         variants={backgroundArtworkVariants}
         initial="hidden"
         animate="visible"

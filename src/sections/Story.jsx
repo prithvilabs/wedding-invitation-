@@ -2,6 +2,9 @@ import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useSpring, useMotionValueEvent } from 'framer-motion';
 import { Plane, MapPin } from 'lucide-react';
 import AnimatedSection from '../animations/AnimatedSection';
+import coupleTraditional from '../assets/couple_traditional.jpg';
+import panel3StoryBg from '../assets/panel3_story_bg.jpg';
+import coupleReception from '../assets/couple_reception.jpg';
 
 export default function Story() {
   const sectionRef = useRef(null);
@@ -253,7 +256,7 @@ export default function Story() {
               >
                 <div className="travel-photo-frame">
                   <img
-                    src="assets/couple_traditional.jpg"
+                    src={coupleTraditional}
                     alt="Prithvi and Harshini in Chennai traditional attire"
                     className="travel-photo-img"
                     loading="lazy"
@@ -305,7 +308,7 @@ export default function Story() {
               >
                 <div className="travel-photo-frame">
                   <img
-                    src="assets/panel3_story_bg.jpg"
+                    src={panel3StoryBg}
                     alt="Prithvi and Harshini sharing a laugh during golden hour"
                     className="travel-photo-img"
                     loading="lazy"
@@ -436,7 +439,7 @@ export default function Story() {
               >
                 <div className="travel-photo-frame">
                   <img
-                    src="assets/couple_reception.jpg"
+                    src={coupleReception}
                     alt="Prithvi and Harshini together celebrating"
                     className="travel-photo-img"
                     loading="lazy"
