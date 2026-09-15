@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import OpeningVideo from './components/invitation/OpeningVideo';
 import StaticBackground from './components/invitation/StaticBackground';
-import FloatingPetals from './components/invitation/FloatingPetals';
+import FloatingRosePetals from './components/invitation/FloatingRosePetals';
 import Navigation from './components/layout/Navigation';
 import MusicPlayer from './components/layout/MusicPlayer';
 import Hero from './sections/Hero';
@@ -51,8 +51,8 @@ export default function App() {
       {/* 2. Persistent Background Artwork Layer with progressive veil reveal */}
       <StaticBackground sessionKey={sessionKey} />
 
-      {/* Reusable Continuous Floral Particle Animation (Floating Petals) */}
-      <FloatingPetals />
+      {/* Reusable Continuous Photorealistic Rose Petal Animation */}
+      <FloatingRosePetals />
 
       {/* 3. Top Navigation Bar (Visible after video intro or immediately when navigating) */}
       <Navigation isVisible={!showVideoIntro} />
