@@ -549,7 +549,7 @@ body {
   font-family: var(--font-script);
   font-size: clamp(1.35rem, 3.5vw, 3.8rem);
   font-weight: 400;
-  color: #b86e7c;
+  color: #123C3A;
   line-height: 1;
   padding: 0 clamp(2px, 0.5vw, 6px);
   white-space: nowrap;
