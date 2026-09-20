@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MusicProvider } from './context/MusicContext';
-import OpeningVideo from './components/invitation/OpeningVideo';
+import TempleEntranceScene from './scenes/TempleEntranceScene';
 import StaticBackground from './components/invitation/StaticBackground';
 import FloatingRosePetals from './components/invitation/FloatingRosePetals';
 import Navigation from './components/layout/Navigation';
 import MusicPlayer from './components/layout/MusicPlayer';
-import Hero from './sections/Hero';
 import ScratchCard from './sections/ScratchCard';
 import Countdown from './sections/Countdown';
 import Families from './sections/Families';
@@ -17,34 +16,20 @@ import Footer from './sections/Footer';
 
 function WeddingApp() {
   const [sessionKey, setSessionKey] = useState(0);
-  const [showVideoIntro, setShowVideoIntro] = useState(true);
+  const [showTempleEntrance, setShowTempleEntrance] = useState(true);
 
-  const handleVideoComplete = () => {
-    setShowVideoIntro(false);
-  };
-
-  const handleEnterWebsite = () => {
-    const scratchSection = document.getElementById('scratchSection');
-    if (scratchSection) {
-      scratchSection.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-  const handleReplay = () => {
-    setShowVideoIntro(true);
-    setSessionKey((prev) => prev + 1);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  const handleEntranceComplete = () => {
+    setShowTempleEntrance(false);
   };
 
   return (
     <div className="wedding-app-root">
-      {/* 1. Cinematic Opening Video Intro Layer */}
+      {/* 1. Scene 1 — Cinematic Temple Entrance (diya, bells, doors, golden light, reveal) */}
       <AnimatePresence mode="wait">
-        {showVideoIntro && (
-          <OpeningVideo
-            key={`video-intro-${sessionKey}`}
-            onComplete={handleVideoComplete}
-            onFallback={handleVideoComplete}
+        {showTempleEntrance && (
+          <TempleEntranceScene
+            key={`temple-entrance-${sessionKey}`}
+            onComplete={handleEntranceComplete}
           />
         )}
       </AnimatePresence>
@@ -55,27 +40,20 @@ function WeddingApp() {
       {/* Reusable Continuous Photorealistic Rose Petal Animation */}
       <FloatingRosePetals />
 
-      {/* 3. Top Navigation Bar (Visible after video intro or immediately when navigating) */}
-      <Navigation isVisible={!showVideoIntro} />
+      {/* 3. Top Navigation Bar (Visible after the temple entrance completes) */}
+      <Navigation isVisible={!showTempleEntrance} />
 
       {/* 4. Floating Music Controller (Global Audio Controller) */}
       <MusicPlayer />
 
       {/* 5. Main Invitation Content */}
       <main id="mainWebsite">
-        {/* Hero Section (Contains Left/Right Animated Names, Weds, Crest & CTA) */}
-        <Hero
-          key={`hero-${sessionKey}`}
-          onExplore={handleEnterWebsite}
-          onReplay={handleReplay}
-        />
-
         {/* Seamlessly Flowing Wedding Sections */}
         <motion.div
           key={`sections-${sessionKey}`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 1.0, delay: 2.8 }}
+          transition={{ duration: 0.8, delay: 0.1 }}
         >
           <ScratchCard />
           <Countdown />

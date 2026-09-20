@@ -1,0 +1,390 @@
+/* ==========================================================================
+   SCENE 1 — GRAND TEMPLE ENTRANCE
+   Layered SVG/CSS cinematic sequence: darkness -> diya -> bells -> doors
+   open -> golden light -> camera push -> typography -> ceremonial CTA.
+   ========================================================================== */
+
+.temple-entrance-stage {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  width: 100vw;
+  height: 100dvh;
+  overflow: hidden;
+  background: #0a0303;
+  touch-action: none;
+}
+
+.temple-camera-frame {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 55%;
+  will-change: transform;
+}
+
+.temple-bg-gradient {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 90% at 50% 38%, rgba(74, 20, 14, 0.55) 0%, rgba(20, 6, 5, 0.92) 55%, #05010 100%),
+    linear-gradient(#0a0303, #05010101);
+  background-color: #060202;
+}
+
+/* ---- Gopuram silhouette + pillars ---- */
+.temple-gopuram-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+.temple-gopuram-svg {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: clamp(500px, 90vw, 1180px);
+  height: 62%;
+}
+
+.temple-pillar-layer {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: clamp(30px, 8vw, 140px);
+  z-index: 2;
+  pointer-events: none;
+}
+.temple-pillar-left { left: 0; }
+.temple-pillar-right { right: 0; transform: scaleX(-1); }
+.temple-pillar-layer svg { width: 100%; height: 100%; }
+
+/* ---- Toranam garland ---- */
+.temple-toranam-wrap {
+  position: absolute;
+  top: clamp(30px, 8vh, 70px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: clamp(320px, 44vw, 720px);
+  z-index: 6;
+  pointer-events: none;
+}
+.temple-toranam-svg { width: 100%; height: auto; display: block; }
+
+/* ---- Doors ---- */
+.temple-doors-layer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  z-index: 5;
+  perspective: 1300px;
+  pointer-events: none;
+}
+.temple-door-shell {
+  width: clamp(200px, 19vw, 320px);
+  height: 78%;
+  margin-top: auto;
+  margin-bottom: 0;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  transition: transform 2.6s cubic-bezier(0.45, 0, 0.2, 1), opacity 2.6s ease-in-out;
+  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.6));
+}
+.temple-door-shell.door-left { transform-origin: left center; margin-right: 1px; }
+.temple-door-shell.door-right { transform-origin: right center; margin-left: 1px; }
+.temple-door-shell.door-left.is-open { transform: rotateY(-98deg); opacity: 0.55; }
+.temple-door-shell.door-right.is-open { transform: rotateY(98deg); opacity: 0.55; }
+.temple-door-svg { width: 100%; height: 100%; display: block; }
+
+/* ---- Golden light bloom behind the door seam ---- */
+.temple-light-bloom {
+  position: absolute;
+  top: 8%;
+  bottom: 10%;
+  left: 50%;
+  width: 2%;
+  transform: translateX(-50%);
+  z-index: 4;
+  opacity: 0;
+  background: radial-gradient(60% 100% at 50% 45%, rgba(255, 236, 179, 0.95) 0%, rgba(255, 200, 100, 0.55) 40%, rgba(255, 200, 100, 0) 75%);
+  filter: blur(6px);
+  transition: width 2.6s cubic-bezier(0.45, 0, 0.2, 1), opacity 1.8s ease-in-out, filter 2.6s ease-in-out;
+  pointer-events: none;
+}
+.temple-light-bloom.is-sliver { opacity: 0.55; width: 3%; }
+.temple-light-bloom.is-expanded { opacity: 1; width: 85%; filter: blur(22px); }
+
+/* ---- Gold dust particles ---- */
+.temple-dust-particles {
+  position: absolute;
+  inset: 0;
+  z-index: 7;
+  opacity: 0;
+  transition: opacity 1.8s ease;
+  pointer-events: none;
+}
+.temple-dust-particles.is-active { opacity: 1; }
+.dust-mote {
+  position: absolute;
+  bottom: 12%;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff6dd 0%, #dfb35a 60%, transparent 100%);
+  opacity: 0;
+  animation: dust-rise linear infinite;
+}
+@keyframes dust-rise {
+  0% { opacity: 0; transform: translate(0, 0); }
+  12% { opacity: 0.9; }
+  85% { opacity: 0.5; }
+  100% { opacity: 0; transform: translate(12px, -240px); }
+}
+
+/* ---- Lamp (kuthuvilakku) ---- */
+.temple-lamp-wrap {
+  position: absolute;
+  bottom: 2%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: clamp(70px, 13vw, 120px);
+  z-index: 8;
+  pointer-events: none;
+}
+.temple-lamp-svg { width: 100%; height: auto; display: block; }
+.lamp-glow, .lamp-flame, .lamp-flame-core { opacity: 0; transition: opacity 0.6s ease; }
+.lamp-glow.is-lit { opacity: 0.9; animation: lamp-glow-pulse 2.4s ease-in-out infinite; }
+.lamp-flame.is-lit { opacity: 1; animation: flame-flicker 1.6s ease-in-out infinite; }
+.lamp-flame-core.is-lit { opacity: 1; animation: flame-flicker 1.3s ease-in-out infinite reverse; }
+@keyframes flame-flicker {
+  0%, 100% { transform: scaleY(1) scaleX(1) skewX(0deg); }
+  20% { transform: scaleY(1.06) scaleX(0.97) skewX(1deg); }
+  45% { transform: scaleY(0.94) scaleX(1.03) skewX(-1.5deg); }
+  70% { transform: scaleY(1.08) scaleX(0.95) skewX(1deg); }
+}
+@keyframes lamp-glow-pulse {
+  0%, 100% { opacity: 0.75; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.08); }
+}
+
+/* ---- Temple bells ---- */
+.temple-bells-row {
+  position: absolute;
+  top: clamp(10px, 4vh, 36px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: clamp(24px, 6vw, 56px);
+  z-index: 6;
+  pointer-events: none;
+}
+.temple-bell-svg {
+  width: clamp(24px, 4.2vw, 40px);
+  height: auto;
+  transform-origin: 50% 4%;
+}
+.temple-bell-svg[data-swinging='true'] {
+  animation: bell-swing 2.4s ease-in-out infinite;
+}
+@keyframes bell-swing {
+  0%, 100% { transform: rotate(-4deg); }
+  50% { transform: rotate(4deg); }
+}
+
+/* ---- Floor glow (anchors the composition on wide desktop viewports) ---- */
+.temple-floor-glow {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: min(1400px, 96vw);
+  height: 14%;
+  transform: translateX(-50%);
+  z-index: 3;
+  pointer-events: none;
+  background: radial-gradient(50% 100% at 50% 100%, rgba(223, 179, 90, 0.16) 0%, rgba(223, 179, 90, 0) 70%);
+  opacity: 0;
+  transition: opacity 2.6s ease-in-out;
+}
+.temple-floor-glow.is-active { opacity: 1; }
+
+/* ---- Vignette + grain ---- */
+.temple-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 9;
+  pointer-events: none;
+  background: radial-gradient(120% 100% at 50% 50%, transparent 45%, rgba(0, 0, 0, 0.75) 100%);
+}
+.temple-film-grain {
+  position: absolute;
+  inset: 0;
+  z-index: 9;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---- Typography ---- */
+.temple-typography {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 clamp(20px, 8vw, 60px);
+  pointer-events: none;
+}
+.temple-typography > * {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 1.1s cubic-bezier(0.16, 1, 0.3, 1), transform 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.temple-typography.is-visible .temple-blessing-line { opacity: 1; transform: translateY(0); transition-delay: 0s; }
+.temple-typography.is-visible .temple-names-line { opacity: 1; transform: translateY(0); transition-delay: 0.85s; }
+.temple-typography.is-visible .temple-date-line { opacity: 1; transform: translateY(0); transition-delay: 1.7s; }
+
+.temple-blessing-line {
+  font-family: var(--font-display, 'Cinzel', serif);
+  font-size: clamp(10px, 2.2vw, 13px);
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--gold-light, #f7e7c4);
+  line-height: 1.8;
+  margin-bottom: clamp(14px, 3vh, 26px);
+}
+.temple-names-line {
+  font-family: var(--font-script, 'Pinyon Script', cursive);
+  font-size: clamp(34px, 8vw, 72px);
+  color: var(--gold-foil, #dfb35a);
+  text-shadow: 0 0 30px rgba(223, 179, 90, 0.45);
+  margin-bottom: clamp(14px, 3vh, 26px);
+  line-height: 1.45;
+  padding: 0 0 0.15em;
+}
+.temple-date-line {
+  font-family: var(--font-display, 'Cinzel', serif);
+  font-size: clamp(11px, 2.4vw, 15px);
+  letter-spacing: 0.32em;
+  color: var(--gold-light, #f7e7c4);
+  opacity: 0.9;
+}
+
+/* ---- Ceremonial CTA seal ---- */
+.temple-cta-seal {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(36px, 8vh, 72px);
+  transform: translateX(-50%);
+  z-index: 21;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: clamp(120px, 24vw, 148px);
+  height: clamp(120px, 24vw, 148px);
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 40%, rgba(223, 179, 90, 0.16), rgba(20, 6, 5, 0.7));
+  border: 1.5px solid var(--gold-foil, #dfb35a);
+  color: var(--gold-light, #f7e7c4);
+  font-family: var(--font-display, 'Cinzel', serif);
+  font-size: clamp(10px, 2vw, 12px);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.temple-cta-ring {
+  position: absolute;
+  inset: 8px;
+  border-radius: 50%;
+  border: 1px solid rgba(223, 179, 90, 0.5);
+  animation: cta-ring-breathe 2.8s ease-in-out infinite;
+}
+@keyframes cta-ring-breathe {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.06); opacity: 1; }
+}
+.temple-cta-label { position: relative; z-index: 1; padding: 0 10px; text-align: center; }
+
+/* ---- Tap-to-begin gate ---- */
+.temple-tap-begin {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  background: #05010101;
+  background-color: rgba(4, 1, 1, 0.55);
+  border: none;
+  color: var(--gold-light, #f7e7c4);
+  font-family: var(--font-display, 'Cinzel', serif);
+  font-size: clamp(12px, 2.4vw, 14px);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.temple-tap-icon {
+  color: var(--gold-foil, #dfb35a);
+  animation: lamp-glow-pulse 2.2s ease-in-out infinite;
+}
+.temple-tap-sub {
+  font-family: var(--font-script, 'Pinyon Script', cursive);
+  font-size: clamp(20px, 5vw, 30px);
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: var(--gold-foil, #dfb35a);
+  opacity: 0.85;
+  line-height: 1.4;
+  padding-top: 0.1em;
+}
+
+/* ---- Skip control ---- */
+.temple-skip-btn {
+  position: absolute;
+  top: max(16px, env(safe-area-inset-top));
+  right: max(16px, env(safe-area-inset-right));
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  border: none;
+  color: var(--gold-light, #f7e7c4);
+  font-family: var(--font-sans, sans-serif);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 8px;
+}
+
+/* ---- Mobile refinements ---- */
+@media (max-width: 480px) {
+  .temple-bells-row { top: clamp(8px, 3vh, 20px); }
+  .temple-door-shell { width: 46vw; }
+  .temple-toranam-wrap { top: clamp(20px, 6vh, 40px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .temple-camera-frame,
+  .dust-mote,
+  .lamp-glow.is-lit,
+  .lamp-flame.is-lit,
+  .lamp-flame-core.is-lit,
+  .temple-bell-svg[data-swinging='true'],
+  .temple-cta-ring {
+    animation: none !important;
+  }
+  .temple-door-shell,
+  .temple-light-bloom,
+  .temple-typography > * {
+    transition-duration: 0.4s !important;
+  }
+}
