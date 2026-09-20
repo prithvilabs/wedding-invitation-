@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MusicProvider } from './context/MusicContext';
-import TempleEntranceScene from './scenes/TempleEntranceScene';
+import EnvelopeOpeningScene from './scenes/EnvelopeOpeningScene';
 import StaticBackground from './components/invitation/StaticBackground';
 import FloatingRosePetals from './components/invitation/FloatingRosePetals';
 import Navigation from './components/layout/Navigation';
 import MusicPlayer from './components/layout/MusicPlayer';
+import Hero from './sections/Hero';
 import ScratchCard from './sections/ScratchCard';
 import Countdown from './sections/Countdown';
 import Families from './sections/Families';
@@ -16,19 +17,19 @@ import Footer from './sections/Footer';
 
 function WeddingApp() {
   const [sessionKey, setSessionKey] = useState(0);
-  const [showTempleEntrance, setShowTempleEntrance] = useState(true);
+  const [showEntrance, setShowEntrance] = useState(true);
 
   const handleEntranceComplete = () => {
-    setShowTempleEntrance(false);
+    setShowEntrance(false);
   };
 
   return (
     <div className="wedding-app-root">
-      {/* 1. Scene 1 — Cinematic Temple Entrance (diya, bells, doors, golden light, reveal) */}
+      {/* 1. Luxury Photorealistic Physical Envelope Opening Experience */}
       <AnimatePresence mode="wait">
-        {showTempleEntrance && (
-          <TempleEntranceScene
-            key={`temple-entrance-${sessionKey}`}
+        {showEntrance && (
+          <EnvelopeOpeningScene
+            key={`envelope-opening-${sessionKey}`}
             onComplete={handleEntranceComplete}
           />
         )}
@@ -40,8 +41,8 @@ function WeddingApp() {
       {/* Reusable Continuous Photorealistic Rose Petal Animation */}
       <FloatingRosePetals />
 
-      {/* 3. Top Navigation Bar (Visible after the temple entrance completes) */}
-      <Navigation isVisible={!showTempleEntrance} />
+      {/* 3. Top Navigation Bar (Visible after entrance completes) */}
+      <Navigation isVisible={!showEntrance} />
 
       {/* 4. Floating Music Controller (Global Audio Controller) */}
       <MusicPlayer />
@@ -55,6 +56,7 @@ function WeddingApp() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.1 }}
         >
+          <Hero />
           <ScratchCard />
           <Countdown />
           <Families />

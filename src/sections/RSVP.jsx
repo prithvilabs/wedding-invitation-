@@ -70,7 +70,7 @@ export default function RSVP() {
       (formData.wishesMessage ? `*Wishes:* "${formData.wishesMessage}"` : '')
     );
 
-    const waUrl = `https://wa.me/919876543210?text=${msg}`;
+    const waUrl = `https://wa.me/919025228713?text=${msg}`;
     window.open(waUrl, '_blank', 'noopener,noreferrer');
   };
 
@@ -127,7 +127,7 @@ export default function RSVP() {
                   id="phoneNumber"
                   name="phoneNumber"
                   required
-                  placeholder="+91 98765 43210"
+                  placeholder="+91 XXXXX XXXXX"
                   value={formData.phoneNumber}
                   onChange={handleChange}
                 />
@@ -190,7 +190,7 @@ export default function RSVP() {
                   <option value="All Events">All Events</option>
                   <option value="Pre-Wedding Reception — 27 Jan">Pre-Wedding Reception — 27 Jan</option>
                   <option value="Wedding Ceremony — 28 Jan">Wedding Ceremony — 28 Jan</option>
-                  <option value="Grand Wedding Reception — 7 Feb">Grand Wedding Reception — 7 Feb</option>
+                  <option value="Post-Wedding Reception — 7 Feb">Post-Wedding Reception — 7 Feb</option>
                 </select>
               </div>
             </div>
@@ -217,7 +217,7 @@ export default function RSVP() {
 
               <a
                 id="whatsappDirectLink"
-                href={`https://wa.me/919876543210?text=${whatsappDirectMsg}`}
+                href={`https://wa.me/919025228713?text=${whatsappDirectMsg}`}
                 target="_blank"
                 rel="noreferrer"
                 className="whatsapp-action-btn"

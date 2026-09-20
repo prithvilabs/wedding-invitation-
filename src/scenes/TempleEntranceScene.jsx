@@ -1,184 +1,42 @@
-import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
+import React, { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { ArrowUpRight, Flame } from 'lucide-react';
+import { Sparkles, ArrowRight } from 'lucide-react';
 import { useMusic } from '../context/MusicContext';
 import useBellChime from '../hooks/useBellChime';
-import CameraMotion from '../components/cinematic/CameraMotion';
-import ParallaxLayer from '../components/cinematic/ParallaxLayer';
 import { couple, weddingDate, blessing } from '../data/weddingData';
 import './temple-entrance.css';
 
-const SEQUENCE = [
-  { step: 2, delay: 300 },   // diya ignites
-  { step: 3, delay: 1300 },  // bells stir
-  { step: 4, delay: 2200 },  // light sliver at door seam
-  { step: 5, delay: 3000 },  // doors open + light expands (runs ~2.4s)
-  { step: 7, delay: 3800 },  // camera pushes forward (slow, 14s ongoing)
-  { step: 8, delay: 5700 },  // typography, once doors have fully opened
-  { step: 9, delay: 8500 }   // ceremonial CTA
-];
-
-function KuthuVilakku({ lit }) {
-  return (
-    <svg viewBox="0 0 120 220" className="temple-lamp-svg" aria-hidden="true">
-      <defs>
-        <linearGradient id="brassGrad" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#f3d78a" />
-          <stop offset="45%" stopColor="#cfa049" />
-          <stop offset="100%" stopColor="#8a5f1f" />
-        </linearGradient>
-        <radialGradient id="flameGlow" cx="50%" cy="35%" r="65%">
-          <stop offset="0%" stopColor="#fff6dd" stopOpacity="0.95" />
-          <stop offset="35%" stopColor="#ffcf6b" stopOpacity="0.55" />
-          <stop offset="100%" stopColor="#ffcf6b" stopOpacity="0" />
-        </radialGradient>
-      </defs>
-      {/* stand */}
-      <rect x="56" y="90" width="8" height="110" fill="url(#brassGrad)" />
-      <ellipse cx="60" cy="204" rx="30" ry="8" fill="url(#brassGrad)" />
-      <ellipse cx="60" cy="96" rx="16" ry="6" fill="url(#brassGrad)" />
-      {/* bowl */}
-      <path d="M32 92 Q60 118 88 92 L82 84 Q60 100 38 84 Z" fill="url(#brassGrad)" />
-      {/* flame glow */}
-      <circle className={`lamp-glow ${lit ? 'is-lit' : ''}`} cx="60" cy="58" r="55" fill="url(#flameGlow)" />
-      {/* flame */}
-      <path
-        className={`lamp-flame ${lit ? 'is-lit' : ''}`}
-        d="M60 30c8 12 14 20 14 30a14 14 0 0 1-28 0c0-10 6-18 14-30z"
-        fill="#ffb347"
-      />
-      <path
-        className={`lamp-flame-core ${lit ? 'is-lit' : ''}`}
-        d="M60 42c4 7 7 11 7 16a7 7 0 0 1-14 0c0-5 3-9 7-16z"
-        fill="#fff6dd"
-      />
-    </svg>
-  );
-}
-
-function TempleBell({ swinging, delay = 0 }) {
-  return (
-    <svg
-      viewBox="0 0 60 90"
-      className="temple-bell-svg"
-      style={{ animationDelay: `${delay}ms` }}
-      aria-hidden="true"
-      data-swinging={swinging ? 'true' : 'false'}
-    >
-      <defs>
-        <linearGradient id="bellGrad" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#f3d78a" />
-          <stop offset="50%" stopColor="#dfb35a" />
-          <stop offset="100%" stopColor="#8a5f1f" />
-        </linearGradient>
-      </defs>
-      <line x1="30" y1="0" x2="30" y2="14" stroke="#8a5f1f" strokeWidth="2" />
-      <path d="M16 40c0-12 6-26 14-26s14 14 14 26z" fill="url(#bellGrad)" />
-      <rect x="12" y="40" width="36" height="6" rx="3" fill="url(#bellGrad)" />
-      <line x1="30" y1="46" x2="30" y2="64" stroke="#8a5f1f" strokeWidth="1.5" />
-      <circle cx="30" cy="68" r="5" fill="url(#bellGrad)" />
-    </svg>
-  );
-}
-
-function ToranamGarland() {
-  const dots = useMemo(
-    () =>
-      Array.from({ length: 21 }, (_, i) => {
-        const t = i / 20;
-        const y = Math.sin(t * Math.PI) * 26;
-        const gold = i % 3 === 0;
-        return { x: t * 100, y, gold };
-      }),
-    []
-  );
-  return (
-    <svg viewBox="0 0 100 30" preserveAspectRatio="none" className="temple-toranam-svg" aria-hidden="true">
-      <path d="M0 2 Q50 30 100 2" stroke="#5c4321" strokeWidth="0.4" fill="none" opacity="0.6" />
-      {dots.map((d, i) => (
-        <circle
-          key={i}
-          cx={d.x}
-          cy={d.y + 2}
-          r={d.gold ? 2.1 : 1.6}
-          fill={d.gold ? '#dfb35a' : '#e8871e'}
-        />
-      ))}
-    </svg>
-  );
-}
-
-function DoorPanel({ side }) {
-  const emblemX = 50;
-  return (
-    <svg viewBox="0 0 100 260" preserveAspectRatio="none" className={`temple-door-svg door-${side}`} aria-hidden="true">
-      <defs>
-        <linearGradient id={`wood-${side}`} x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stopColor="#2c0f0a" />
-          <stop offset="50%" stopColor="#4a1c12" />
-          <stop offset="100%" stopColor="#230c08" />
-        </linearGradient>
-        <linearGradient id={`trim-${side}`} x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#f3d78a" />
-          <stop offset="100%" stopColor="#8a5f1f" />
-        </linearGradient>
-      </defs>
-      <rect x="0" y="0" width="100" height="260" fill={`url(#wood-${side})`} />
-      {/* grain lines */}
-      {Array.from({ length: 8 }).map((_, i) => (
-        <line key={i} x1={8 + i * 11} y1="6" x2={8 + i * 11} y2="254" stroke="#1a0705" strokeWidth="0.6" opacity="0.5" />
-      ))}
-      {/* outer trim */}
-      <rect x="4" y="4" width="92" height="252" fill="none" stroke={`url(#trim-${side})`} strokeWidth="2.4" />
-      {/* panel divisions */}
-      <rect x="10" y="12" width="80" height="100" fill="none" stroke={`url(#trim-${side})`} strokeWidth="1.4" />
-      <rect x="10" y="148" width="80" height="100" fill="none" stroke={`url(#trim-${side})`} strokeWidth="1.4" />
-      {/* lotus emblem, upper panel */}
-      <g transform="translate(50 62)">
-        <circle r="20" fill="none" stroke={`url(#trim-${side})`} strokeWidth="1.6" />
-        {Array.from({ length: 8 }).map((_, i) => {
-          const angle = (i / 8) * Math.PI * 2;
-          const x = Math.cos(angle) * 12;
-          const y = Math.sin(angle) * 12;
-          return <ellipse key={i} cx={x} cy={y} rx="6" ry="3" fill="#dfb35a" opacity="0.85" transform={`rotate(${(angle * 180) / Math.PI} ${x} ${y})`} />;
-        })}
-        <circle r="4.5" fill="#f7e7c4" />
-      </g>
-      {/* lower emblem */}
-      <g transform="translate(50 198)">
-        <circle r="14" fill="none" stroke={`url(#trim-${side})`} strokeWidth="1.4" />
-        <circle r="3.4" fill="#dfb35a" />
-      </g>
-      {/* door ring handle near the seam */}
-      <circle cx={side === 'left' ? 92 : emblemX + 42 - emblemX} cy="130" r="5" fill="none" stroke="#f3d78a" strokeWidth="2" />
-    </svg>
-  );
-}
+const ASSET_BASE = `${import.meta.env.BASE_URL}assets/scene-01/`;
 
 function GoldDustParticles({ active }) {
   const particles = useMemo(
     () =>
-      Array.from({ length: 16 }, (_, i) => ({
+      Array.from({ length: 24 }, (_, i) => ({
         id: i,
-        left: 30 + Math.random() * 40,
-        delay: Math.random() * 4,
-        duration: 5 + Math.random() * 4,
-        size: 2 + Math.random() * 3
+        left: 20 + Math.random() * 60,
+        bottom: 10 + Math.random() * 50,
+        delay: Math.random() * 3,
+        duration: 4 + Math.random() * 3,
+        size: 2 + Math.random() * 3.5,
+        driftX: (Math.random() - 0.5) * 60
       })),
     []
   );
+
   return (
-    <div className={`temple-dust-particles ${active ? 'is-active' : ''}`} aria-hidden="true">
+    <div className={`temple-dust-layer ${active ? 'is-active' : ''}`} aria-hidden="true">
       {particles.map((p) => (
         <span
           key={p.id}
           className="dust-mote"
           style={{
             left: `${p.left}%`,
+            bottom: `${p.bottom}%`,
             width: `${p.size}px`,
             height: `${p.size}px`,
             animationDelay: `${p.delay}s`,
-            animationDuration: `${p.duration}s`
+            animationDuration: `${p.duration}s`,
+            '--drift-x': `${p.driftX}px`
           }}
         />
       ))}
@@ -190,192 +48,280 @@ export default function TempleEntranceScene({ onComplete }) {
   const shouldReduceMotion = useReducedMotion();
   const { playMusic } = useMusic();
   const ringBell = useBellChime();
-  const [phase, setPhase] = useState('idle'); // idle -> playing -> exiting
-  const [step, setStep] = useState(0);
-  const timers = useRef([]);
 
-  const clearTimers = useCallback(() => {
+  // Sequence state: 'idle' -> 'triggered' -> 'lamps_lit' -> 'doors_opening' -> 'camera_push' -> 'exiting'
+  const [phase, setPhase] = useState('idle');
+  const [isLampsLit, setIsLampsLit] = useState(false);
+  const [isBellsSwinging, setIsBellsSwinging] = useState(false);
+  const [isDoorsOpen, setIsDoorsOpen] = useState(false);
+  const [isCameraPush, setIsCameraPush] = useState(false);
+  const [isFadingOut, setIsFadingOut] = useState(false);
+
+  const timers = useRef([]);
+  const hasTriggeredRef = useRef(false);
+
+  const clearAllTimers = useCallback(() => {
     timers.current.forEach((t) => clearTimeout(t));
     timers.current = [];
   }, []);
 
-  const beginSequence = useCallback(() => {
+  const startEntranceSequence = useCallback(() => {
+    if (hasTriggeredRef.current) return;
+    hasTriggeredRef.current = true;
+
+    setPhase('triggered');
+
+    // PHASE 1 (0.0s -> 0.7s): Sound + bell stir + start music
+    ringBell();
     playMusic();
-    setPhase('playing');
-    setStep(1);
+    setIsBellsSwinging(true);
 
     if (shouldReduceMotion) {
-      setStep(9);
+      setIsLampsLit(true);
+      setIsDoorsOpen(true);
+      const exitTimer = setTimeout(() => {
+        setIsFadingOut(true);
+        if (onComplete) onComplete();
+      }, 2000);
+      timers.current.push(exitTimer);
       return;
     }
 
-    SEQUENCE.forEach(({ step: s, delay }) => {
-      const id = setTimeout(() => setStep(s), delay);
-      timers.current.push(id);
-    });
-  }, [playMusic, shouldReduceMotion]);
+    // PHASE 2 (0.5s -> 1.4s): Illuminate lamps
+    const tLamps = setTimeout(() => {
+      setIsLampsLit(true);
+    }, 500);
+    timers.current.push(tLamps);
 
-  const skipToEnd = useCallback(() => {
-    clearTimers();
-    setStep(9);
-  }, [clearTimers]);
+    // PHASE 3 & 4 (0.8s -> 3.0s): Open doors & expand golden light rays
+    const tDoors = setTimeout(() => {
+      setIsDoorsOpen(true);
+    }, 800);
+    timers.current.push(tDoors);
 
-  const handleEnter = useCallback(() => {
-    ringBell();
-    setPhase('exiting');
-    const id = setTimeout(() => {
+    // PHASE 5 (2.2s -> 4.0s): Cinematic camera push forward
+    const tCamera = setTimeout(() => {
+      setIsCameraPush(true);
+    }, 2200);
+    timers.current.push(tCamera);
+
+    // PHASE 6 (3.8s -> 4.5s): Fade typography and transition to Scene 2
+    const tFade = setTimeout(() => {
+      setIsFadingOut(true);
+    }, 3800);
+    timers.current.push(tFade);
+
+    const tComplete = setTimeout(() => {
       if (onComplete) onComplete();
-    }, 650);
-    timers.current.push(id);
-  }, [onComplete, ringBell]);
+    }, 4500);
+    timers.current.push(tComplete);
+  }, [ringBell, playMusic, shouldReduceMotion, onComplete]);
 
-  useEffect(() => clearTimers, [clearTimers]);
+  const handleSkip = useCallback(() => {
+    clearAllTimers();
+    if (onComplete) onComplete();
+  }, [clearAllTimers, onComplete]);
+
+  useEffect(() => clearAllTimers, [clearAllTimers]);
 
   return (
     <motion.div
-      className="temple-entrance-stage"
+      className="scene1-container"
       initial={{ opacity: 1 }}
-      animate={{ opacity: 1 }}
-      exit={{
-        opacity: 0,
-        scale: 1.03,
-        filter: 'blur(10px)',
-        transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] }
-      }}
+      animate={{ opacity: isFadingOut ? 0 : 1 }}
+      exit={{ opacity: 0, transition: { duration: 0.8, ease: 'easeInOut' } }}
+      data-testid="scene-01-temple-entrance"
     >
-      <CameraMotion active={step >= 7 && !shouldReduceMotion} className="temple-camera-frame">
-        <div className="temple-bg-gradient" />
+      {/* 3D Cinematic Camera Viewport */}
+      <div
+        className={`scene1-camera-viewport ${isCameraPush ? 'is-pushed' : ''}`}
+        style={{
+          transform: isCameraPush && !shouldReduceMotion ? 'scale(1.08) translateY(-1%)' : 'scale(1) translateY(0)',
+          transition: shouldReduceMotion ? 'none' : 'transform 2.4s cubic-bezier(0.25, 1, 0.3, 1)'
+        }}
+      >
+        {/* LAYER 1: Base Temple Sanctum Background */}
+        <div className="scene1-layer scene1-bg-layer">
+          <img
+            src={`${ASSET_BASE}background.webp`}
+            alt="Temple Sanctum Interior"
+            className="scene1-bg-img"
+            loading="eager"
+            decoding="async"
+          />
+          <div className="scene1-bg-overlay" />
+        </div>
 
-        <ParallaxLayer speed={0.01} className="temple-gopuram-layer">
-          <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMax meet" className="temple-gopuram-svg" aria-hidden="true">
-            <defs>
-              <linearGradient id="gopuramGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#1c0a07" />
-                <stop offset="100%" stopColor="#3a120c" />
-              </linearGradient>
-            </defs>
-            <path
-              d="M60 300 L60 120 Q60 60 110 40 Q140 10 200 10 Q260 10 290 40 Q340 60 340 120 L340 300 Z"
-              fill="url(#gopuramGrad)"
-              opacity="0.9"
+        {/* LAYER 2: Volumetric Golden Light Rays (Behind Doors) */}
+        <div
+          className={`scene1-layer scene1-light-rays-layer ${isDoorsOpen ? 'is-visible' : ''}`}
+          style={{
+            opacity: isDoorsOpen ? 0.95 : 0.1,
+            transform: isDoorsOpen ? 'scale(1.1)' : 'scale(0.95)',
+            filter: isDoorsOpen ? 'brightness(1.2) contrast(1.1)' : 'brightness(0.6)',
+            transition: shouldReduceMotion ? 'none' : 'opacity 2.2s ease-in-out, transform 2.5s ease-out, filter 2.2s ease-in-out'
+          }}
+        >
+          <img
+            src={`${ASSET_BASE}light-rays.webp`}
+            alt="Golden Light Rays"
+            className="scene1-light-rays-img"
+          />
+        </div>
+
+        {/* LAYER 3: Brass Kuthuvilakku Lamps (Sides) */}
+        <div
+          className={`scene1-layer scene1-lamps-layer ${isLampsLit ? 'is-lit' : ''}`}
+          style={{
+            opacity: isLampsLit ? 1 : 0.25,
+            filter: isLampsLit ? 'brightness(1.1) drop-shadow(0 0 25px rgba(255, 180, 50, 0.45))' : 'brightness(0.5)',
+            transition: shouldReduceMotion ? 'none' : 'opacity 1.2s ease-out, filter 1.2s ease-out'
+          }}
+        >
+          <img
+            src={`${ASSET_BASE}lamps.webp`}
+            alt="Brass Kuthuvilakku Lamps"
+            className="scene1-lamps-img"
+          />
+          <div className={`scene1-lamp-glow-left ${isLampsLit ? 'is-active' : ''}`} />
+          <div className={`scene1-lamp-glow-right ${isLampsLit ? 'is-active' : ''}`} />
+        </div>
+
+        {/* LAYER 4: Marigold and Jasmine Flower Toranam (Top Arch) */}
+        <div className="scene1-layer scene1-flowers-layer">
+          <img
+            src={`${ASSET_BASE}flowers.webp`}
+            alt="South Indian Marigold and Jasmine Garland"
+            className="scene1-flowers-img"
+          />
+        </div>
+
+        {/* LAYER 5: Antique Temple Bells (Top Hanging) */}
+        <div className={`scene1-layer scene1-bells-layer ${isBellsSwinging ? 'is-swinging' : ''}`}>
+          <img
+            src={`${ASSET_BASE}bells.webp`}
+            alt="Traditional Temple Bells"
+            className="scene1-bells-img"
+          />
+        </div>
+
+        {/* LAYER 6 & 7: Heavy Carved Wooden Temple Doors (3D Perspective) */}
+        <div className="scene1-doors-perspective-stage">
+          {/* Left Door Panel */}
+          <div
+            className="scene1-door-wrapper door-left-wrapper"
+            style={{
+              transformOrigin: 'left center',
+              transform: isDoorsOpen ? 'rotateY(-105deg)' : 'rotateY(0deg)',
+              transition: shouldReduceMotion
+                ? 'opacity 0.4s ease'
+                : 'transform 2.2s cubic-bezier(0.25, 0.1, 0.25, 1.0)'
+            }}
+          >
+            <img
+              src={`${ASSET_BASE}doors-left.webp`}
+              alt="Carved Temple Left Door"
+              className="scene1-door-img"
+              draggable="false"
             />
-            {Array.from({ length: 5 }).map((_, i) => (
-              <rect key={i} x={90 + i * 3} y={30 + i * 16} width={220 - i * 6} height="3" fill="#5c2417" opacity="0.5" />
-            ))}
-          </svg>
-        </ParallaxLayer>
-
-        <ParallaxLayer speed={0.02} className="temple-pillar-layer temple-pillar-left">
-          <svg viewBox="0 0 60 300" preserveAspectRatio="none" aria-hidden="true">
-            <rect x="10" y="0" width="40" height="300" fill="#20090a" opacity="0.85" />
-            {Array.from({ length: 10 }).map((_, i) => (
-              <rect key={i} x="10" y={i * 30} width="40" height="2" fill="#8a5f1f" opacity="0.35" />
-            ))}
-          </svg>
-        </ParallaxLayer>
-        <ParallaxLayer speed={0.02} className="temple-pillar-layer temple-pillar-right">
-          <svg viewBox="0 0 60 300" preserveAspectRatio="none" aria-hidden="true">
-            <rect x="10" y="0" width="40" height="300" fill="#20090a" opacity="0.85" />
-            {Array.from({ length: 10 }).map((_, i) => (
-              <rect key={i} x="10" y={i * 30} width="40" height="2" fill="#8a5f1f" opacity="0.35" />
-            ))}
-          </svg>
-        </ParallaxLayer>
-
-        <div className="temple-toranam-wrap">
-          <ToranamGarland />
-        </div>
-
-        <div className="temple-doors-layer">
-          <div className={`temple-door-shell door-left ${step >= 5 ? 'is-open' : ''}`}>
-            <DoorPanel side="left" />
+            {/* Dark inner shadow on door face */}
+            <div className={`scene1-door-shadow ${isDoorsOpen ? 'is-open' : ''}`} />
           </div>
-          <div className={`temple-door-shell door-right ${step >= 5 ? 'is-open' : ''}`}>
-            <DoorPanel side="right" />
+
+          {/* Right Door Panel */}
+          <div
+            className="scene1-door-wrapper door-right-wrapper"
+            style={{
+              transformOrigin: 'right center',
+              transform: isDoorsOpen ? 'rotateY(105deg)' : 'rotateY(0deg)',
+              transition: shouldReduceMotion
+                ? 'opacity 0.4s ease'
+                : 'transform 2.2s cubic-bezier(0.25, 0.1, 0.25, 1.0)'
+            }}
+          >
+            <img
+              src={`${ASSET_BASE}doors-right.webp`}
+              alt="Carved Temple Right Door"
+              className="scene1-door-img"
+              draggable="false"
+            />
+            <div className={`scene1-door-shadow ${isDoorsOpen ? 'is-open' : ''}`} />
           </div>
         </div>
 
-        <div className={`temple-light-bloom ${step >= 4 ? 'is-sliver' : ''} ${step >= 5 ? 'is-expanded' : ''}`} aria-hidden="true" />
-        <div className={`temple-floor-glow ${step >= 5 ? 'is-active' : ''}`} aria-hidden="true" />
-
-        <GoldDustParticles active={step >= 5} />
-
-        <ParallaxLayer speed={0.04} className="temple-lamp-wrap">
-          <KuthuVilakku lit={step >= 2} />
-        </ParallaxLayer>
-
-        <div className="temple-bells-row">
-          <TempleBell swinging={step >= 3} delay={0} />
-          <TempleBell swinging={step >= 3} delay={120} />
-          <TempleBell swinging={step >= 3} delay={240} />
-        </div>
-
-        <div className="temple-vignette" aria-hidden="true" />
-        <div className="temple-film-grain" aria-hidden="true" />
-      </CameraMotion>
-
-      <div className={`temple-typography ${step >= 8 ? 'is-visible' : ''}`}>
-        <p className="temple-blessing-line">
-          {blessing.eyebrow}
-          <br />
-          {blessing.eyebrowSecondary}
-        </p>
-        <h1 className="temple-names-line">{couple.displayNames}</h1>
-        <p className="temple-date-line">
-          {weddingDate.display.toUpperCase()} · {weddingDate.city.toUpperCase()}
-        </p>
+        {/* LAYER 8: Atmospheric Particles & Vignette */}
+        <GoldDustParticles active={isDoorsOpen} />
+        <div className="scene1-vignette" />
       </div>
 
-      <AnimatePresence>
-        {step >= 9 && (
-          <motion.button
-            type="button"
-            className="temple-cta-seal"
-            onClick={handleEnter}
-            onMouseEnter={ringBell}
-            onFocus={ringBell}
-            initial={{ opacity: 0, scale: 0.85, y: 16 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            aria-label="Enter the invitation"
+      {/* LAYER 9: UI Typography & Interactive Call-to-Action */}
+      <div className={`scene1-ui-container ${phase !== 'idle' ? 'is-fading' : ''}`}>
+        <div className="scene1-typography-box">
+          <motion.p
+            className="scene1-blessing-text"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 0.1 }}
           >
-            <span className="temple-cta-ring" />
-            <span className="temple-cta-label">Enter Invitation</span>
-          </motion.button>
-        )}
-      </AnimatePresence>
+            {blessing.eyebrow}
+            <br />
+            {blessing.eyebrowSecondary}
+          </motion.p>
 
-      <AnimatePresence>
-        {phase === 'idle' && (
-          <motion.button
-            type="button"
-            className="temple-tap-begin"
-            onClick={beginSequence}
-            exit={{ opacity: 0, transition: { duration: 0.5 } }}
-            aria-label="Begin the wedding invitation"
+          <motion.h1
+            className="scene1-names-text"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1.1, delay: 0.35 }}
           >
-            <Flame size={22} strokeWidth={1.4} className="temple-tap-icon" />
-            <span>Touch to Begin</span>
-            <span className="temple-tap-sub">{couple.displayNames}</span>
-          </motion.button>
-        )}
-      </AnimatePresence>
+            {couple.displayNames}
+          </motion.h1>
 
-      {phase === 'playing' && step < 9 && (
-        <motion.button
+          <motion.p
+            className="scene1-date-text"
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 0.6 }}
+          >
+            {weddingDate.display.toUpperCase()} · {weddingDate.city.toUpperCase()}
+          </motion.p>
+        </div>
+
+        {/* Central Ceremonial Touch to Begin CTA */}
+        <AnimatePresence>
+          {phase === 'idle' && (
+            <motion.button
+              type="button"
+              className="scene1-cta-button"
+              onClick={startEntranceSequence}
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.85, transition: { duration: 0.4 } }}
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.96 }}
+              aria-label="Touch to begin the wedding invitation"
+            >
+              <span className="scene1-cta-glow-pulse" />
+              <div className="scene1-cta-content">
+                <Sparkles className="scene1-cta-icon" size={18} />
+                <span className="scene1-cta-title">TOUCH TO BEGIN</span>
+              </div>
+            </motion.button>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Skip button for non-blocking navigation */}
+      {phase !== 'idle' && !isFadingOut && (
+        <button
           type="button"
-          className="temple-skip-btn"
-          onClick={skipToEnd}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.75 }}
-          whileHover={{ opacity: 1 }}
-          aria-label="Skip to the end of the entrance"
+          className="scene1-skip-control"
+          onClick={handleSkip}
+          aria-label="Skip to main invitation"
         >
           <span>Skip</span>
-          <ArrowUpRight size={13} strokeWidth={2} />
-        </motion.button>
+          <ArrowRight size={14} />
+        </button>
       )}
     </motion.div>
   );

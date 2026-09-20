@@ -34,7 +34,7 @@ export default function Events() {
       day: '07',
       monthYear: 'FEBRUARY 2027',
       fullDate: '7 FEBRUARY 2027',
-      title: 'GRAND WEDDING RECEPTION',
+      title: 'POST WEDDING RECEPTION',
       time: '6:00 PM onwards',
       venue: 'Anand Grand Palace',
       venueLocation: 'Hosur, Tamil Nadu',

@@ -31,52 +31,53 @@ export default function FloatingRosePetals() {
     return () => window.removeEventListener('resize', checkViewport);
   }, []);
 
-  // Generate randomized, natural physical properties for each individual petal
+  // Generate randomized, natural physical properties for each individual petal,
+  // keeping the central 25-30% bottom area clean and unobstructed for caricature placement
   const petals = useMemo(() => {
-    const totalCount = prefersReducedMotion ? 6 : isMobile ? 14 : 34;
+    const totalCount = prefersReducedMotion ? 6 : isMobile ? 12 : 28;
     const items = [];
 
     for (let i = 0; i < totalCount; i++) {
       const assetIndex = i % PETAL_ASSETS.length;
       const imageSrc = PETAL_ASSETS[assetIndex];
 
-      // Natural horizontal distribution across the viewport width
-      const rawX = ((i + 0.5) / totalCount) * 96 + ((i * 19) % 13) - 6;
-      const boundedX = Math.max(1, Math.min(97, rawX));
+      // Flank distribution: Left flank (2% - 33%) and Right flank (67% - 97%)
+      // Leaves the center-bottom unobstructed and serene
+      const isLeftFlank = i % 2 === 0;
+      const flankRatio = i / totalCount;
+      const boundedX = isLeftFlank
+        ? 2 + (flankRatio * 30) + ((i * 7) % 5)
+        : 66 + (flankRatio * 28) + ((i * 7) % 5);
 
       // Slow, luxurious falling speed (18s to 34s)
       const duration = 18 + ((i * 3.7) % 14) + (i % 4) * 1.5;
 
-      // Negative delay ensures petals are already naturally floating across the screen on initial load
+      // Negative delay ensures petals are naturally in flight on initial load
       const startDelay = -(((i * 2.1) + ((i % 7) * 3.3)) % duration);
 
-      // 3 Cinematic Depth Tiers:
-      // 1. Foreground (~10%): Large (64px-92px), camera-proximity bokeh blur (3.5px-5px)
-      // 2. Midground (~55%): Crisp (32px-46px), sharp 0px blur, vivid color
-      // 3. Background (~35%): Delicate (16px-24px), soft 1.6px blur, softer opacity
-      const isForeground = (i % 9 === 0) && !isMobile;
+      const isForeground = (i % 8 === 0) && !isMobile;
       const isBackground = !isForeground && (i % 3 === 0);
 
       let size, blur, maxOpacity, swayX, rotZDelta;
 
       if (isForeground) {
-        size = 66 + (i % 3) * 12; // 66px to 90px
-        blur = '4.2px';
-        maxOpacity = 0.88;
-        swayX = 90;
-        rotZDelta = 260;
+        size = 58 + (i % 3) * 10;
+        blur = '3.8px';
+        maxOpacity = 0.85;
+        swayX = isLeftFlank ? -25 - (i % 4) * 6 : 25 + (i % 4) * 6;
+        rotZDelta = 240;
       } else if (isBackground) {
-        size = 18 + (i % 4) * 2; // 18px to 24px
+        size = 18 + (i % 4) * 2;
         blur = '1.6px';
-        maxOpacity = 0.52;
-        swayX = 35 + (i % 4) * 8;
+        maxOpacity = 0.50;
+        swayX = isLeftFlank ? -18 - (i % 4) * 4 : 18 + (i % 4) * 4;
         rotZDelta = 160 + (i % 3) * 50;
       } else {
-        size = 32 + (i % 5) * 3.5; // 32px to 46px
+        size = 30 + (i % 5) * 3.2;
         blur = '0px';
-        maxOpacity = 0.95;
-        swayX = 60 + (i % 4) * 12;
-        rotZDelta = 220 + (i % 5) * 45;
+        maxOpacity = 0.92;
+        swayX = isLeftFlank ? -22 - (i % 4) * 5 : 22 + (i % 4) * 5;
+        rotZDelta = 200 + (i % 5) * 40;
       }
 
       const swayDir = i % 2 === 0 ? 1 : -1;

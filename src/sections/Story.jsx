@@ -5,6 +5,7 @@ import AnimatedSection from '../animations/AnimatedSection';
 import coupleTraditional from '../assets/couple_traditional.jpg';
 import panel3StoryBg from '../assets/panel3_story_bg.jpg';
 import coupleReception from '../assets/couple_reception.jpg';
+import instaCard from '../assets/insta.png';
 
 export default function Story() {
   const sectionRef = useRef(null);
@@ -286,14 +287,14 @@ export default function Story() {
                   A little curiosity turned into an Instagram request. A simple ‘Hi’ was sent, gently opening the door to countless conversations.
                 </p>
 
-                {/* Authentic Micro Instagram DM Memory Snippet */}
-                <div className="micro-dm-memory" aria-label="First Instagram DM exchange">
-                  <div className="micro-dm-pill dm-sent">
-                    <span>Hi</span>
-                  </div>
-                  <div className="micro-dm-pill dm-received">
-                    <span>Hi</span>
-                  </div>
+                {/* Authentic First Instagram DM Memory Card */}
+                <div className="story-insta-card-wrap">
+                  <img
+                    src={instaCard}
+                    alt="First Instagram DM exchange saying Hi"
+                    className="story-insta-card-img"
+                    loading="lazy"
+                  />
                 </div>
               </div>
 
