@@ -41,7 +41,7 @@ export default function Families() {
 
               <div className="lineage-origin-tag">
                 <MapPin size={13} strokeWidth={1.75} className="lineage-pin-icon" />
-                <span>Chennai, Tamil Nadu</span>
+                <span>Hosur, Tamil Nadu</span>
               </div>
             </div>
           </div>
