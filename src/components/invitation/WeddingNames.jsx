@@ -67,56 +67,86 @@ export default function WeddingNames({ onExplore, onReplay }) {
         initial="hidden"
         animate="visible"
       >
-        {/* Delicate Olive Leaf Branch Divider */}
-        <div className="home-leaf-divider" aria-hidden="true">
-          <span className="leaf-hairline" />
+        {/* Ornamental Lotus Divider */}
+        <div className="home-lotus-divider" aria-hidden="true">
+          <span className="lotus-hairline" />
           <svg
-            className="leaf-twig-icon"
-            width="32"
-            height="16"
-            viewBox="0 0 32 16"
+            className="lotus-motif-icon"
+            width="36"
+            height="22"
+            viewBox="0 0 36 22"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
-            {/* Center stem */}
+            <defs>
+              <linearGradient id="lotusGoldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#D2B06A" />
+                <stop offset="50%" stopColor="#B58A3A" />
+                <stop offset="100%" stopColor="#D2B06A" />
+              </linearGradient>
+            </defs>
+            {/* Center Petal */}
             <path
-              d="M3 8 Q16 7, 29 8"
-              stroke="#435848"
-              strokeWidth="1.2"
+              d="M 18 2 C 15.6 6.8, 15.6 13, 18 18.2 C 20.4 13, 20.4 6.8, 18 2 Z"
+              stroke="url(#lotusGoldGradient)"
+              strokeWidth="1.15"
               strokeLinecap="round"
+              strokeLinejoin="round"
+              fill="none"
             />
-            {/* Center leaf */}
+            {/* Inner Left Petal */}
             <path
-              d="M16 7 Q16 1, 14 0 Q12 1, 16 7"
-              fill="#435848"
-              opacity="0.9"
+              d="M 18 18.2 C 14.5 16, 11 11.2, 11.8 6.5 C 14.2 9, 16.6 12, 18 14"
+              stroke="url(#lotusGoldGradient)"
+              strokeWidth="1.1"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              fill="none"
             />
-            {/* Left upper leaf */}
+            {/* Inner Right Petal */}
             <path
-              d="M11 7.5 Q9 3, 6 2 Q7 5, 11 7.5"
-              fill="#4f6655"
-              opacity="0.85"
+              d="M 18 18.2 C 21.5 16, 25 11.2, 24.2 6.5 C 21.8 9, 19.4 12, 18 14"
+              stroke="url(#lotusGoldGradient)"
+              strokeWidth="1.1"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              fill="none"
             />
-            {/* Left lower leaf */}
+            {/* Outer Left Flared Petal */}
             <path
-              d="M12 8 Q10 12, 7 13 Q8 10, 12 8"
-              fill="#4f6655"
-              opacity="0.85"
+              d="M 16 18.2 C 12 17.2, 6.2 14.8, 5.5 10.8 C 8.6 12.2, 12.2 14.8, 14.8 16.8"
+              stroke="url(#lotusGoldGradient)"
+              strokeWidth="1.1"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              fill="none"
             />
-            {/* Right upper leaf */}
+            {/* Outer Right Flared Petal */}
             <path
-              d="M21 7.5 Q23 3, 26 2 Q25 5, 21 7.5"
-              fill="#4f6655"
-              opacity="0.85"
+              d="M 20 18.2 C 24 17.2, 29.8 14.8, 30.5 10.8 C 27.4 12.2, 23.8 14.8, 21.2 16.8"
+              stroke="url(#lotusGoldGradient)"
+              strokeWidth="1.1"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              fill="none"
             />
-            {/* Right lower leaf */}
+            {/* Base Calyx Arc */}
             <path
-              d="M20 8 Q22 12, 25 13 Q24 10, 20 8"
-              fill="#4f6655"
-              opacity="0.85"
+              d="M 12 19.2 C 15 21.2, 21 21.2, 24 19.2"
+              stroke="url(#lotusGoldGradient)"
+              strokeWidth="1.1"
+              strokeLinecap="round"
+              fill="none"
+            />
+            {/* Central Pearl Accent */}
+            <circle
+              cx="18"
+              cy="18.2"
+              r="0.9"
+              fill="#D2B06A"
             />
           </svg>
-          <span className="leaf-hairline" />
+          <span className="lotus-hairline" />
         </div>
 
         {/* WE ARE GETTING MARRIED */}

@@ -565,26 +565,40 @@ body {
   width: 100%;
 }
 
+.home-lotus-divider,
 .home-leaf-divider {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: clamp(8px, 1.5vw, 14px);
-  width: clamp(150px, 35vw, 280px);
+  gap: clamp(14px, 2.2vw, 22px);
+  width: clamp(160px, 36vw, 300px);
   margin: 2px auto clamp(4px, 1vh, 8px);
 }
 
+.lotus-hairline,
 .leaf-hairline {
   flex: 1;
   height: 1px;
-  background: linear-gradient(to right, transparent, rgba(67, 88, 72, 0.55), transparent);
+  background: linear-gradient(to right, transparent, rgba(181, 138, 58, 0.55), transparent);
 }
 
+.lotus-hairline:first-child,
+.leaf-hairline:first-child {
+  background: linear-gradient(to left, rgba(181, 138, 58, 0.65), transparent);
+}
+
+.lotus-hairline:last-child,
+.leaf-hairline:last-child {
+  background: linear-gradient(to right, rgba(181, 138, 58, 0.65), transparent);
+}
+
+.lotus-motif-icon,
 .leaf-twig-icon {
   display: block;
   flex-shrink: 0;
-  width: clamp(24px, 3vw, 32px);
+  width: clamp(26px, 3.2vw, 36px);
   height: auto;
+  filter: drop-shadow(0 1px 2px rgba(181, 138, 58, 0.2));
 }
 
 .reference-getting-married-title {
