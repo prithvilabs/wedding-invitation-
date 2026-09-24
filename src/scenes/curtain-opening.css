@@ -1,0 +1,375 @@
+/* ==========================================================================
+   GRAND THEATER VELVET CURTAIN OPENING EXPERIENCE
+   Deep Maroon Velvet Panels, Warm Pin-Spots, Splitting Central Gold Medallion,
+   Floating Golden Dust Motes & 3-Second Majestic Parting Reveal
+   ========================================================================== */
+
+.theater-curtain-container {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10000;
+  overflow: hidden;
+  background-color: #0b0204;
+  user-select: none;
+  -webkit-user-select: none;
+  font-family: var(--font-serif, "Cormorant Garamond", Georgia, serif);
+}
+
+.theater-curtain-container.is-settled {
+  pointer-events: none !important;
+}
+
+.theater-curtain-viewport {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  overflow: hidden;
+}
+
+/* 1. Left and Right Heavy Velvet Curtain Panels (3-Second Majestic Parting) */
+.curtain-panel {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 50vw;
+  overflow: hidden;
+  z-index: 5;
+  transition: transform 3.0s cubic-bezier(0.25, 1, 0.35, 1);
+  box-shadow: 0 0 60px rgba(0, 0, 0, 0.95);
+  will-change: transform;
+}
+
+.curtain-panel-left {
+  left: 0;
+  transform-origin: left center;
+}
+
+.curtain-panel-right {
+  left: 50vw;
+  transform-origin: right center;
+}
+
+/* Parting translations: smoothly glide to far left and right edges over 3.0s */
+.is-parting .curtain-panel-left,
+.is-settled .curtain-panel-left {
+  transform: translateX(-88%);
+}
+
+.is-parting .curtain-panel-right,
+.is-settled .curtain-panel-right {
+  transform: translateX(88%);
+}
+
+/* Responsive adjustments for mobile touchscreens: slide further outward */
+@media (max-width: 768px) {
+  .is-parting .curtain-panel-left,
+  .is-settled .curtain-panel-left {
+    transform: translateX(-92%);
+  }
+
+  .is-parting .curtain-panel-right,
+  .is-settled .curtain-panel-right {
+    transform: translateX(92%);
+  }
+}
+
+/* Internal full-bleed rich velvet curtain fabric */
+.curtain-sheet {
+  position: absolute;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+}
+
+.curtain-sheet-left {
+  left: 0;
+  object-position: left center;
+}
+
+.curtain-sheet-right {
+  left: -50vw;
+  object-position: right center;
+}
+
+/* Center vertical seam shadow when curtains meet */
+.curtain-seam-shadow-left {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 32px;
+  height: 100%;
+  background: linear-gradient(to left, rgba(8, 1, 3, 0.88) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 6;
+  transition: opacity 0.8s ease;
+}
+
+.curtain-seam-shadow-right {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 32px;
+  height: 100%;
+  background: linear-gradient(to right, rgba(8, 1, 3, 0.88) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 6;
+  transition: opacity 0.8s ease;
+}
+
+.is-parting .curtain-seam-shadow-left,
+.is-parting .curtain-seam-shadow-right,
+.is-settled .curtain-seam-shadow-left,
+.is-settled .curtain-seam-shadow-right {
+  opacity: 0.15;
+}
+
+/* 2. Warm Overhead Golden Pin-Spots / Spotlights */
+.curtain-spotlights-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 7;
+  background: radial-gradient(ellipse 26% 62% at 20% 0%, rgba(255, 224, 150, 0.35) 0%, transparent 80%),
+              radial-gradient(ellipse 34% 74% at 50% 0%, rgba(255, 230, 160, 0.48) 0%, transparent 85%),
+              radial-gradient(ellipse 26% 62% at 80% 0%, rgba(255, 224, 150, 0.35) 0%, transparent 80%);
+  mix-blend-mode: screen;
+  opacity: 0.55;
+  transition: opacity 0.5s ease;
+}
+
+/* Spotlights intensify upon tap */
+.theater-curtain-container.is-tapped .curtain-spotlights-layer,
+.theater-curtain-container.is-parting .curtain-spotlights-layer {
+  opacity: 1;
+}
+
+.theater-curtain-container.is-settled .curtain-spotlights-layer {
+  opacity: 0;
+  transition: opacity 1.4s ease;
+}
+
+/* 3. The Central Metallic Gold Medallion ('P&H' Crest & Calligraphy) */
+.medallion-half {
+  position: absolute;
+  top: 50%;
+  width: clamp(140px, 22vw, 210px);
+  height: clamp(120px, 19vw, 180px);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  transition: opacity 1.8s cubic-bezier(0.5, 0, 0.75, 0) 1.2s, transform 0.5s ease;
+}
+
+/* Left hemisphere pinned to right edge of left curtain panel */
+.medallion-half-left {
+  right: 0;
+  transform: translate(50%, -50%);
+  clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);
+}
+
+/* Right hemisphere pinned to left edge of right curtain panel */
+.medallion-half-right {
+  left: 0;
+  transform: translate(-50%, -50%);
+  clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%);
+}
+
+.medallion-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.85)) drop-shadow(0 2px 8px rgba(223, 179, 90, 0.45));
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease;
+}
+
+/* Interactive click anchor positioned at center */
+.medallion-tap-trigger {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: clamp(140px, 22vw, 210px);
+  height: clamp(120px, 19vw, 180px);
+  border-radius: 50%;
+  z-index: 15;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Ambient breathing aura around closed medallion */
+.medallion-breathing-aura {
+  position: absolute;
+  inset: -14px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(246, 220, 150, 0.45) 0%, rgba(212, 168, 67, 0.15) 55%, transparent 75%);
+  filter: blur(10px);
+  opacity: 0.7;
+  animation: medallionPulse 3.2s ease-in-out infinite;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+@keyframes medallionPulse {
+  0%, 100% {
+    transform: scale(0.94);
+    opacity: 0.55;
+  }
+  50% {
+    transform: scale(1.14);
+    opacity: 0.88;
+  }
+}
+
+/* Subtle pulse upon tap (0.5s) */
+.theater-curtain-container.is-tapped .medallion-half-left {
+  transform: translate(50%, -50%) scale(1.07);
+}
+
+.theater-curtain-container.is-tapped .medallion-half-right {
+  transform: translate(-50%, -50%) scale(1.07);
+}
+
+.theater-curtain-container.is-tapped .medallion-breathing-aura {
+  transform: scale(1.35);
+  opacity: 1;
+}
+
+/* As curtains part, medallion halves fade gracefully as they reach the far edges */
+.theater-curtain-container.is-parting .medallion-half,
+.theater-curtain-container.is-settled .medallion-half {
+  opacity: 0;
+}
+
+.theater-curtain-container.is-parting .medallion-breathing-aura,
+.theater-curtain-container.is-settled .medallion-breathing-aura {
+  opacity: 0;
+}
+
+/* 4. Soft-Focus Golden Dust Motes in the Newly Revealed Light */
+.curtain-motes-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4;
+  overflow: hidden;
+}
+
+.curtain-mote {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 248, 220, 0.9) 0%, rgba(246, 220, 150, 0.55) 50%, transparent 80%);
+  box-shadow: 0 0 8px rgba(255, 224, 130, 0.7);
+  animation: moteFloat var(--duration) ease-in-out infinite alternate;
+}
+
+@keyframes moteFloat {
+  0% {
+    transform: translate(0, 0) scale(0.8);
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.85;
+    transform: translate(var(--dx), -35px) scale(1.15);
+  }
+  100% {
+    transform: translate(calc(var(--dx) * 1.6), -70px) scale(0.9);
+    opacity: 0.3;
+  }
+}
+
+/* 5. Elegant Floating Tap Cue at Bottom */
+.curtain-tap-cue {
+  position: absolute;
+  bottom: clamp(28px, 6vh, 52px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 24px;
+  background: rgba(18, 3, 7, 0.85);
+  border: 1px solid rgba(223, 179, 90, 0.55);
+  border-radius: 30px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.65), 0 0 16px rgba(223, 179, 90, 0.25);
+  cursor: pointer;
+  transition: transform 0.4s ease, opacity 0.5s ease;
+  animation: curtainCueFloat 2.6s ease-in-out infinite;
+}
+
+@keyframes curtainCueFloat {
+  0%, 100% {
+    transform: translate(-50%, 0);
+  }
+  50% {
+    transform: translate(-50%, -6px);
+  }
+}
+
+.curtain-tap-cue:hover {
+  transform: translate(-50%, -4px) scale(1.03);
+  border-color: rgba(246, 220, 150, 0.85);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.75), 0 0 24px rgba(246, 220, 150, 0.4);
+}
+
+.theater-curtain-container.is-tapped .curtain-tap-cue,
+.theater-curtain-container.is-parting .curtain-tap-cue,
+.theater-curtain-container.is-settled .curtain-tap-cue {
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 18px);
+}
+
+.cue-sparkle-gold {
+  color: #dfb35a;
+  font-size: 0.85rem;
+  animation: sparkleTwinkle 2s ease-in-out infinite alternate;
+}
+
+@keyframes sparkleTwinkle {
+  0% {
+    opacity: 0.5;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+.cue-text-gold {
+  font-family: var(--font-sans, "DM Sans", sans-serif);
+  font-size: clamp(0.72rem, 1.7vw, 0.82rem);
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: #faebd2;
+}
+
+/* 6. Natural Fade of Settled Curtains when scrolling down */
+.theater-curtain-container.is-settled {
+  transition: opacity 0.45s ease;
+}
+
+/* Reduced Motion Mode */
+@media (prefers-reduced-motion: reduce) {
+  .curtain-panel,
+  .curtain-spotlights-layer,
+  .medallion-half,
+  .medallion-breathing-aura,
+  .curtain-mote {
+    transition-duration: 0.01s !important;
+    animation: none !important;
+  }
+}

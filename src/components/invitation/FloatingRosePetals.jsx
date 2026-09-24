@@ -34,7 +34,7 @@ export default function FloatingRosePetals() {
   // Generate randomized, natural physical properties for each individual petal,
   // keeping the central 25-30% bottom area clean and unobstructed for caricature placement
   const petals = useMemo(() => {
-    const totalCount = prefersReducedMotion ? 6 : isMobile ? 12 : 28;
+    const totalCount = prefersReducedMotion ? 6 : isMobile ? 10 : 20;
     const items = [];
 
     for (let i = 0; i < totalCount; i++) {

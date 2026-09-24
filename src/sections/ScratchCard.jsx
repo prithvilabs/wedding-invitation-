@@ -2,15 +2,33 @@ import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, Clock3, CalendarDays } from 'lucide-react';
 import AnimatedSection from '../animations/AnimatedSection';
+import RosetteDivider from '../components/invitation/RosetteDivider';
+import FlowerConfetti from '../components/invitation/FlowerConfetti';
 
 export default function ScratchCard() {
   const canvasRef = useRef(null);
   const containerRef = useRef(null);
   const [scratchState, setScratchState] = useState('idle'); // 'idle' | 'scratching' | 'revealed'
   const [revealedPercent, setRevealedPercent] = useState(0);
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [confettiOrigin, setConfettiOrigin] = useState(null);
   const isDrawingRef = useRef(false);
   const lastPercentCheckRef = useRef(0);
   const isRevealed = scratchState === 'revealed';
+
+  // Trigger celebration flower confetti when revealed
+  useEffect(() => {
+    if (isRevealed) {
+      if (containerRef.current) {
+        const rect = containerRef.current.getBoundingClientRect();
+        setConfettiOrigin({
+          x: rect.left + rect.width / 2,
+          y: rect.top + rect.height / 2,
+        });
+      }
+      setShowConfetti(true);
+    }
+  }, [isRevealed]);
 
   // Initialize Canvas with layered antique gold foil texture & delicate traditional pattern
   const initCanvas = useCallback(() => {
@@ -117,7 +135,7 @@ export default function ScratchCard() {
       }
     };
 
-    const checkRevealedPercentage = () => {
+    const checkRevealedPercentage = (isEnding = false) => {
       if (scratchState === 'revealed') return;
       try {
         const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -133,8 +151,8 @@ export default function ScratchCard() {
         const pct = Math.min(100, Math.round((transparentCount / (total / sampleStep)) * 100));
         setRevealedPercent(pct);
 
-        // HALF SCRATCH THRESHOLD: Trigger full reveal once ~50% is scratched
-        if (pct >= 48) {
+        // Responsive threshold: Reveal once 38% scratched, or 25% on pointer up/release
+        if (pct >= 38 || (isEnding && pct >= 25)) {
           setScratchState('revealed');
         }
       } catch (err) {}
@@ -161,7 +179,7 @@ export default function ScratchCard() {
       const now = Date.now();
       if (now - lastPercentCheckRef.current > 90) {
         lastPercentCheckRef.current = now;
-        checkRevealedPercentage();
+        checkRevealedPercentage(false);
       }
     };
 
@@ -173,7 +191,7 @@ export default function ScratchCard() {
             e.currentTarget.releasePointerCapture(e.pointerId);
           }
         } catch (err) {}
-        checkRevealedPercentage();
+        checkRevealedPercentage(true);
       }
     };
 
@@ -192,14 +210,14 @@ export default function ScratchCard() {
       const now = Date.now();
       if (now - lastPercentCheckRef.current > 90) {
         lastPercentCheckRef.current = now;
-        checkRevealedPercentage();
+        checkRevealedPercentage(false);
       }
     };
 
     const handleTouchEnd = () => {
       if (isDrawingRef.current) {
         isDrawingRef.current = false;
-        checkRevealedPercentage();
+        checkRevealedPercentage(true);
       }
     };
 
@@ -228,19 +246,21 @@ export default function ScratchCard() {
 
   return (
     <AnimatedSection className="section-block muhurtham-floating-section" id="scratchSection">
+      {/* Full-screen celebratory flower confetti burst on reveal */}
+      <FlowerConfetti
+        active={showConfetti}
+        origin={confettiOrigin}
+        onComplete={() => setShowConfetti(false)}
+      />
+
       <div className="muhurtham-floating-container text-center">
-        {/* Editorial Heading Stack */}
+        {/* Editorial Heading Stack with Top Rosette Divider */}
         <div className="muhurtham-heading-stack">
+          <RosetteDivider className="muhurtham-top-rosette" />
           <h2 className="muhurtham-display-title">SAVE THE DATE</h2>
           
-          <div className="muhurtham-divider-flourish" aria-hidden="true">
-            <span className="muhurtham-flourish-line" />
-            <span className="muhurtham-flourish-node">❈ ❖ ❈</span>
-            <span className="muhurtham-flourish-line" />
-          </div>
-          
           <p className="muhurtham-instruction-text">
-            Drag or swipe across the golden stationery surface to unveil our auspicious Muhurtham
+            A new chapter begins, and we would be honoured to have you with us as we step into forever.
           </p>
         </div>
 
@@ -263,6 +283,73 @@ export default function ScratchCard() {
             {/* 1. Underlying Revealed Invitation Parchment Layer */}
             <div className="luxury-revealed-parchment" id="scratchRevealedLayer">
               <div className="parchment-inner-border">
+                {/* 4 Corner Botanical Flourishes */}
+                <div className="card-corner-flourish corner-tl" aria-hidden="true">
+                  <svg viewBox="0 0 36 36" fill="none">
+                    <g fill="#c49746">
+                      <path d="M 6 6 C 14 10, 18 16, 22 22 C 16 18, 10 14, 6 6 Z" />
+                      <path d="M 22 22 C 25 25, 27 28, 28 30 C 26 29, 23 27, 20 24 Z" />
+                      <path d="M 12 8 C 18 8, 24 11, 26 13 C 22 14, 16 13, 12 8 Z" />
+                      <path d="M 8 12 C 8 18, 11 24, 13 26 C 14 22, 13 16, 8 12 Z" />
+                      <path d="M 25 10 C 28 8, 32 9, 34 11 C 31 12, 28 13, 25 10 Z" />
+                      <path d="M 10 25 C 8 28, 9 32, 11 34 C 12 31, 13 28, 10 25 Z" />
+                    </g>
+                  </svg>
+                </div>
+                <div className="card-corner-flourish corner-tr" aria-hidden="true">
+                  <svg viewBox="0 0 36 36" fill="none">
+                    <g fill="#c49746">
+                      <path d="M 6 6 C 14 10, 18 16, 22 22 C 16 18, 10 14, 6 6 Z" />
+                      <path d="M 22 22 C 25 25, 27 28, 28 30 C 26 29, 23 27, 20 24 Z" />
+                      <path d="M 12 8 C 18 8, 24 11, 26 13 C 22 14, 16 13, 12 8 Z" />
+                      <path d="M 8 12 C 8 18, 11 24, 13 26 C 14 22, 13 16, 8 12 Z" />
+                      <path d="M 25 10 C 28 8, 32 9, 34 11 C 31 12, 28 13, 25 10 Z" />
+                      <path d="M 10 25 C 8 28, 9 32, 11 34 C 12 31, 13 28, 10 25 Z" />
+                    </g>
+                  </svg>
+                </div>
+                <div className="card-corner-flourish corner-bl" aria-hidden="true">
+                  <svg viewBox="0 0 36 36" fill="none">
+                    <g fill="#c49746">
+                      <path d="M 6 6 C 14 10, 18 16, 22 22 C 16 18, 10 14, 6 6 Z" />
+                      <path d="M 22 22 C 25 25, 27 28, 28 30 C 26 29, 23 27, 20 24 Z" />
+                      <path d="M 12 8 C 18 8, 24 11, 26 13 C 22 14, 16 13, 12 8 Z" />
+                      <path d="M 8 12 C 8 18, 11 24, 13 26 C 14 22, 13 16, 8 12 Z" />
+                      <path d="M 25 10 C 28 8, 32 9, 34 11 C 31 12, 28 13, 25 10 Z" />
+                      <path d="M 10 25 C 8 28, 9 32, 11 34 C 12 31, 13 28, 10 25 Z" />
+                    </g>
+                  </svg>
+                </div>
+                <div className="card-corner-flourish corner-br" aria-hidden="true">
+                  <svg viewBox="0 0 36 36" fill="none">
+                    <g fill="#c49746">
+                      <path d="M 6 6 C 14 10, 18 16, 22 22 C 16 18, 10 14, 6 6 Z" />
+                      <path d="M 22 22 C 25 25, 27 28, 28 30 C 26 29, 23 27, 20 24 Z" />
+                      <path d="M 12 8 C 18 8, 24 11, 26 13 C 22 14, 16 13, 12 8 Z" />
+                      <path d="M 8 12 C 8 18, 11 24, 13 26 C 14 22, 13 16, 8 12 Z" />
+                      <path d="M 25 10 C 28 8, 32 9, 34 11 C 31 12, 28 13, 25 10 Z" />
+                      <path d="M 10 25 C 8 28, 9 32, 11 34 C 12 31, 13 28, 10 25 Z" />
+                    </g>
+                  </svg>
+                </div>
+
+                {/* Bottom Center Lotus Ornament */}
+                <div className="card-bottom-lotus" aria-hidden="true">
+                  <svg viewBox="0 0 44 20" fill="none">
+                    <line x1="2" y1="12" x2="12" y2="12" stroke="#c49746" strokeWidth="1" />
+                    <circle cx="12" cy="12" r="1.1" fill="#c49746" />
+                    <circle cx="32" cy="12" r="1.1" fill="#c49746" />
+                    <line x1="32" y1="12" x2="42" y2="12" stroke="#c49746" strokeWidth="1" />
+                    <g transform="translate(22, 12)" fill="#c49746">
+                      <path d="M 0 -8 C 1.8 -4, 2 -1, 0 0 C -2 -1, -1.8 -4, 0 -8 Z" />
+                      <path d="M 0 0 C 3 -6, 6 -5, 5 -1 C 3 0, 1 0, 0 0 Z" />
+                      <path d="M 0 0 C -3 -6, -6 -5, -5 -1 C -3 0, -1 0, 0 0 Z" />
+                      <path d="M 0 0 C 4 -2, 7.5 -2, 7.5 0.5 C 5 1.8, 2 1, 0 0 Z" />
+                      <path d="M 0 0 C -4 -2, -7.5 -2, -7.5 0.5 C -5 1.8, -2 1, 0 0 Z" />
+                    </g>
+                  </svg>
+                </div>
+
                 <motion.div
                   className="parchment-content-stack"
                   initial={{ opacity: 0.9, scale: 0.98, y: 4 }}
@@ -340,6 +427,8 @@ export default function ScratchCard() {
           <p className="muhurtham-supporting-message">
             Thank you for being an irreplaceable part of our journey.
           </p>
+
+          <RosetteDivider className="muhurtham-mid-rosette" />
         </motion.div>
       </div>
     </AnimatedSection>

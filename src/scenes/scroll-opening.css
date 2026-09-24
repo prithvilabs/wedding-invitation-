@@ -1,0 +1,572 @@
+/* ==========================================================================
+   ROYAL VELVET SCROLL UNBOXING & UNFURLING ENTRANCE EXPERIENCE
+   Ceremonial Brass Urli, Golden Diya Lights, Temple Bells, P&H Wax Seal
+   ========================================================================== */
+
+.scroll-opening-container {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10000;
+  overflow: hidden;
+  background-color: #0d0306;
+  user-select: none;
+  -webkit-user-select: none;
+  font-family: var(--font-serif, "Cormorant Garamond", Georgia, serif);
+}
+
+.scroll-scene-viewport {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1200px;
+}
+
+/* 1. Photorealistic Background Layer (Urli, floating flowers, diyas, bells) */
+.scroll-bg-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.scroll-bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 48%;
+  transform: scale(1.02);
+  transition: transform 3.5s cubic-bezier(0.2, 0.8, 0.2, 1), filter 1.2s ease;
+}
+
+.scroll-scene-viewport.is-activated .scroll-bg-img {
+  transform: scale(1.06);
+  filter: brightness(0.72) saturate(1.1);
+}
+
+/* Atmospheric vignette & soft dimming on tap */
+.scroll-dim-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(20, 4, 8, 0.15) 0%, rgba(13, 3, 6, 0.72) 100%);
+  opacity: 0;
+  transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.scroll-scene-viewport.is-activated .scroll-dim-overlay {
+  opacity: 1;
+}
+
+/* Soft golden radial focus glow behind the central scroll */
+.scroll-golden-focus-glow {
+  position: absolute;
+  top: 48%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.7);
+  width: min(650px, 90vw);
+  height: min(450px, 60vh);
+  background: radial-gradient(circle, rgba(246, 220, 150, 0.42) 0%, rgba(212, 168, 67, 0.18) 45%, transparent 72%);
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 3;
+  filter: blur(24px);
+  transition: opacity 1.4s ease, transform 2.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scroll-scene-viewport.is-activated .scroll-golden-focus-glow {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.2);
+}
+
+/* 2. Interactive Scroll Altar Rig (Positioned directly over the Urli pedestal) */
+.scroll-altar-rig {
+  position: absolute;
+  top: 47%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(580px, 92vw);
+  height: min(340px, 50vh);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* Ambient contact shadow under the scroll cylinder */
+.scroll-cylinder-shadow {
+  position: absolute;
+  top: 52%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  width: 82%;
+  height: 28px;
+  background: radial-gradient(ellipse at center, rgba(16, 3, 6, 0.8) 0%, rgba(16, 3, 6, 0.3) 60%, transparent 80%);
+  filter: blur(8px);
+  pointer-events: none;
+  z-index: 4;
+  transition: opacity 1.2s ease;
+}
+
+.is-unfurling .scroll-cylinder-shadow {
+  opacity: 0;
+}
+
+/* The Closed Rolled Velvet Scroll Cylinder */
+.scroll-cylinder-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease;
+}
+
+.scroll-cylinder-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.65));
+  transition: filter 0.5s ease;
+}
+
+.scroll-cylinder-wrapper:hover .scroll-cylinder-img {
+  filter: drop-shadow(0 16px 36px rgba(223, 179, 90, 0.45)) drop-shadow(0 6px 14px rgba(0, 0, 0, 0.8));
+}
+
+/* 3. The Golden Wax Seal & Cord Overlay */
+.scroll-seal-cord-layer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* The Golden Twisted Cord Bow */
+.scroll-cord-bow {
+  position: absolute;
+  top: 48%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(230px, 45%);
+  height: auto;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.65));
+  transition: transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.9s ease;
+}
+
+.scroll-cord-bow.is-unspooling {
+  transform: translate(-50%, 65px) scale(0.85) rotate(8deg);
+  opacity: 0;
+}
+
+/* Wax Seal Target (Clickable interactive anchor) */
+.scroll-wax-seal-anchor {
+  position: absolute;
+  top: 47%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: clamp(72px, 15vw, 94px);
+  height: clamp(72px, 15vw, 94px);
+  z-index: 12;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Breathing idle halo aura around seal */
+.scroll-seal-aura {
+  position: absolute;
+  inset: -16px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(246, 220, 150, 0.45) 0%, rgba(212, 168, 67, 0.15) 55%, transparent 75%);
+  filter: blur(8px);
+  opacity: 0.7;
+  animation: sealAuraPulse 3.4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes sealAuraPulse {
+  0%, 100% {
+    transform: scale(0.92);
+    opacity: 0.55;
+  }
+  50% {
+    transform: scale(1.16);
+    opacity: 0.9;
+  }
+}
+
+.scroll-wax-seal-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 8px 22px rgba(0, 0, 0, 0.75)) drop-shadow(0 2px 6px rgba(223, 179, 90, 0.4));
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), filter 0.45s ease;
+}
+
+.scroll-wax-seal-anchor:hover .scroll-wax-seal-img {
+  transform: scale(1.08);
+  filter: drop-shadow(0 10px 30px rgba(246, 220, 150, 0.65)) drop-shadow(0 2px 8px rgba(0, 0, 0, 0.9));
+}
+
+/* Cracking / Melting Fragments Simulation */
+.seal-crack-fissures {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 15;
+  transition: opacity 0.2s ease;
+}
+
+.seal-crack-fissures.is-visible {
+  opacity: 1;
+}
+
+.crack-fragment {
+  position: absolute;
+  inset: 0;
+  transition: transform 0.9s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.85s ease;
+}
+
+.is-breaking .crack-fragment-tl {
+  transform: translate(-22px, -12px) rotate(-16deg) scale(0.85);
+  opacity: 0;
+}
+
+.is-breaking .crack-fragment-tr {
+  transform: translate(24px, -10px) rotate(18deg) scale(0.85);
+  opacity: 0;
+}
+
+.is-breaking .crack-fragment-bl {
+  transform: translate(-18px, 26px) rotate(-12deg) scale(0.8);
+  opacity: 0;
+}
+
+.is-breaking .crack-fragment-br {
+  transform: translate(20px, 28px) rotate(14deg) scale(0.8);
+  opacity: 0;
+}
+
+/* Golden Embers & Sparks Burst */
+.golden-sparks-layer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+  z-index: 20;
+}
+
+.golden-spark {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fffdf0 0%, #ffd166 40%, #dfb35a 80%);
+  box-shadow: 0 0 10px #ffe49e, 0 0 20px #ffb703;
+  opacity: 0;
+  animation: sparkBurst 1.1s cubic-bezier(0.12, 0.8, 0.32, 1) forwards;
+}
+
+@keyframes sparkBurst {
+  0% {
+    transform: translate(0, 0) scale(1.2);
+    opacity: 1;
+  }
+  60% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate(var(--tx), var(--ty)) scale(0.2);
+    opacity: 0;
+  }
+}
+
+/* 4. The Unfurling Scroll Experience */
+.scroll-unfurling-stage {
+  position: absolute;
+  top: 38%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(540px, 94vw);
+  z-index: 25;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+}
+
+/* Top Roller Bar (Stationary top anchor with ornate gold finials) */
+.scroll-top-roller-bar {
+  width: 100%;
+  max-width: 540px;
+  position: relative;
+  z-index: 30;
+  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.75));
+}
+
+.scroll-top-roller-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Unfurling Velvet Parchment Body */
+.scroll-velvet-body-wrapper {
+  position: relative;
+  width: 90%;
+  overflow: hidden;
+  height: 0px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8), inset 0 0 40px rgba(0, 0, 0, 0.6);
+  transition: height 2.1s cubic-bezier(0.2, 0.85, 0.25, 1.0);
+  margin-top: -3px;
+  margin-bottom: -3px;
+  z-index: 28;
+}
+
+.scroll-velvet-background-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+/* Gold Embroidery Borders & Live Regal Typography inside the Scroll */
+.scroll-velvet-content {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  padding: clamp(24px, 5vh, 48px) clamp(28px, 6vw, 56px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: center;
+  color: #f7dfa5;
+  box-sizing: border-box;
+}
+
+.scroll-sacred-emblem {
+  width: 44px;
+  height: 44px;
+  margin-bottom: 8px;
+  color: #dfb35a;
+  filter: drop-shadow(0 2px 8px rgba(223, 179, 90, 0.5));
+}
+
+.scroll-content-monogram {
+  font-family: var(--font-display, "Cinzel", Georgia, serif);
+  font-size: clamp(1.4rem, 3.2vw, 2.0rem);
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: #fff2cc;
+  background: linear-gradient(135deg, #fff7d6 0%, #e2b755 50%, #c69228 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0 0 6px;
+  filter: drop-shadow(0 2px 10px rgba(212, 168, 67, 0.35));
+}
+
+.scroll-content-names {
+  font-family: var(--font-serif, "Cormorant Garamond", Georgia, serif);
+  font-size: clamp(1.65rem, 4.4vw, 2.45rem);
+  font-style: italic;
+  font-weight: 600;
+  color: #fff9e6;
+  text-shadow: 0 2px 12px rgba(244, 208, 111, 0.5), 0 0 24px rgba(223, 179, 90, 0.3);
+  margin: 4px 0 10px;
+  letter-spacing: 0.02em;
+}
+
+.scroll-content-divider {
+  width: 120px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(246, 220, 150, 0.8), transparent);
+  margin: 8px auto 14px;
+}
+
+.scroll-content-invitation {
+  font-family: var(--font-serif, "Cormorant Garamond", Georgia, serif);
+  font-size: clamp(0.95rem, 2.2vw, 1.15rem);
+  font-style: italic;
+  color: #edd9b4;
+  line-height: 1.5;
+  max-width: 380px;
+  margin: 0 auto 14px;
+}
+
+.scroll-content-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 18px;
+  background: rgba(30, 5, 10, 0.65);
+  border: 1px solid rgba(223, 179, 90, 0.6);
+  border-radius: 24px;
+  font-family: var(--font-sans, "DM Sans", sans-serif);
+  font-size: clamp(0.72rem, 1.6vw, 0.84rem);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #fae8be;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+}
+
+/* Bottom Roller Bar (Rolls downward under heavy gravity with 3D rotation) */
+.scroll-bottom-roller-bar {
+  width: 100%;
+  max-width: 540px;
+  position: relative;
+  z-index: 30;
+  filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.85));
+  transition: transform 2.1s cubic-bezier(0.2, 0.85, 0.25, 1.0);
+}
+
+.scroll-bottom-roller-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* 5. Phase 3: Screen Expansion & Elegant Vertical Wipe-Down Veil */
+.scroll-fullscreen-expansion-veil {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 50;
+  pointer-events: none;
+  background: radial-gradient(circle at center, #420814 0%, #25030b 60%, #150206 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), clip-path 1.1s cubic-bezier(0.65, 0, 0.35, 1);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+
+.scroll-fullscreen-expansion-veil.is-active {
+  opacity: 1;
+}
+
+.scroll-fullscreen-expansion-veil.is-wiping {
+  clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
+}
+
+/* Gold Filigree Curtain Header for the Wipe */
+.scroll-wipe-gold-border {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 12px;
+  background: linear-gradient(90deg, #b88026, #f6dc96, #ffd166, #f6dc96, #b88026);
+  box-shadow: 0 4px 20px rgba(255, 215, 100, 0.8);
+}
+
+/* 6. Interactive Tap Call-to-Action Cue */
+.scroll-tap-cue {
+  position: absolute;
+  bottom: clamp(24px, 6vh, 48px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 15;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 24px;
+  background: rgba(22, 4, 8, 0.85);
+  border: 1px solid rgba(223, 179, 90, 0.55);
+  border-radius: 30px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.6), 0 0 16px rgba(223, 179, 90, 0.25);
+  cursor: pointer;
+  transition: transform 0.4s ease, opacity 0.5s ease;
+  animation: tapCueFloat 2.6s ease-in-out infinite;
+}
+
+@keyframes tapCueFloat {
+  0%, 100% {
+    transform: translate(-50%, 0);
+  }
+  50% {
+    transform: translate(-50%, -6px);
+  }
+}
+
+.scroll-tap-cue:hover {
+  transform: translate(-50%, -4px) scale(1.03);
+  border-color: rgba(246, 220, 150, 0.85);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.7), 0 0 24px rgba(246, 220, 150, 0.4);
+}
+
+.scroll-scene-viewport.is-activated .scroll-tap-cue {
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 16px);
+}
+
+.cue-sparkle {
+  color: #dfb35a;
+  font-size: 0.85rem;
+  animation: cueSparkleTwinkle 2s ease-in-out infinite alternate;
+}
+
+@keyframes cueSparkleTwinkle {
+  0% {
+    opacity: 0.5;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+.cue-text {
+  font-family: var(--font-sans, "DM Sans", sans-serif);
+  font-size: clamp(0.72rem, 1.7vw, 0.82rem);
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: #faebd2;
+}
+
+/* Reduced Motion Mode */
+@media (prefers-reduced-motion: reduce) {
+  .scroll-bg-img,
+  .scroll-dim-overlay,
+  .scroll-golden-focus-glow,
+  .scroll-velvet-body-wrapper,
+  .scroll-bottom-roller-bar,
+  .scroll-fullscreen-expansion-veil {
+    transition-duration: 0.01s !important;
+    animation: none !important;
+  }
+}

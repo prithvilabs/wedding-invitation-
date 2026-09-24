@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { CalendarPlus } from 'lucide-react';
 import AnimatedSection from '../animations/AnimatedSection';
+import RosetteDivider from '../components/invitation/RosetteDivider';
+import CountdownPlaque from '../components/invitation/CountdownPlaque';
 
 export default function Countdown() {
   const [timeLeft, setTimeLeft] = useState({
@@ -75,42 +77,18 @@ export default function Countdown() {
   return (
     <AnimatedSection className="section-block muhurtham-floating-section" id="countdown">
       <div className="muhurtham-floating-container text-center">
-        {/* Editorial Heading Stack for Countdown Floating Over Background */}
+        {/* Editorial Heading Stack with Rosette Divider */}
         <div className="muhurtham-heading-stack">
           <h2 className="muhurtham-display-title">COUNTING DOWN TO FOREVER</h2>
-          
-          <div className="muhurtham-divider-flourish" aria-hidden="true">
-            <span className="muhurtham-flourish-line" />
-            <span className="muhurtham-flourish-node">❈ ❖ ❈</span>
-            <span className="muhurtham-flourish-line" />
-          </div>
-          
-          <p className="muhurtham-instruction-text">
-            Thursday, 28th January 2027 · 9:00 AM – 10:30 AM · Shri Umadri Mahal, Chennai
-          </p>
+          <RosetteDivider className="muhurtham-countdown-rosette" />
         </div>
 
-        {/* High-Contrast Luxury Timer Pods */}
+        {/* Authentic Accolade Cartouche Countdown Plaques matching reference design */}
         <div className="muhurtham-countdown-grid" role="timer" aria-label="Live countdown to wedding Muhurtham">
-          <div className="muhurtham-time-pod">
-            <span className="muhurtham-pod-digits">{timeLeft.days}</span>
-            <span className="muhurtham-pod-label">DAYS</span>
-          </div>
-          <div className="muhurtham-pod-colon">:</div>
-          <div className="muhurtham-time-pod">
-            <span className="muhurtham-pod-digits">{timeLeft.hours}</span>
-            <span className="muhurtham-pod-label">HOURS</span>
-          </div>
-          <div className="muhurtham-pod-colon">:</div>
-          <div className="muhurtham-time-pod">
-            <span className="muhurtham-pod-digits">{timeLeft.minutes}</span>
-            <span className="muhurtham-pod-label">MINUTES</span>
-          </div>
-          <div className="muhurtham-pod-colon">:</div>
-          <div className="muhurtham-time-pod">
-            <span className="muhurtham-pod-digits">{timeLeft.seconds}</span>
-            <span className="muhurtham-pod-label">SECONDS</span>
-          </div>
+          <CountdownPlaque digits={timeLeft.days} label="DAYS" />
+          <CountdownPlaque digits={timeLeft.hours} label="HOURS" />
+          <CountdownPlaque digits={timeLeft.minutes} label="MINUTES" />
+          <CountdownPlaque digits={timeLeft.seconds} label="SECONDS" />
         </div>
 
         {/* Calendar Action */}
@@ -129,3 +107,4 @@ export default function Countdown() {
     </AnimatedSection>
   );
 }
+

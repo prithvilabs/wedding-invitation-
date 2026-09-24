@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MusicProvider } from './context/MusicContext';
-import EnvelopeOpeningScene from './scenes/EnvelopeOpeningScene';
+import EnvelopeFlapScene from './scenes/EnvelopeFlapScene';
 import StaticBackground from './components/invitation/StaticBackground';
 import FloatingRosePetals from './components/invitation/FloatingRosePetals';
+import ContinuousRosePetalCascade from './components/invitation/ContinuousRosePetalCascade';
 import Navigation from './components/layout/Navigation';
 import MusicPlayer from './components/layout/MusicPlayer';
 import Hero from './sections/Hero';
@@ -17,32 +18,37 @@ import Footer from './sections/Footer';
 
 function WeddingApp() {
   const [sessionKey, setSessionKey] = useState(0);
-  const [showEntrance, setShowEntrance] = useState(true);
+  const [entranceOpened, setEntranceOpened] = useState(false);
+  const [petalCascadeActive, setPetalCascadeActive] = useState(false);
 
   const handleEntranceComplete = () => {
-    setShowEntrance(false);
+    setEntranceOpened(true);
+  };
+
+  const handleTriggerCascade = () => {
+    setPetalCascadeActive(true);
   };
 
   return (
     <div className="wedding-app-root">
-      {/* 1. Luxury Photorealistic Physical Envelope Opening Experience */}
-      <AnimatePresence mode="wait">
-        {showEntrance && (
-          <EnvelopeOpeningScene
-            key={`envelope-opening-${sessionKey}`}
-            onComplete={handleEntranceComplete}
-          />
-        )}
-      </AnimatePresence>
+      {/* 1. Cinematic 3D Envelope Flap Opening Experience */}
+      <EnvelopeFlapScene
+        key={`envelope-flap-${sessionKey}`}
+        onComplete={handleEntranceComplete}
+        onTriggerCascade={handleTriggerCascade}
+      />
 
-      {/* 2. Persistent Background Artwork Layer with progressive veil reveal */}
+      {/* 2. Unified Continuous Rose Petal Cascade (Falls across entrance & persists over main site) */}
+      <ContinuousRosePetalCascade active={petalCascadeActive} />
+
+      {/* 3. Persistent Background Artwork Layer with progressive veil reveal */}
       <StaticBackground sessionKey={sessionKey} />
 
-      {/* Reusable Continuous Photorealistic Rose Petal Animation */}
+      {/* Ambient Rose Petal Animation */}
       <FloatingRosePetals />
 
-      {/* 3. Top Navigation Bar (Visible after entrance completes) */}
-      <Navigation isVisible={!showEntrance} />
+      {/* 4. Top Navigation Bar (Visible after entrance completes) */}
+      <Navigation isVisible={entranceOpened} />
 
       {/* 4. Floating Music Controller (Global Audio Controller) */}
       <MusicPlayer />

@@ -1,0 +1,272 @@
+/* ==========================================================================
+   MINIMALIST CREAM PARCHMENT & REDDISH-GOLD WAX SEAL ENTRANCE
+   Handmade Deckled Paper, Translucent P&H Wax Seal, Radial Ripple Dissolve
+   ========================================================================== */
+
+.parchment-opening-container {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10000;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 45%, #fbf8f2 0%, #ede6da 70%, #dfd5c4 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: pointer;
+  transition: opacity 1.2s ease;
+}
+
+.parchment-opening-container.is-completed {
+  pointer-events: none !important;
+  opacity: 0;
+}
+
+/* Ambient Blurred Background Lighting */
+.parchment-ambient-backdrop {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 18% 25%, rgba(255, 235, 190, 0.45) 0%, transparent 50%),
+              radial-gradient(circle at 82% 75%, rgba(255, 220, 160, 0.35) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* 1. Center Deckled Parchment Card */
+.parchment-card-stage {
+  position: relative;
+  width: min(880px, 94vw);
+  max-height: 88vh;
+  aspect-ratio: 1024 / 729;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 28px 75px rgba(58, 28, 34, 0.18), 0 6px 20px rgba(0, 0, 0, 0.08);
+  border-radius: 3px;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.6s ease;
+}
+
+.parchment-card-stage:hover {
+  transform: translateY(-2px) scale(1.006);
+  box-shadow: 0 32px 85px rgba(58, 28, 34, 0.22), 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+/* The High-Resolution Macro Parchment Paper Cover */
+.parchment-cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+  border-radius: 3px;
+}
+
+/* Center-Outward Radial Ripple Dissolve Mask */
+.parchment-card-stage.is-dissolving {
+  mask-image: radial-gradient(circle at 50% 48%, transparent var(--ripple, 0%), black calc(var(--ripple, 0%) + 18%));
+  -webkit-mask-image: radial-gradient(circle at 50% 48%, transparent var(--ripple, 0%), black calc(var(--ripple, 0%) + 18%));
+}
+
+/* Subtle Paper Curl Shadow behind the seal (Phase 1) */
+.parchment-paper-curl-shadow {
+  position: absolute;
+  top: 48%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: clamp(110px, 18vw, 150px);
+  height: clamp(55px, 9vw, 75px);
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(68, 24, 32, 0.42) 0%, rgba(68, 24, 32, 0.1) 60%, transparent 80%);
+  filter: blur(8px);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 6;
+  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.is-activated .parchment-paper-curl-shadow {
+  opacity: 1;
+  transform: translate(-50%, -42%) scale(1.18);
+}
+
+/* 2. The Deep-Reddish-Gold Translucent Wax Seal */
+.parchment-wax-seal-wrapper {
+  position: absolute;
+  top: 48%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: clamp(88px, 14.5vw, 120px);
+  height: clamp(88px, 14.5vw, 120px);
+  z-index: 10;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease;
+}
+
+/* Ambient Breathing Warm Gold Glow around Seal */
+.parchment-seal-aura {
+  position: absolute;
+  inset: -14px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(246, 215, 130, 0.52) 0%, rgba(212, 150, 50, 0.2) 55%, transparent 75%);
+  filter: blur(8px);
+  opacity: 0.65;
+  animation: parchmentAuraPulse 3.4s ease-in-out infinite;
+  pointer-events: none;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+@keyframes parchmentAuraPulse {
+  0%, 100% {
+    transform: scale(0.92);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.85;
+  }
+}
+
+/* Phase 1: Subtle Pulse & Warm Golden Glow */
+.is-activated .parchment-wax-seal-wrapper {
+  transform: translate(-50%, -50%) scale(1.08);
+}
+
+.is-activated .parchment-seal-aura {
+  transform: scale(1.35);
+  opacity: 1;
+  background: radial-gradient(circle, rgba(255, 230, 150, 0.75) 0%, rgba(220, 160, 50, 0.3) 60%, transparent 80%);
+}
+
+.parchment-wax-seal-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 6px 16px rgba(45, 12, 18, 0.35));
+  transition: filter 0.4s ease;
+}
+
+.parchment-wax-seal-wrapper:hover .parchment-wax-seal-img {
+  filter: drop-shadow(0 8px 24px rgba(220, 150, 50, 0.45)) drop-shadow(0 4px 10px rgba(45, 12, 18, 0.4));
+}
+
+/* Phase 2: Gentle Pop / Clean Release and Lift Away */
+.is-releasing .parchment-wax-seal-wrapper {
+  transform: translate(-50%, -64%) scale(1.22);
+  opacity: 0;
+  transition: transform 1.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.9s cubic-bezier(0.5, 0, 0.75, 0);
+}
+
+.is-releasing .parchment-seal-aura {
+  transform: scale(1.6);
+  opacity: 0;
+  transition: transform 1.2s ease, opacity 0.8s ease;
+}
+
+/* Soft Golden Release Embers */
+.parchment-release-embers-layer {
+  position: absolute;
+  top: 48%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+  z-index: 12;
+}
+
+.parchment-ember {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fffef0 0%, #ffd166 45%, #dfb35a 85%);
+  box-shadow: 0 0 8px rgba(255, 215, 100, 0.8);
+  animation: emberPop 1.2s cubic-bezier(0.12, 0.8, 0.32, 1) forwards;
+}
+
+@keyframes emberPop {
+  0% {
+    transform: translate(0, 0) scale(1.1);
+    opacity: 1;
+  }
+  60% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translate(var(--tx), var(--ty)) scale(0.2);
+    opacity: 0;
+  }
+}
+
+/* 3. Floating Tap Cue at Bottom */
+.parchment-tap-cue {
+  position: absolute;
+  bottom: clamp(24px, 5vh, 44px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 24px;
+  background: rgba(255, 252, 246, 0.9);
+  border: 1px solid rgba(195, 150, 75, 0.45);
+  border-radius: 30px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 6px 20px rgba(50, 20, 25, 0.1), 0 1px 4px rgba(195, 150, 75, 0.2);
+  cursor: pointer;
+  transition: transform 0.4s ease, opacity 0.5s ease;
+  animation: parchmentCueFloat 2.6s ease-in-out infinite;
+}
+
+@keyframes parchmentCueFloat {
+  0%, 100% {
+    transform: translate(-50%, 0);
+  }
+  50% {
+    transform: translate(-50%, -5px);
+  }
+}
+
+.parchment-tap-cue:hover {
+  transform: translate(-50%, -3px) scale(1.025);
+  border-color: rgba(195, 150, 75, 0.8);
+  box-shadow: 0 8px 28px rgba(50, 20, 25, 0.15);
+}
+
+.is-activated .parchment-tap-cue,
+.is-releasing .parchment-tap-cue {
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 14px);
+}
+
+.parchment-cue-sparkle {
+  color: #b8862d;
+  font-size: 0.85rem;
+}
+
+.parchment-cue-text {
+  font-family: var(--font-sans, "DM Sans", sans-serif);
+  font-size: clamp(0.72rem, 1.7vw, 0.8rem);
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: #5a2630;
+}
+
+/* Reduced Motion Mode */
+@media (prefers-reduced-motion: reduce) {
+  .parchment-card-stage,
+  .parchment-wax-seal-wrapper,
+  .parchment-seal-aura,
+  .parchment-paper-curl-shadow {
+    transition-duration: 0.01s !important;
+    animation: none !important;
+  }
+}
