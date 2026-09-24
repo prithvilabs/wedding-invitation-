@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { MusicProvider } from './context/MusicContext';
-import EnvelopeFlapScene from './scenes/EnvelopeFlapScene';
+import React, { useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { MusicProvider, useMusic } from './context/MusicContext';
 import StaticBackground from './components/invitation/StaticBackground';
 import FloatingRosePetals from './components/invitation/FloatingRosePetals';
-import ContinuousRosePetalCascade from './components/invitation/ContinuousRosePetalCascade';
 import Navigation from './components/layout/Navigation';
 import MusicPlayer from './components/layout/MusicPlayer';
 import Hero from './sections/Hero';
@@ -17,50 +15,43 @@ import RSVP from './sections/RSVP';
 import Footer from './sections/Footer';
 
 function WeddingApp() {
-  const [sessionKey, setSessionKey] = useState(0);
-  const [entranceOpened, setEntranceOpened] = useState(false);
-  const [petalCascadeActive, setPetalCascadeActive] = useState(false);
+  const { playMusic } = useMusic();
 
-  const handleEntranceComplete = () => {
-    setEntranceOpened(true);
-  };
+  // Smoothly trigger audio on first user touch/click anywhere on the page
+  useEffect(() => {
+    const handleFirstInteraction = () => {
+      playMusic();
+    };
 
-  const handleTriggerCascade = () => {
-    setPetalCascadeActive(true);
-  };
+    window.addEventListener('click', handleFirstInteraction, { once: true });
+    window.addEventListener('touchstart', handleFirstInteraction, { once: true });
+
+    return () => {
+      window.removeEventListener('click', handleFirstInteraction);
+      window.removeEventListener('touchstart', handleFirstInteraction);
+    };
+  }, [playMusic]);
 
   return (
     <div className="wedding-app-root">
-      {/* 1. Cinematic 3D Envelope Flap Opening Experience */}
-      <EnvelopeFlapScene
-        key={`envelope-flap-${sessionKey}`}
-        onComplete={handleEntranceComplete}
-        onTriggerCascade={handleTriggerCascade}
-      />
+      {/* 1. Persistent Background Artwork Layer */}
+      <StaticBackground />
 
-      {/* 2. Unified Continuous Rose Petal Cascade (Falls across entrance & persists over main site) */}
-      <ContinuousRosePetalCascade active={petalCascadeActive} />
-
-      {/* 3. Persistent Background Artwork Layer with progressive veil reveal */}
-      <StaticBackground sessionKey={sessionKey} />
-
-      {/* Ambient Rose Petal Animation */}
+      {/* 2. Romantic Ambient Falling Rose Petals */}
       <FloatingRosePetals />
 
-      {/* 4. Top Navigation Bar (Visible after entrance completes) */}
-      <Navigation isVisible={entranceOpened} />
+      {/* 3. Top Navigation Bar (Always visible) */}
+      <Navigation />
 
-      {/* 4. Floating Music Controller (Global Audio Controller) */}
+      {/* 4. Floating Music Controller (Bottom Right) */}
       <MusicPlayer />
 
       {/* 5. Main Invitation Content */}
       <main id="mainWebsite">
-        {/* Seamlessly Flowing Wedding Sections */}
         <motion.div
-          key={`sections-${sessionKey}`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.1 }}
+          transition={{ duration: 0.6 }}
         >
           <Hero />
           <ScratchCard />
