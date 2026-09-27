@@ -2,7 +2,11 @@ import React, { useRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import AnimatedSection from '../animations/AnimatedSection';
 
-// Authentic Polaroid assets cropped directly from the editorial design
+// Authentic Editorial Paper & Botanical Sprig Assets
+import deckledCardBg from '../assets/story/deckled_card_bg.png';
+import botanicalSprig from '../assets/story/botanical_sprig.png';
+
+// High-resolution Retina Polaroid Assets
 import polaroid2021 from '../assets/story/polaroid_2021.png';
 import polaroid2022 from '../assets/story/polaroid_2022.png';
 import polaroidDating from '../assets/story/polaroid_dating.png';
@@ -15,7 +19,7 @@ export default function Story() {
   const flightPathRef = useRef(null);
   const [planePos, setPlanePos] = useState({
     x: -20,
-    y: 115,
+    y: 108.6,
     angle: 90,
     opacity: 1
   });
@@ -63,7 +67,7 @@ export default function Story() {
     return () => cancelAnimationFrame(animationFrameId);
   }, []);
 
-  // 7 milestones: original 6 + new 2026 Engagement milestone
+  // 7 milestones: original 6 + 2026 Engagement milestone
   const milestones = [
     {
       id: 'beginning',
@@ -75,7 +79,7 @@ export default function Story() {
       polaroid: polaroid2021,
       polaroidSide: 'left',
       polaroidAlt: 'It started with a mutual friend',
-      flourish: '✦'
+      sprig: null
     },
     {
       id: 'first-hi',
@@ -83,11 +87,11 @@ export default function Story() {
       badgeIcon: '📷',
       badgeText: '2022',
       title: 'THE FIRST "HI"',
-      description: 'A little curiosity turned into an Instagram request. A simple \'Hi\' was sent, gently opening the door to countless conversations.',
+      description: "A little curiosity turned into an Instagram request. A simple 'Hi' was sent, gently opening the door to countless conversations.",
       polaroid: polaroid2022,
       polaroidSide: 'right',
       polaroidAlt: 'Just a "Hi"...',
-      flourish: '✦'
+      sprig: 'sprig-c2'
     },
     {
       id: 'dating',
@@ -99,7 +103,7 @@ export default function Story() {
       polaroid: polaroidDating,
       polaroidSide: 'right',
       polaroidAlt: 'Same hearts, new chapter',
-      flourish: '✦'
+      sprig: 'sprig-c3'
     },
     {
       id: 'travelling',
@@ -111,7 +115,7 @@ export default function Story() {
       polaroid: polaroidTravelling,
       polaroidSide: 'left',
       polaroidAlt: 'Different cities, same us',
-      flourish: '✦'
+      sprig: 'sprig-c4'
     },
     {
       id: 'memories',
@@ -123,7 +127,7 @@ export default function Story() {
       polaroid: polaroidMemories,
       polaroidSide: 'right',
       polaroidAlt: 'More stamps, more memories',
-      flourish: '✦'
+      sprig: 'sprig-c5'
     },
     {
       id: 'oceans',
@@ -135,7 +139,7 @@ export default function Story() {
       polaroid: polaroidOceans,
       polaroidSide: 'right',
       polaroidAlt: 'Different skies, same moon',
-      flourish: '✦'
+      sprig: 'sprig-c6'
     },
     {
       id: 'engaged',
@@ -147,9 +151,73 @@ export default function Story() {
       polaroid: polaroidEngaged,
       polaroidSide: 'right',
       polaroidAlt: 'We got engaged',
-      flourish: '✦'
+      sprig: 'sprig-c7'
     }
   ];
+
+  const renderCard = (item, idx = 0) => (
+    <motion.div
+      key={item.id}
+      className={`story-deckle-card story-card-${item.id} polaroid-${item.polaroidSide} ${item.id === 'engaged' ? 'card-engaged-highlight' : ''}`}
+      initial={{ opacity: 0, y: 22 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-40px' }}
+      transition={{ duration: 0.65, delay: idx * 0.1 }}
+    >
+      {/* Botanical Floral & Leaf Sprig sprouting organically around box */}
+      {item.sprig && (
+        <div className={`story-card-sprig ${item.sprig}`} aria-hidden="true">
+          <img src={botanicalSprig} alt="" className="sprig-leaf-img" loading="lazy" />
+        </div>
+      )}
+
+      {/* Authentic Torn Deckled Edge Handmade Cotton Paper Background */}
+      <img
+        src={deckledCardBg}
+        alt=""
+        className="story-deckled-paper-bg"
+        aria-hidden="true"
+      />
+
+      <div className="story-card-body">
+        {item.polaroidSide === 'left' && (
+          <div className="story-polaroid-anchor tilt-left">
+            <img
+              src={item.polaroid}
+              alt={item.polaroidAlt}
+              className="story-polaroid-frame-img"
+              loading="lazy"
+            />
+          </div>
+        )}
+
+        <div className="story-card-narrative">
+          <div className="story-narrative-badge">
+            <span className="badge-icon">{item.badgeIcon}</span>
+            <span className="badge-text">{item.badgeText}</span>
+          </div>
+          <h3 className="story-narrative-title">{item.title}</h3>
+          <p className="story-narrative-desc">{item.description}</p>
+          <div className="story-card-flourish" aria-hidden="true">
+            <span className="flourish-line"></span>
+            <span className="flourish-rosette">𑁍</span>
+            <span className="flourish-line"></span>
+          </div>
+        </div>
+
+        {item.polaroidSide === 'right' && (
+          <div className="story-polaroid-anchor tilt-right">
+            <img
+              src={item.polaroid}
+              alt={item.polaroidAlt}
+              className="story-polaroid-frame-img"
+              loading="lazy"
+            />
+          </div>
+        )}
+      </div>
+    </motion.div>
+  );
 
   return (
     <AnimatedSection className="section-block story-editorial-section" id="story">
@@ -233,7 +301,7 @@ export default function Story() {
             <path
               ref={flightPathRef}
               className="flight-route-path"
-              d="M -20 115 L 350 115 L 415 115 L 765 115 L 830 115 L 1140 115 C 1195 115, 1205 180, 1150 215 C 990 238, 790 236, 590 237 C 380 238, 130 236, 20 270 C -35 295, -20 345, 30 360 L 350 360 L 415 360 L 765 360 L 830 360 L 1140 360 C 1200 360, 1180 470, 990 525 C 850 565, 760 595, 680 605 L 460 605"
+              d="M -20 108.6 L 358 108.6 L 412 108.6 L 769 108.6 L 821 108.6 L 1140 108.6 C 1195 108.6, 1205 165, 1150 195 C 990 215, 790 215, 590 215 C 380 215, 130 215, 30 245 C -25 270, -15 310, 35 321.7 L 358 321.7 L 412 321.7 L 769 321.7 L 821 321.7 L 1140 321.7 C 1200 321.7, 1175 425, 985 475 C 840 515, 760 534.2, 680 534.2 L 460 534.2"
               fill="none"
               stroke="url(#flightPathGrad)"
               strokeWidth="2.2"
@@ -243,13 +311,13 @@ export default function Story() {
 
             {/* Static Milestone Markers along the Flight Route */}
             {/* Marker 1 (between Card 1 & 2): ⊙ */}
-            <g transform="translate(382, 115)">
+            <g transform="translate(385, 108.6)">
               <circle cx="0" cy="0" r="7.5" fill="#FAF4E8" stroke="#C99738" strokeWidth="1.6" />
               <circle cx="0" cy="0" r="3" fill="#C99738" />
             </g>
 
             {/* Marker 2 (between Card 2 & 3): ♡ Heart in gold ring */}
-            <g transform="translate(798, 115)">
+            <g transform="translate(795, 108.6)">
               <circle cx="0" cy="0" r="8.5" fill="#FAF4E8" stroke="#C99738" strokeWidth="1.6" />
               <path
                 d="M 0 -2.5 C -1.5 -5, -4.5 -4, -4 -1.5 C -3.5 1, 0 3.5, 0 4.2 C 0 3.5, 3.5 1, 4 -1.5 C 4.5 -4, 1.5 -5, 0 -2.5 Z"
@@ -259,7 +327,7 @@ export default function Story() {
             </g>
 
             {/* Airplane Stamp near Card 3 */}
-            <g transform="translate(840, 85) rotate(-22)" opacity="0.45">
+            <g transform="translate(835, 78) rotate(-22)" opacity="0.45">
               <path
                 d="M12 2C11.5 2 11 2.5 11 4V10L4 13.5V15.5L11 13V17L9 18.5V20L12 19L15 20V18.5L13 17V13L20 15.5V13.5L13 10V4C13 2.5 12.5 2 12 2Z"
                 fill="#C99738"
@@ -268,19 +336,19 @@ export default function Story() {
             </g>
 
             {/* Marker in middle loop: ✦ */}
-            <text x="590" y="242" textAnchor="middle" fill="#C99738" fontSize="13" fontWeight="bold">✦</text>
+            <text x="590" y="219" textAnchor="middle" fill="#C99738" fontSize="13" fontWeight="bold">✦</text>
 
             {/* Marker in left return loop: ✦ */}
-            <text x="32" y="315" textAnchor="middle" fill="#C99738" fontSize="12" fontWeight="bold">✦</text>
+            <text x="30" y="285" textAnchor="middle" fill="#C99738" fontSize="12" fontWeight="bold">✦</text>
 
             {/* Marker 3 (between Card 4 & 5): ⊙ */}
-            <g transform="translate(382, 360)">
+            <g transform="translate(385, 321.7)">
               <circle cx="0" cy="0" r="7.5" fill="#FAF4E8" stroke="#C99738" strokeWidth="1.6" />
               <circle cx="0" cy="0" r="3" fill="#C99738" />
             </g>
 
             {/* Marker 4 (between Card 5 & 6): 📍 Location Pin */}
-            <g transform="translate(798, 360)">
+            <g transform="translate(795, 321.7)">
               <circle cx="0" cy="0" r="8" fill="#FAF4E8" stroke="#C99738" strokeWidth="1.4" />
               <path
                 d="M0 -4.5 C -2.5 -4.5, -4 -3, -4 -0.5 C -4 2, 0 5, 0 5 C 0 5, 4 2, 4 -0.5 C 4 -3, 2.5 -4.5, 0 -4.5 Z"
@@ -291,7 +359,7 @@ export default function Story() {
             </g>
 
             {/* Marker on swoop to 2026 Engagement: ✦ */}
-            <text x="900" y="555" textAnchor="middle" fill="#C99738" fontSize="13" fontWeight="bold">✦</text>
+            <text x="890" y="505" textAnchor="middle" fill="#C99738" fontSize="13" fontWeight="bold">✦</text>
 
             {/* Live Traveling Airplane Icon */}
             <g
@@ -319,143 +387,17 @@ export default function Story() {
           <div className="story-cards-grid">
             {/* ROW 1 (Cards 1, 2, 3) */}
             <div className="story-cards-row row-1">
-              {milestones.filter(m => m.row === 1).map((item, idx) => (
-                <motion.div
-                  key={item.id}
-                  className={`story-deckle-card story-card-${item.id} polaroid-${item.polaroidSide}`}
-                  initial={{ opacity: 0, y: 22 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-40px' }}
-                  transition={{ duration: 0.65, delay: idx * 0.1 }}
-                >
-                  <div className="story-card-body">
-                    {item.polaroidSide === 'left' && (
-                      <div className="story-polaroid-anchor tilt-left">
-                        <img
-                          src={item.polaroid}
-                          alt={item.polaroidAlt}
-                          className="story-polaroid-frame-img"
-                          loading="lazy"
-                        />
-                      </div>
-                    )}
-
-                    <div className="story-card-narrative">
-                      <div className="story-narrative-badge">
-                        <span className="badge-icon">{item.badgeIcon}</span>
-                        <span className="badge-text">{item.badgeText}</span>
-                      </div>
-                      <h3 className="story-narrative-title">{item.title}</h3>
-                      <p className="story-narrative-desc">{item.description}</p>
-                      {item.flourish && (
-                        <div className="story-narrative-flourish" aria-hidden="true">
-                          {item.flourish}
-                        </div>
-                      )}
-                    </div>
-
-                    {item.polaroidSide === 'right' && (
-                      <div className="story-polaroid-anchor tilt-right">
-                        <img
-                          src={item.polaroid}
-                          alt={item.polaroidAlt}
-                          className="story-polaroid-frame-img"
-                          loading="lazy"
-                        />
-                      </div>
-                    )}
-                  </div>
-                </motion.div>
-              ))}
+              {milestones.filter(m => m.row === 1).map((item, idx) => renderCard(item, idx))}
             </div>
 
             {/* ROW 2 (Cards 4, 5, 6) */}
             <div className="story-cards-row row-2">
-              {milestones.filter(m => m.row === 2).map((item, idx) => (
-                <motion.div
-                  key={item.id}
-                  className={`story-deckle-card story-card-${item.id} polaroid-${item.polaroidSide}`}
-                  initial={{ opacity: 0, y: 22 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-40px' }}
-                  transition={{ duration: 0.65, delay: idx * 0.1 }}
-                >
-                  <div className="story-card-body">
-                    {item.polaroidSide === 'left' && (
-                      <div className="story-polaroid-anchor tilt-left">
-                        <img
-                          src={item.polaroid}
-                          alt={item.polaroidAlt}
-                          className="story-polaroid-frame-img"
-                          loading="lazy"
-                        />
-                      </div>
-                    )}
-
-                    <div className="story-card-narrative">
-                      <div className="story-narrative-badge">
-                        <span className="badge-icon">{item.badgeIcon}</span>
-                        <span className="badge-text">{item.badgeText}</span>
-                      </div>
-                      <h3 className="story-narrative-title">{item.title}</h3>
-                      <p className="story-narrative-desc">{item.description}</p>
-                      {item.flourish && (
-                        <div className="story-narrative-flourish" aria-hidden="true">
-                          {item.flourish}
-                        </div>
-                      )}
-                    </div>
-
-                    {item.polaroidSide === 'right' && (
-                      <div className="story-polaroid-anchor tilt-right">
-                        <img
-                          src={item.polaroid}
-                          alt={item.polaroidAlt}
-                          className="story-polaroid-frame-img"
-                          loading="lazy"
-                        />
-                      </div>
-                    )}
-                  </div>
-                </motion.div>
-              ))}
+              {milestones.filter(m => m.row === 2).map((item, idx) => renderCard(item, idx))}
             </div>
 
             {/* ROW 3 (Card 7: 2026 We Got Engaged, centered) */}
             <div className="story-cards-row row-3-engaged">
-              {milestones.filter(m => m.row === 3).map((item) => (
-                <motion.div
-                  key={item.id}
-                  className={`story-deckle-card story-card-${item.id} polaroid-${item.polaroidSide} card-engaged-highlight`}
-                  initial={{ opacity: 0, scale: 0.96, y: 24 }}
-                  whileInView={{ opacity: 1, scale: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-40px' }}
-                  transition={{ duration: 0.75 }}
-                >
-                  <div className="story-card-body">
-                    <div className="story-card-narrative">
-                      <div className="story-narrative-badge">
-                        <span className="badge-icon">{item.badgeIcon}</span>
-                        <span className="badge-text">{item.badgeText}</span>
-                      </div>
-                      <h3 className="story-narrative-title">{item.title}</h3>
-                      <p className="story-narrative-desc">{item.description}</p>
-                      <div className="story-narrative-flourish" aria-hidden="true">
-                        ✦
-                      </div>
-                    </div>
-
-                    <div className="story-polaroid-anchor tilt-right">
-                      <img
-                        src={item.polaroid}
-                        alt={item.polaroidAlt}
-                        className="story-polaroid-frame-img"
-                        loading="lazy"
-                      />
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
+              {milestones.filter(m => m.row === 3).map((item) => renderCard(item, 0))}
             </div>
           </div>
         </div>
@@ -469,53 +411,147 @@ export default function Story() {
           transition={{ duration: 0.8 }}
         >
           <div className="story-reflection-cluster">
-            {/* Left Golden Olive Branch */}
+            {/* Left Golden Olive Branch with slender pointed leaves */}
             <div className="story-olive-branch branch-left" aria-hidden="true">
-              <svg width="65" height="95" viewBox="0 0 65 95" fill="none">
-                <path d="M54 90 C42 68, 30 45, 12 12" stroke="#C99738" strokeWidth="1.4" strokeLinecap="round" />
-                <path d="M46 74 C38 66, 40 56, 50 62 C48 70, 46 74, 46 74 Z" fill="#D4A843" fillOpacity="0.92" stroke="#B37D22" strokeWidth="0.5" />
-                <path d="M38 58 C28 53, 26 42, 37 46 C35 53, 38 58, 38 58 Z" fill="#D4A843" fillOpacity="0.92" stroke="#B37D22" strokeWidth="0.5" />
-                <path d="M28 40 C19 34, 22 23, 32 28 C29 36, 28 40, 28 40 Z" fill="#D4A843" fillOpacity="0.92" stroke="#B37D22" strokeWidth="0.5" />
-                <path d="M16 22 C8 17, 13 7, 22 13 C20 19, 16 22, 16 22 Z" fill="#D4A843" fillOpacity="0.92" stroke="#B37D22" strokeWidth="0.5" />
-                <path d="M12 12 C7 6, 9 1, 16 4 C14 8, 12 12, 12 12 Z" fill="#D4A843" fillOpacity="0.92" stroke="#B37D22" strokeWidth="0.5" />
+              <svg width="72" height="96" viewBox="0 0 75 95" fill="none">
+                <path d="M68 90 C56 70, 42 42, 18 10" stroke="#C28E35" strokeWidth="1.3" strokeLinecap="round" />
+                {/* Terminal tip leaf */}
+                <path d="M18 10 C14 6, 14 2, 19 3 C23 7, 21 11, 18 10 Z" stroke="#C28E35" strokeWidth="1.0" fill="rgba(250, 238, 220, 0.4)" />
+                <line x1="18" y1="10" x2="17" y2="3" stroke="#C28E35" strokeWidth="0.7" />
+                {/* Pair 1 */}
+                <path d="M22 21 C14 17, 10 13, 14 10 C18 10, 21 16, 22 21 Z" stroke="#C28E35" strokeWidth="1.0" fill="rgba(250, 238, 220, 0.4)" />
+                <line x1="22" y1="21" x2="13" y2="11" stroke="#C28E35" strokeWidth="0.7" />
+                <path d="M27 25 C34 19, 39 17, 40 21 C39 26, 31 27, 27 25 Z" stroke="#C28E35" strokeWidth="1.0" fill="rgba(250, 238, 220, 0.4)" />
+                <line x1="27" y1="25" x2="39" y2="19" stroke="#C28E35" strokeWidth="0.7" />
+                {/* Pair 2 */}
+                <path d="M32 37 C22 31, 17 26, 22 23 C26 23, 30 31, 32 37 Z" stroke="#C28E35" strokeWidth="1.0" fill="rgba(250, 238, 220, 0.4)" />
+                <line x1="32" y1="37" x2="20" y2="24" stroke="#C28E35" strokeWidth="0.7" />
+                <path d="M38 41 C46 34, 53 31, 53 36 C51 42, 43 43, 38 41 Z" stroke="#C28E35" strokeWidth="1.0" fill="rgba(250, 238, 220, 0.4)" />
+                <line x1="38" y1="41" x2="52" y2="34" stroke="#C28E35" strokeWidth="0.7" />
+                {/* Pair 3 */}
+                <path d="M44 55 C33 48, 27 43, 33 39 C37 40, 42 48, 44 55 Z" stroke="#C28E35" strokeWidth="1.0" fill="rgba(250, 238, 220, 0.4)" />
+                <line x1="44" y1="55" x2="30" y2="41" stroke="#C28E35" strokeWidth="0.7" />
+                <path d="M50 59 C59 51, 67 48, 66 54 C63 60, 55 61, 50 59 Z" stroke="#C28E35" strokeWidth="1.0" fill="rgba(250, 238, 220, 0.4)" />
+                <line x1="50" y1="59" x2="65" y2="51" stroke="#C28E35" strokeWidth="0.7" />
+                {/* Pair 4 */}
+                <path d="M56 71 C46 64, 41 60, 46 56 C50 57, 54 65, 56 71 Z" stroke="#C28E35" strokeWidth="1.0" fill="rgba(250, 238, 220, 0.4)" />
+                <line x1="56" y1="71" x2="44" y2="58" stroke="#C28E35" strokeWidth="0.7" />
+                <path d="M61 74 C70 66, 76 64, 76 69 C73 75, 66 76, 61 74 Z" stroke="#C28E35" strokeWidth="1.0" fill="rgba(250, 238, 220, 0.4)" />
+                <line x1="61" y1="74" x2="75" y2="67" stroke="#C28E35" strokeWidth="0.7" />
               </svg>
             </div>
 
             {/* Reflection Text */}
             <div className="story-reflection-text-wrap">
               <p className="story-reflection-body">
-                We grew in different places, under different skies, and on completely opposite schedules. Strangely, we never grew away from each other.<br />
+                We grew in different places, under different skies, and on completely<br />
+                opposite schedules. Strangely, we never grew away from each other.<br />
                 After years of counting miles, days and hours, we're finally done with the countdown.<br />
                 <span className="reflection-closing">This is the chapter where we stay.</span>
               </p>
             </div>
 
-            {/* Right Golden Olive Branch */}
+            {/* Right Golden Olive Branch (mirrored) */}
             <div className="story-olive-branch branch-right" aria-hidden="true">
-              <svg width="65" height="95" viewBox="0 0 65 95" fill="none">
-                <path d="M11 90 C23 68, 35 45, 53 12" stroke="#C99738" strokeWidth="1.4" strokeLinecap="round" />
-                <path d="M19 74 C27 66, 25 56, 15 62 C17 70, 19 74, 19 74 Z" fill="#D4A843" fillOpacity="0.92" stroke="#B37D22" strokeWidth="0.5" />
-                <path d="M27 58 C37 53, 39 42, 28 46 C30 53, 27 58, 27 58 Z" fill="#D4A843" fillOpacity="0.92" stroke="#B37D22" strokeWidth="0.5" />
-                <path d="M37 40 C46 34, 43 23, 33 28 C36 36, 37 40, 37 40 Z" fill="#D4A843" fillOpacity="0.92" stroke="#B37D22" strokeWidth="0.5" />
-                <path d="M49 22 C57 17, 52 7, 43 13 C45 19, 49 22, 49 22 Z" fill="#D4A843" fillOpacity="0.92" stroke="#B37D22" strokeWidth="0.5" />
-                <path d="M53 12 C58 6, 56 1, 49 4 C51 8, 53 12, 53 12 Z" fill="#D4A843" fillOpacity="0.92" stroke="#B37D22" strokeWidth="0.5" />
+              <svg width="72" height="96" viewBox="0 0 75 95" fill="none" style={{ transform: 'scaleX(-1)' }}>
+                <path d="M68 90 C56 70, 42 42, 18 10" stroke="#C28E35" strokeWidth="1.3" strokeLinecap="round" />
+                {/* Terminal tip leaf */}
+                <path d="M18 10 C14 6, 14 2, 19 3 C23 7, 21 11, 18 10 Z" stroke="#C28E35" strokeWidth="1.0" fill="rgba(250, 238, 220, 0.4)" />
+                <line x1="18" y1="10" x2="17" y2="3" stroke="#C28E35" strokeWidth="0.7" />
+                {/* Pair 1 */}
+                <path d="M22 21 C14 17, 10 13, 14 10 C18 10, 21 16, 22 21 Z" stroke="#C28E35" strokeWidth="1.0" fill="rgba(250, 238, 220, 0.4)" />
+                <line x1="22" y1="21" x2="13" y2="11" stroke="#C28E35" strokeWidth="0.7" />
+                <path d="M27 25 C34 19, 39 17, 40 21 C39 26, 31 27, 27 25 Z" stroke="#C28E35" strokeWidth="1.0" fill="rgba(250, 238, 220, 0.4)" />
+                <line x1="27" y1="25" x2="39" y2="19" stroke="#C28E35" strokeWidth="0.7" />
+                {/* Pair 2 */}
+                <path d="M32 37 C22 31, 17 26, 22 23 C26 23, 30 31, 32 37 Z" stroke="#C28E35" strokeWidth="1.0" fill="rgba(250, 238, 220, 0.4)" />
+                <line x1="32" y1="37" x2="20" y2="24" stroke="#C28E35" strokeWidth="0.7" />
+                <path d="M38 41 C46 34, 53 31, 53 36 C51 42, 43 43, 38 41 Z" stroke="#C28E35" strokeWidth="1.0" fill="rgba(250, 238, 220, 0.4)" />
+                <line x1="38" y1="41" x2="52" y2="34" stroke="#C28E35" strokeWidth="0.7" />
+                {/* Pair 3 */}
+                <path d="M44 55 C33 48, 27 43, 33 39 C37 40, 42 48, 44 55 Z" stroke="#C28E35" strokeWidth="1.0" fill="rgba(250, 238, 220, 0.4)" />
+                <line x1="44" y1="55" x2="30" y2="41" stroke="#C28E35" strokeWidth="0.7" />
+                <path d="M50 59 C59 51, 67 48, 66 54 C63 60, 55 61, 50 59 Z" stroke="#C28E35" strokeWidth="1.0" fill="rgba(250, 238, 220, 0.4)" />
+                <line x1="50" y1="59" x2="65" y2="51" stroke="#C28E35" strokeWidth="0.7" />
+                {/* Pair 4 */}
+                <path d="M56 71 C46 64, 41 60, 46 56 C50 57, 54 65, 56 71 Z" stroke="#C28E35" strokeWidth="1.0" fill="rgba(250, 238, 220, 0.4)" />
+                <line x1="56" y1="71" x2="44" y2="58" stroke="#C28E35" strokeWidth="0.7" />
+                <path d="M61 74 C70 66, 76 64, 76 69 C73 75, 66 76, 61 74 Z" stroke="#C28E35" strokeWidth="1.0" fill="rgba(250, 238, 220, 0.4)" />
+                <line x1="61" y1="74" x2="75" y2="67" stroke="#C28E35" strokeWidth="0.7" />
               </svg>
             </div>
           </div>
 
-          {/* Couple Names & Year Signature */}
-          <div className="story-signature-block">
-            <div className="story-signature-names">
-              <span>PRITHVI RAJ</span>
-              <span className="signature-cross">✕</span>
-              <span>HARSHINI</span>
-            </div>
-            <div className="story-signature-year">2027</div>
-            <div className="story-signature-rosette" aria-hidden="true">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="#C99738">
-                <path d="M12 2L13.5 8.5L20 7L15.5 12L20 17L13.5 15.5L12 22L10.5 15.5L4 17L8.5 12L4 7L10.5 8.5L12 2Z" />
+          {/* 4. Golden Heart Divider Line */}
+          <div className="story-reflection-heart-divider" aria-hidden="true">
+            <span className="reflection-divider-line"></span>
+            <div className="reflection-golden-heart">
+              <svg width="20" height="18" viewBox="0 0 20 18" fill="none">
+                <defs>
+                  <linearGradient id="heartGold3D" x1="0.2" y1="0" x2="0.8" y2="1">
+                    <stop offset="0%" stopColor="#FFECA0" />
+                    <stop offset="35%" stopColor="#D4A143" />
+                    <stop offset="70%" stopColor="#A6701C" />
+                    <stop offset="100%" stopColor="#633906" />
+                  </linearGradient>
+                  <filter id="heartShadowFilter" x="-30%" y="-30%" width="160%" height="160%">
+                    <feDropShadow dx="0" dy="1.5" stdDeviation="1.5" floodColor="#3B1204" floodOpacity="0.32" />
+                  </filter>
+                </defs>
+                <path
+                  d="M10 16.5 C9.5 16.5, 1.5 10.5, 1.5 5 C1.5 2.2, 3.8 0.5, 6.5 0.5 C8.2 0.5, 9.4 1.4, 10 2.2 C10.6 1.4, 11.8 0.5, 13.5 0.5 C16.2 0.5, 18.5 2.2, 18.5 5 C18.5 10.5, 10.5 16.5, 10 16.5 Z"
+                  fill="url(#heartGold3D)"
+                  stroke="#7A4B06"
+                  strokeWidth="0.6"
+                  filter="url(#heartShadowFilter)"
+                />
+                <path
+                  d="M5 3.2 C3.8 4.2, 3.8 5.6, 4.4 6.8"
+                  stroke="#FFFDF5"
+                  strokeWidth="0.9"
+                  strokeLinecap="round"
+                  opacity="0.8"
+                />
               </svg>
             </div>
+            <span className="reflection-divider-line"></span>
+          </div>
+
+          {/* 5. Couple Names */}
+          <div className="story-signature-names">
+            <span>PRITHVI RAJ</span>
+            <span className="signature-cross">✕</span>
+            <span>HARSHINI</span>
+          </div>
+
+          {/* 6. 2027 Flanked by Hairline Rules */}
+          <div className="story-signature-year-divider">
+            <span className="year-divider-line"></span>
+            <span className="story-signature-year">2027</span>
+            <span className="year-divider-line"></span>
+          </div>
+
+          {/* 7. Mandala Rosette Ornament */}
+          <div className="story-signature-rosette" aria-hidden="true">
+            <svg width="30" height="30" viewBox="-13 -13 26 26" fill="none">
+              <defs>
+                <radialGradient id="mandalaCoreGrad" cx="35%" cy="35%" r="65%">
+                  <stop offset="0%" stopColor="#FFE082" />
+                  <stop offset="60%" stopColor="#D4A843" />
+                  <stop offset="100%" stopColor="#8A5B0F" />
+                </radialGradient>
+              </defs>
+              {/* 8 Radial Petals */}
+              {[0, 45, 90, 135, 180, 225, 270, 315].map((deg) => (
+                <g key={deg} transform={`rotate(${deg})`}>
+                  <ellipse cx="0" cy="-5.2" rx="2.0" ry="2.8" stroke="#AC3B44" strokeWidth="1.0" fill="rgba(245, 230, 220, 0.45)" />
+                  <circle cx="0" cy="-9.2" r="1.0" fill="#AC3B44" />
+                </g>
+              ))}
+              {/* Center Core */}
+              <circle cx="0" cy="0" r="2.6" fill="url(#mandalaCoreGrad)" stroke="#8A5B0F" strokeWidth="0.6" />
+              <circle cx="0" cy="0" r="1.1" fill="#FAF4E8" />
+            </svg>
           </div>
         </motion.div>
       </div>
