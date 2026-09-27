@@ -1688,292 +1688,572 @@ body {
 }
 
 /* ==========================================================================
-   5. OUR STORY — EDITORIAL STATIONERY & LIVE FLIGHT ROUTE JOURNEY
+   5. OUR STORY — LUXURY SOUTH INDIAN WEDDING KEEPSAKE & FILM STORYBOOK
    ========================================================================== */
-.story-editorial-section {
+.story-cinematic-section {
   position: relative;
-  padding: 110px 20px 80px;
+  padding: 90px 20px 80px;
   overflow: hidden;
   scroll-margin-top: 70px;
 }
 
-.story-editorial-container {
+.story-cinematic-container {
   position: relative;
   width: 100%;
-  max-width: 1180px;
+  max-width: 1080px;
   margin: 0 auto;
   z-index: 2;
 }
 
-/* 1. Section Header */
-.story-editorial-header {
-  margin-bottom: 42px;
+/* 1. Cinematic Hero / Opening Title Card */
+.story-cinematic-hero {
+  margin-bottom: 34px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
-.story-eyebrow-line {
+.story-lotus-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 12px;
+  width: 100%;
+}
+
+.story-lotus-line {
+  height: 1px;
+  width: 55px;
+  background: linear-gradient(to right, transparent, rgba(201, 162, 74, 0.7));
+}
+
+.story-lotus-row .story-lotus-line:last-child {
+  background: linear-gradient(to left, transparent, rgba(201, 162, 74, 0.7));
+}
+
+.story-names-badge {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
+  font-family: var(--font-sans, "DM Sans", sans-serif);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: #C9A24A;
+  margin-bottom: 8px;
+}
+
+.names-dot {
+  font-size: 0.65rem;
+  color: #C9A24A;
+}
+
+.story-cinematic-main-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(2.4rem, 5.5vw, 3.8rem);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #5A1F2B;
+  margin: 0 0 8px;
+  line-height: 1.15;
+  text-shadow: 0 2px 12px rgba(90, 31, 43, 0.08);
+}
+
+.story-cinematic-main-quote {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: clamp(1.2rem, 2.3vw, 1.6rem);
+  font-weight: 500;
+  line-height: 1.4;
+  color: #5A1F2B;
+  text-align: center;
+  margin: 0 auto 10px;
+}
+
+.story-cinematic-tagline-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   font-family: var(--font-sans, "DM Sans", sans-serif);
   font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.24em;
+  font-weight: 600;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: #5C1D24;
+  color: #76564B;
   margin-bottom: 12px;
 }
 
-.eyebrow-flourish {
-  color: #C99738;
-  font-size: 0.75rem;
-}
-
-.story-main-title {
-  font-family: 'Cinzel', serif;
-  font-size: clamp(2.5rem, 5vw, 3.6rem);
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  color: #4A121A;
-  margin: 0 0 10px;
-  text-shadow: 0 2px 14px rgba(255, 248, 235, 0.85);
-}
-
-.story-main-subtitle {
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  font-style: italic;
-  font-size: clamp(1.15rem, 2.2vw, 1.45rem);
-  line-height: 1.45;
-  color: #5C2B22;
-  text-align: center;
-  margin: 0 auto 14px;
-  text-shadow: 0 1px 8px rgba(255, 248, 235, 0.85);
-}
-
-.story-header-rosette {
+.story-hero-rosette-divider {
   display: flex;
+  align-items: center;
   justify-content: center;
+  gap: 14px;
   margin-top: 4px;
+  width: 100%;
 }
 
-/* 2. Interactive Milestone Cards Stage & SVG Flight Route */
-.story-cards-stage {
+.rosette-line {
+  height: 1px;
+  width: 60px;
+  background: linear-gradient(to right, transparent, rgba(201, 162, 74, 0.65));
+}
+
+.story-hero-rosette-divider .rosette-line:last-child {
+  background: linear-gradient(to left, transparent, rgba(201, 162, 74, 0.65));
+}
+
+.rosette-symbol {
+  font-size: 0.72rem;
+  color: #C9A24A;
+  letter-spacing: 0.28em;
+}
+
+/* 2. Vintage Keepsake Film Roll (Warm Ivory, Champagne Gold & Burgundy) */
+.story-film-reel-dock {
   position: relative;
   width: 100%;
-  max-width: 1180px;
+  margin: 0 auto;
+  z-index: 10;
+}
+
+.film-strip-wrapper {
+  background: linear-gradient(135deg, rgba(255, 253, 249, 0.95) 0%, rgba(248, 241, 230, 0.97) 100%);
+  border: 1.5px solid rgba(201, 162, 74, 0.75);
+  border-radius: 16px;
+  box-shadow: 0 16px 40px -8px rgba(90, 31, 43, 0.12), 0 0 24px rgba(201, 162, 74, 0.18);
+  backdrop-filter: blur(12px);
+  overflow: hidden;
+}
+
+.film-sprockets-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 7px 14px;
+  background: rgba(242, 230, 215, 0.55);
+}
+
+.film-sprockets-row.top {
+  border-bottom: 1px solid rgba(201, 162, 74, 0.35);
+}
+
+.film-sprockets-row.bottom {
+  border-top: 1px solid rgba(201, 162, 74, 0.35);
+}
+
+.sprocket-hole {
+  width: 10px;
+  height: 7px;
+  background: #5A1F2B;
+  border-radius: 2px;
+  border: 1px solid rgba(201, 162, 74, 0.4);
+  flex-shrink: 0;
+}
+
+.film-edge-meta-track {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 18px;
+  font-family: monospace;
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  color: #76564B;
+  text-transform: uppercase;
+  background: rgba(255, 250, 243, 0.65);
+}
+
+.film-reel-frames-track {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+  padding: 14px 16px;
+  background: rgba(255, 253, 249, 0.7);
+}
+
+.film-frame-tab {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  outline: none;
+}
+
+.tab-frame-outer {
+  background: #FFFDF9;
+  border: 1.5px solid rgba(201, 162, 74, 0.45);
+  border-radius: 10px;
+  padding: 8px 6px;
+  box-shadow: 0 4px 12px rgba(90, 31, 43, 0.06);
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.film-frame-tab:hover .tab-frame-outer {
+  border-color: #5A1F2B;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(90, 31, 43, 0.14);
+}
+
+.film-frame-tab.active-frame .tab-frame-outer {
+  border-color: #5A1F2B;
+  background: #FFF6EE;
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(90, 31, 43, 0.22), 0 0 18px rgba(201, 162, 74, 0.4);
+}
+
+.tab-frame-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  margin-bottom: 5px;
+}
+
+.tab-frame-num {
+  color: #C9A24A;
+  font-weight: 700;
+}
+
+.tab-frame-year {
+  color: #5A1F2B;
+  font-weight: 700;
+}
+
+.tab-thumb-window {
+  aspect-ratio: 4/3;
+  overflow: hidden;
+  border-radius: 4px;
+  position: relative;
+  background: #FAF2EC;
+  border: 1px solid rgba(201, 162, 74, 0.3);
+}
+
+.tab-thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+  display: block;
+}
+
+.film-frame-tab:hover .tab-thumb-img {
+  transform: scale(1.04);
+}
+
+.tab-active-indicator {
+  position: absolute;
+  inset: 0;
+  border: 2px solid #5A1F2B;
+  box-shadow: inset 0 0 8px rgba(201, 162, 74, 0.4);
+  pointer-events: none;
+}
+
+.tab-frame-caption {
+  margin-top: 6px;
+  text-align: center;
+  width: 100%;
+  overflow: hidden;
+}
+
+.tab-chapter-title {
+  display: block;
+  font-family: 'Cinzel', serif;
+  font-size: clamp(0.6rem, 0.9vw, 0.68rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #5A1F2B !important;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  line-height: 1.25;
+  transition: color 0.25s ease;
+}
+
+.film-frame-tab:hover .tab-chapter-title,
+.film-frame-tab.active-frame .tab-chapter-title {
+  color: #8C2F3D !important;
+}
+
+/* Subtle Guidance Ribbon (When no chapter is open) */
+.film-reel-guidance-pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 24px auto 0;
+  padding: 9px 24px;
+  background: rgba(255, 253, 249, 0.92);
+  backdrop-filter: blur(8px);
+  border: 1px dashed rgba(201, 162, 74, 0.65);
+  border-radius: 30px;
+  width: fit-content;
+  font-family: var(--font-sans, "DM Sans", sans-serif);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: #5A1F2B;
+  text-transform: uppercase;
+  box-shadow: 0 4px 16px rgba(90, 31, 43, 0.08);
+  animation: pulseGuidance 2.8s infinite ease-in-out;
+}
+
+@keyframes pulseGuidance {
+  0%, 100% { opacity: 0.8; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.02); }
+}
+
+.guidance-dot {
+  color: #C9A24A;
+  font-size: 0.7rem;
+}
+
+/* 3. Luxury Wedding Storybook Card */
+.story-scenes-container {
+  position: relative;
+  width: 100%;
+  margin-top: 32px;
+}
+
+.story-active-scene-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.storybook-card {
+  position: relative;
+  background: #FDFBF7;
+  border: 1.5px solid rgba(201, 162, 74, 0.75);
+  border-radius: 20px;
+  padding: 36px 32px 30px;
+  box-shadow: 0 20px 50px -10px rgba(90, 31, 43, 0.16), 0 0 24px rgba(235, 210, 180, 0.25);
+  overflow: hidden;
+  max-width: 960px;
   margin: 0 auto;
 }
 
-.story-flight-path-svg {
+/* Inner Gold Hairline Frame */
+.storybook-inner-frame {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 8px;
+  border: 1px solid rgba(201, 162, 74, 0.38);
+  border-radius: 14px;
   pointer-events: none;
   z-index: 1;
-  overflow: visible;
 }
 
-.flight-route-path {
-  filter: drop-shadow(0 1px 2px rgba(255, 255, 255, 0.7));
-}
-
-.story-live-airplane-group {
+/* Botanical Watercolor Corner Accents */
+.storybook-corner-floral {
+  position: absolute;
+  width: 55px;
+  height: 55px;
+  object-fit: contain;
   pointer-events: none;
-  transition: opacity 0.3s ease;
-  will-change: transform;
-}
-
-/* 3. Cards Grid Layout */
-.story-cards-grid {
-  position: relative;
+  opacity: 0.92;
   z-index: 2;
+}
+
+.storybook-corner-floral.corner-tl {
+  top: 4px;
+  left: 4px;
+}
+
+.storybook-corner-floral.corner-tr {
+  top: 4px;
+  right: 4px;
+  transform: scaleX(-1);
+}
+
+.storybook-corner-floral.corner-bl {
+  bottom: 4px;
+  left: 4px;
+  transform: scaleY(-1);
+}
+
+.storybook-corner-floral.corner-br {
+  bottom: 4px;
+  right: 4px;
+  transform: scale(-1);
+}
+
+/* Card Header Action Bar */
+.storybook-header-bar {
   display: flex;
-  flex-direction: column;
-  gap: 40px;
-}
-
-.story-cards-row {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 52px;
-}
-
-.story-cards-row.row-3-engaged {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-}
-
-.card-engaged-highlight {
-  max-width: 395px;
-  width: 100%;
-}
-
-.card-engaged-highlight .story-deckled-paper-bg {
-  filter: drop-shadow(0 12px 26px rgba(180, 130, 40, 0.25)) drop-shadow(0 4px 10px rgba(45, 10, 18, 0.14));
-}
-
-/* 4. Authentic Deckled Edge Stationery Cards */
-.story-deckle-card {
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
   position: relative;
-  background: transparent;
-  border: none;
-  border-radius: 0;
-  box-shadow: none;
-  padding: 16px 16px;
-  min-height: 172px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 3;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(201, 162, 74, 0.28);
 }
 
-.story-deckled-paper-bg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: fill;
-  pointer-events: none;
-  z-index: 1;
-  filter: drop-shadow(0 10px 22px rgba(45, 12, 18, 0.14)) drop-shadow(0 3px 6px rgba(0, 0, 0, 0.05));
-  transition: filter 0.32s ease, transform 0.32s ease;
-}
-
-.story-deckle-card:hover {
-  transform: translateY(-4px);
-}
-
-.story-deckle-card:hover .story-deckled-paper-bg {
-  filter: drop-shadow(0 16px 30px rgba(45, 12, 18, 0.22)) drop-shadow(0 5px 10px rgba(0, 0, 0, 0.08));
-}
-
-/* Botanical Leaf & Floral Sprigs sprouting organically around cards */
-.story-card-sprig {
-  position: absolute;
-  pointer-events: none;
-  z-index: 0;
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  transform-origin: center bottom;
-}
-
-.story-card-sprig .sprig-leaf-img {
-  width: 100%;
-  height: auto;
-  display: block;
-  filter: drop-shadow(0 3px 6px rgba(45, 20, 10, 0.14));
-}
-
-.story-card-sprig.sprig-c2 {
-  top: -32px;
-  right: -24px;
-  width: 72px;
-  transform: rotate(18deg);
-}
-
-.story-card-sprig.sprig-c3 {
-  top: -22px;
-  right: -32px;
-  width: 90px;
-  transform: rotate(-6deg);
-}
-
-.story-card-sprig.sprig-c4 {
-  top: -26px;
-  left: -28px;
-  width: 86px;
-  transform: scaleX(-1) rotate(14deg);
-}
-
-.story-card-sprig.sprig-c5 {
-  top: -20px;
-  right: -32px;
-  width: 88px;
-  transform: rotate(12deg);
-}
-
-.story-card-sprig.sprig-c6 {
-  top: -20px;
-  right: -28px;
-  width: 86px;
-  transform: rotate(-4deg);
-}
-
-.story-card-sprig.sprig-c7 {
-  top: -24px;
-  right: -32px;
-  width: 90px;
-  transform: rotate(8deg);
-}
-
-.story-deckle-card:hover .story-card-sprig {
-  transform: scale(1.06);
-}
-
-.story-card-body {
+.storybook-header-info {
   display: flex;
   align-items: center;
-  gap: 14px;
-  width: 100%;
-  position: relative;
-  z-index: 2;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
-/* 5. Polaroid Photo Styling */
-.story-polaroid-anchor {
-  flex-shrink: 0;
-  width: 122px;
+.storybook-badge-pill {
+  background: #5A1F2B;
+  color: #FAF4E8;
+  font-family: var(--font-sans, "DM Sans", sans-serif);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 20px;
+  box-shadow: 0 2px 6px rgba(90, 31, 43, 0.15);
+}
+
+.storybook-year-pill {
+  font-family: 'Cinzel', serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #76564B;
+  letter-spacing: 0.1em;
+}
+
+.storybook-route-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-sans, "DM Sans", sans-serif);
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #5A1F2B;
+  background: rgba(201, 162, 74, 0.15);
+  border: 1px solid rgba(201, 162, 74, 0.4);
+  padding: 4px 10px;
+  border-radius: 16px;
+}
+
+.btn-storybook-close {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1.5px solid rgba(201, 162, 74, 0.6);
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-family: var(--font-sans, "DM Sans", sans-serif);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #5A1F2B;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.25s ease;
+}
+
+.btn-storybook-close:hover {
+  background: #5A1F2B;
+  border-color: #5A1F2B;
+  color: #FAF4E8;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(90, 31, 43, 0.2);
+}
+
+/* Card Main Editorial Layout */
+.storybook-content-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 34px;
+  align-items: center;
   position: relative;
   z-index: 3;
 }
 
-.story-polaroid-frame-img {
+/* Left Photo Column */
+.storybook-photo-matting {
+  background: #FFFDF9;
+  border: 1.5px solid rgba(201, 162, 74, 0.5);
+  border-radius: 14px;
+  padding: 10px;
+  box-shadow: 0 10px 24px rgba(90, 31, 43, 0.08);
+}
+
+.photo-inner-fillet {
+  border: 1px solid rgba(201, 162, 74, 0.3);
+  border-radius: 8px;
+  overflow: hidden;
+  aspect-ratio: 4/3;
+  background: #FAF2EC;
+}
+
+.storybook-photo-img {
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
   display: block;
-  filter: drop-shadow(0 6px 14px rgba(45, 10, 18, 0.18));
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), filter 0.35s ease;
-  image-rendering: -webkit-optimize-contrast;
 }
 
-.story-polaroid-anchor.tilt-left {
-  margin-left: -4px;
-  margin-top: -12px;
-}
-
-.story-polaroid-anchor.tilt-left .story-polaroid-frame-img {
-  transform: rotate(-3.5deg);
-}
-
-.story-polaroid-anchor.tilt-right {
-  margin-right: -4px;
-  margin-top: -12px;
-}
-
-.story-polaroid-anchor.tilt-right .story-polaroid-frame-img {
-  transform: rotate(3.2deg);
-}
-
-.story-deckle-card:hover .story-polaroid-frame-img {
-  transform: rotate(0deg) scale(1.06);
-  filter: drop-shadow(0 12px 22px rgba(45, 10, 18, 0.26));
-}
-
-/* 6. Card Narrative Typography */
-.story-card-narrative {
-  flex: 1;
-  min-width: 0;
+.storybook-photo-caption {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 6px 2px;
+  font-family: monospace;
+  font-size: 0.62rem;
+  color: #76564B;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
-.story-narrative-badge {
-  display: flex;
+.caption-tag {
+  color: #C9A24A;
+  font-weight: 700;
+}
+
+/* Right Narrative Column */
+.storybook-narrative-header {
+  margin-bottom: 12px;
+}
+
+.narrative-lotus-ornament {
+  margin-bottom: 8px;
+}
+
+.storybook-chapter-subtitle {
+  display: block;
+  font-family: var(--font-sans, "DM Sans", sans-serif);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: #C9A24A;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.storybook-scene-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.6rem, 2.6vw, 2.1rem);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #5A1F2B;
+  margin: 0 0 10px;
+  line-height: 1.25;
+}
+
+.narrative-meta-badge {
+  display: inline-flex;
   align-items: center;
   gap: 6px;
   font-family: var(--font-sans, "DM Sans", sans-serif);
@@ -1981,229 +2261,261 @@ body {
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #5C1D24;
-  margin-bottom: 3px;
+  color: #5A1F2B;
+  background: rgba(242, 195, 174, 0.3);
+  border: 1px solid rgba(201, 162, 74, 0.4);
+  padding: 4px 10px;
+  border-radius: 12px;
+  margin-bottom: 12px;
 }
 
-.story-narrative-badge .badge-icon {
-  font-size: 0.72rem;
-  color: #8A2432;
+.narrative-meta-badge.engaged-badge {
+  background: rgba(201, 162, 74, 0.2);
+  border-color: rgba(201, 162, 74, 0.6);
 }
 
-.story-narrative-title {
-  font-family: 'Cinzel', serif;
-  font-size: 0.95rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #4A121A;
-  margin: 0 0 4px;
-  line-height: 1.25;
-}
-
-.story-narrative-desc {
+.storybook-main-quote {
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-style: italic;
-  font-size: 0.86rem;
-  line-height: 1.45;
-  color: #4A3528;
-  margin: 0;
+  font-size: clamp(1.15rem, 2.1vw, 1.4rem);
+  line-height: 1.55;
+  color: #5A1F2B;
+  border-left: 2.5px solid #C9A24A;
+  padding-left: 14px;
+  margin: 0 0 12px;
 }
 
-.story-card-flourish {
+.storybook-story-body {
+  font-family: var(--font-sans, "DM Sans", sans-serif);
+  font-size: 0.92rem;
+  line-height: 1.7;
+  color: #4A352F;
+  margin: 0 0 16px;
+}
+
+.engaged-storybook-highlight {
+  margin-bottom: 14px;
+}
+
+.engaged-highlight-text {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #7A2837;
+}
+
+.storybook-flourish-divider {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
-  margin-top: 6px;
+  gap: 12px;
+  margin-top: 14px;
 }
 
-.story-card-flourish .flourish-line {
+.flourish-hairline {
   height: 1px;
-  width: 22px;
-  background: linear-gradient(90deg, transparent, rgba(201, 151, 56, 0.5), transparent);
+  width: 45px;
+  background: linear-gradient(to right, rgba(201, 162, 74, 0.6), transparent);
 }
 
-.story-card-flourish .flourish-rosette {
-  color: #C99738;
-  font-size: 0.68rem;
-  line-height: 1;
+.storybook-flourish-divider .flourish-hairline:last-child {
+  background: linear-gradient(to left, rgba(201, 162, 74, 0.6), transparent);
 }
 
-/* 7. Bottom Reflection Quote & Signature (Exact Editorial Layout) */
-.story-bottom-reflection {
-  max-width: 840px;
-  margin: 48px auto 0;
+.flourish-symbol {
+  font-size: 0.7rem;
+  color: #C9A24A;
+  letter-spacing: 0.25em;
+}
+
+/* Card Footer Navigation */
+.storybook-footer-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 28px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(201, 162, 74, 0.25);
+  position: relative;
+  z-index: 3;
+}
+
+.storybook-nav-btn {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1.5px solid rgba(201, 162, 74, 0.5);
+  border-radius: 20px;
+  color: #5A1F2B;
+  padding: 7px 16px;
+  font-family: var(--font-sans, "DM Sans", sans-serif);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.25s ease;
+}
+
+.storybook-nav-btn:hover {
+  background: #5A1F2B;
+  color: #FAF4E8;
+  border-color: #5A1F2B;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(90, 31, 43, 0.16);
+}
+
+.storybook-nav-btn.close {
+  border-color: rgba(201, 162, 74, 0.6);
+  background: rgba(248, 241, 230, 0.8);
+}
+
+.storybook-nav-btn.close:hover {
+  background: #5A1F2B;
+  color: #FAF4E8;
+  border-color: #5A1F2B;
+}
+
+/* Chapter 06 Grand Finale Epilogue */
+.storybook-epilogue-wrap {
+  margin-top: 36px;
+  padding-top: 28px;
+  border-top: 1px solid rgba(201, 162, 74, 0.3);
   text-align: center;
   position: relative;
-  z-index: 5;
-  padding: 10px 20px 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  z-index: 3;
 }
 
-.story-reflection-cluster {
+.epilogue-ornament-row {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 24px;
-  width: 100%;
-  margin-bottom: 0;
+  gap: 14px;
+  margin-bottom: 12px;
 }
 
-.story-olive-branch {
-  flex-shrink: 0;
-  opacity: 0.95;
-  filter: drop-shadow(0 2px 5px rgba(184, 130, 54, 0.22));
+.epilogue-line {
+  height: 1px;
+  width: 55px;
+  background: linear-gradient(to right, transparent, rgba(201, 162, 74, 0.65));
 }
 
-.story-reflection-text-wrap {
-  flex: 1;
-  max-width: 660px;
+.epilogue-ornament-row .epilogue-line:last-child {
+  background: linear-gradient(to left, transparent, rgba(201, 162, 74, 0.65));
 }
 
-.story-reflection-body {
+.storybook-epilogue-tagline {
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-style: italic;
-  font-size: clamp(1.05rem, 1.85vw, 1.18rem);
-  line-height: 1.62;
-  color: #3A1E14;
-  margin: 0;
-  text-shadow: 0 1px 8px rgba(255, 250, 240, 0.95), 0 0 24px rgba(255, 245, 230, 0.85);
+  font-size: 1.35rem;
+  color: #5A1F2B;
+  margin: 0 0 6px;
 }
 
-.reflection-closing {
-  display: block;
-  font-weight: 600;
-  margin-top: 2px;
-  color: #4A121A;
-}
-
-/* Golden Heart with Divider Line */
-.story-reflection-heart-divider {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-  margin: 18px 0 12px;
-  width: 100%;
-}
-
-.reflection-divider-line {
-  height: 1px;
-  width: 80px;
-  background: linear-gradient(to right, transparent, rgba(184, 134, 40, 0.55));
-}
-
-.story-reflection-heart-divider .reflection-divider-line:last-child {
-  background: linear-gradient(to left, transparent, rgba(184, 134, 40, 0.55));
-}
-
-.reflection-golden-heart {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Couple Names */
-.story-signature-names {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
+.storybook-epilogue-names {
   font-family: 'Cinzel', serif;
-  font-size: 1.02rem;
+  font-size: 1.15rem;
   font-weight: 700;
-  letter-spacing: 0.24em;
-  color: #4A121A;
-  text-shadow: 0 1px 4px rgba(255, 255, 255, 0.9);
-  margin-bottom: 8px;
+  color: #3B1720;
+  letter-spacing: 0.12em;
+  margin-bottom: 4px;
 }
 
-.story-signature-names .signature-cross {
-  color: #8E5238;
-  font-weight: 400;
-  font-size: 0.88rem;
+.epilogue-ampersand {
+  color: #C9A24A;
+  margin: 0 8px;
 }
 
-/* 2027 with Hairline Rules */
-.story-signature-year-divider {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  margin-bottom: 8px;
-}
-
-.year-divider-line {
-  height: 1px;
-  width: 58px;
-  background: linear-gradient(to right, transparent, rgba(184, 134, 40, 0.55));
-}
-
-.story-signature-year-divider .year-divider-line:last-child {
-  background: linear-gradient(to left, transparent, rgba(184, 134, 40, 0.55));
-}
-
-.story-signature-year {
+.storybook-epilogue-year {
   font-family: 'Cinzel', serif;
-  font-size: 0.88rem;
+  font-size: 0.85rem;
+  color: #C9A24A;
+  letter-spacing: 0.15em;
+  margin-bottom: 18px;
+}
+
+.storybook-epilogue-cta {
+  margin-top: 8px;
+}
+
+.btn-view-our-wedding {
+  background: linear-gradient(135deg, #7A2837 0%, #5A1F2B 100%);
+  border: 1.5px solid #C9A24A;
+  border-radius: 28px;
+  padding: 13px 32px;
+  color: #FAF4E8;
+  font-family: var(--font-sans, "DM Sans", sans-serif);
+  font-size: 0.76rem;
   font-weight: 700;
-  letter-spacing: 0.26em;
-  color: #4A121A;
-  text-shadow: 0 1px 4px rgba(255, 255, 255, 0.9);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 10px 28px rgba(90, 31, 43, 0.22);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.story-signature-rosette {
-  margin-top: 2px;
-  display: flex;
-  justify-content: center;
+.btn-view-our-wedding:hover {
+  background: linear-gradient(135deg, #8C2F3E 0%, #682331 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 14px 34px rgba(90, 31, 43, 0.32);
 }
 
-/* Responsive Breakpoints */
-@media (max-width: 1040px) {
-  .story-cards-row {
-    grid-template-columns: repeat(2, 1fr);
+/* Responsive Breakpoints for Our Story */
+@media (max-width: 960px) {
+  .storybook-content-grid {
+    grid-template-columns: 1fr;
     gap: 24px;
   }
 
-  .story-flight-path-svg {
-    display: none;
-  }
-
-  .story-cards-row.row-3-engaged {
-    justify-content: center;
+  .film-reel-frames-track {
+    grid-template-columns: repeat(6, 140px);
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 12px;
   }
 }
 
-@media (max-width: 768px) {
-  .story-editorial-section {
-    padding: 70px 16px 70px;
+@media (max-width: 640px) {
+  .story-cinematic-section {
+    padding: 70px 14px 60px;
   }
 
-  .story-cards-grid {
-    gap: 20px;
+  .story-cinematic-main-title {
+    font-size: 2.2rem;
   }
 
-  .story-cards-row {
-    grid-template-columns: 1fr;
-    gap: 18px;
-  }
-
-  .story-deckle-card {
-    max-width: 440px;
-    margin: 0 auto;
-    width: 100%;
-  }
-
-  .story-reflection-cluster {
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .story-olive-branch {
+  .film-edge-meta-track {
     display: none;
+  }
+
+  .storybook-card {
+    padding: 26px 18px 22px;
+    border-radius: 16px;
+  }
+
+  .storybook-corner-floral {
+    width: 40px;
+    height: 40px;
+  }
+
+  .storybook-nav-btn {
+    padding: 6px 12px;
+    font-size: 0.66rem;
+  }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .film-frame-tab,
+  .storybook-nav-btn,
+  .btn-view-our-wedding {
+    transition: none !important;
+    transform: none !important;
   }
 }
 
@@ -2811,6 +3123,25 @@ body {
   align-items: flex-end;
 }
 
+.form-row-duo.single-pod-row {
+  grid-template-columns: 1fr;
+}
+
+.rsvp-fade-enter {
+  animation: rsvpFadeIn 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes rsvpFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .form-control-pod {
   display: flex;
   flex-direction: column;
@@ -2960,6 +3291,24 @@ body {
   box-shadow: 0 6px 20px rgba(223, 179, 90, 0.4);
 }
 
+.submit-action-btn:disabled {
+  opacity: 0.85;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: 0 2px 8px rgba(45, 10, 18, 0.12) !important;
+  filter: grayscale(0.12);
+}
+
+.btn-spinner-icon {
+  animation: rsvpSpin 0.9s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes rsvpSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 .whatsapp-action-btn {
   background: #1e7e48;
   color: #ffffff;
@@ -2993,6 +3342,174 @@ body {
   background: rgba(110, 19, 35, 0.12);
   color: #6e1323;
   border: 1px solid #6e1323;
+}
+
+/* ==========================================================================
+   RSVP LUXURY CONFIRMATION CARD
+   ========================================================================== */
+.rsvp-confirmation-card {
+  animation: rsvpConfirmEntrance 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  text-align: center;
+  padding: 12px 6px 6px;
+}
+
+@keyframes rsvpConfirmEntrance {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.rsvp-success-crest-badge {
+  margin-bottom: 10px;
+}
+
+.rsvp-check-ring {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #185a33 0%, #0d381e 100%);
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--gold-rich);
+  box-shadow: 0 6px 20px rgba(24, 90, 51, 0.28);
+}
+
+.rsvp-check-glyph {
+  color: #fffdfa;
+}
+
+.rsvp-confirmation-heading {
+  font-family: var(--font-serif);
+  font-size: clamp(1.4rem, 2.5vw, 1.85rem);
+  color: var(--crimson-maroon);
+  margin: 8px 0 6px;
+  letter-spacing: 0.02em;
+  font-weight: 700;
+}
+
+.rsvp-guest-name {
+  color: var(--crimson-deep);
+  font-style: italic;
+  background: linear-gradient(135deg, var(--crimson-maroon) 0%, #831b2e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.rsvp-confirmation-text {
+  font-family: var(--font-serif);
+  font-size: clamp(0.98rem, 1.8vw, 1.14rem);
+  color: var(--ink-secondary);
+  line-height: 1.5;
+  margin: 0 auto 16px;
+  max-width: 480px;
+}
+
+.rsvp-confirmation-summary {
+  background: rgba(207, 160, 73, 0.09);
+  border: 1.2px dashed rgba(207, 160, 73, 0.48);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin: 12px auto 18px;
+  max-width: 460px;
+}
+
+.summary-pill-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+}
+
+.summary-pill {
+  font-family: var(--font-sans);
+  font-size: 0.76rem;
+  font-weight: 800;
+  padding: 5px 12px;
+  border-radius: 16px;
+  background: #ffffff;
+  border: 1px solid rgba(207, 160, 73, 0.4);
+  color: var(--ink-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  box-shadow: 0 1px 4px rgba(45, 10, 18, 0.05);
+}
+
+.summary-pill.attendance-pill-accept {
+  background: rgba(20, 73, 41, 0.09);
+  color: #144929;
+  border-color: rgba(20, 73, 41, 0.35);
+}
+
+.summary-pill.attendance-pill-decline {
+  background: rgba(110, 19, 35, 0.08);
+  color: #6e1323;
+  border-color: rgba(110, 19, 35, 0.3);
+}
+
+.summary-pill.guests-pill {
+  background: #fffdf8;
+  color: var(--crimson-maroon);
+}
+
+.summary-pill.events-pill {
+  background: #fffdf8;
+  color: var(--ink-secondary);
+}
+
+.summary-wishes-quote {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.9rem;
+  color: var(--ink-secondary);
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(207, 160, 73, 0.22);
+  line-height: 1.45;
+}
+
+.rsvp-confirmation-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  max-width: 460px;
+  margin: 10px auto 0;
+}
+
+.rsvp-reset-action-btn {
+  height: 44px;
+  padding: 0 16px;
+  border-radius: 8px;
+  background: #faf4e8;
+  border: 1.2px solid rgba(207, 160, 73, 0.6);
+  color: var(--crimson-maroon);
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.25s ease;
+}
+
+.rsvp-reset-action-btn:hover {
+  background: #f7ede0;
+  border-color: var(--crimson-maroon);
+  transform: translateY(-1px);
+}
+
+.confirmation-wa-btn {
+  margin-top: 0;
 }
 
 .venue-route-box {
@@ -3301,4 +3818,60 @@ body {
     padding: 10px;
     border-radius: 50%;
   }
+
+  /* Mobile RSVP Section Polish (< 600px) */
+  .rsvp-compact-shell {
+    padding: 18px 12px;
+  }
+
+  .rsvp-editorial-card {
+    padding: 24px 16px;
+    border-radius: 16px;
+  }
+
+  .rsvp-form-grid {
+    gap: 10px;
+  }
+
+  .form-row-duo {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .attend-toggle-row {
+    grid-template-columns: 1fr;
+    height: auto;
+    gap: 7px;
+  }
+
+  .attend-btn {
+    height: 42px;
+    width: 100%;
+    font-size: 0.8rem;
+    justify-content: center;
+  }
+
+  .form-actions-row,
+  .rsvp-confirmation-actions {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .form-control-pod input,
+  .form-control-pod select,
+  .form-control-pod textarea {
+    font-size: 16px; /* Prevents auto-zoom on iOS */
+  }
+
+  .route-pill-list {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .venue-pill-link {
+    width: 100%;
+    justify-content: center;
+    box-sizing: border-box;
+  }
 }
+
