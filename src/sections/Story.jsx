@@ -3,12 +3,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import AnimatedSection from '../animations/AnimatedSection';
 
 // Authentic High-Resolution Couple & Story Photography
-import photoBeginning from '../assets/story/photos/photo_1_beginning.jpg';
+import photoBeginning from '../assets/story/The Beginning.jpeg';
 import photoFirstHi from '../assets/story/photos/photo_2_first_hi.jpg';
 import photoDating from '../assets/story/photos/photo_3_dating.jpg';
-import photoTravelling from '../assets/story/photos/photo_4_travelling.jpg';
+import photoTravelling from '../assets/story/Travelling together.jpeg';
 import photoOceans from '../assets/story/photos/photo_6_oceans.jpg';
-import photoEngaged from '../assets/story/photos/photo_7_engaged.jpg';
+import photoEngaged from '../assets/story/Engaged.jpeg';
 
 const ASSET_BASE = import.meta.env.BASE_URL;
 
@@ -134,6 +134,9 @@ export default function Story() {
       subtext: 'A quiet spark in a bustling world, setting a lifetime in motion. A first impression that said far more than words ever could.',
       photo: photoBeginning,
       photoAlt: 'The Beginning - 2021',
+      aspectRatio: '1/1',
+      objectPosition: 'center 8%',
+      thumbPosition: 'center 10%',
       filmMeta: 'SCENE 01 • KEEPSAKE ARCHIVE • 2021',
       frameLabel: 'FRAME 01A',
       badgeOverlay: 'OCT 2021',
@@ -178,6 +181,9 @@ export default function Story() {
       subtext: 'Between bustling railway platforms, quiet morning filter coffees, and temple spires reaching into the sky, every mile brought us closer.',
       photo: photoTravelling,
       photoAlt: 'Travelling Together - Chennai to Bengaluru',
+      aspectRatio: '16/10',
+      objectPosition: 'center center',
+      thumbPosition: 'center center',
       filmMeta: 'SCENE 04 • EXPEDITION SOUTH INDIA',
       frameLabel: 'FRAME 04A',
       badgeOverlay: 'CHENNAI ➔ BENGALURU',
@@ -208,6 +214,9 @@ export default function Story() {
       subtext: 'We grew in different places, under different skies, and on completely opposite schedules. After years of counting miles, days and hours, we are finally done with the countdown. This is the chapter where we stay.',
       photo: photoEngaged,
       photoAlt: 'We Got Engaged - 2026',
+      aspectRatio: '3/4',
+      objectPosition: 'center 3%',
+      thumbPosition: 'center 12%',
       filmMeta: 'FINAL SCENE • A PROMISE FOR A LIFETIME',
       frameLabel: 'FRAME 06A',
       footerStamp: 'WE GOT ENGAGED'
@@ -325,6 +334,7 @@ export default function Story() {
                           src={ch.photo}
                           alt=""
                           className="tab-thumb-img"
+                          style={{ objectPosition: ch.thumbPosition || ch.objectPosition || 'center center' }}
                           loading="lazy"
                         />
                         {isActive && <div className="tab-active-indicator" />}
@@ -438,12 +448,13 @@ export default function Story() {
                   <div className="storybook-content-grid">
                     {/* Left: Golden Framed Keepsake Photo */}
                     <div className="storybook-photo-column">
-                      <div className="storybook-photo-matting">
-                        <div className="photo-inner-fillet">
+                      <div className="storybook-photo-matting" style={{ maxWidth: currentCh.aspectRatio === '3/4' ? '360px' : '440px', margin: '0 auto' }}>
+                        <div className="photo-inner-fillet" style={{ aspectRatio: currentCh.aspectRatio || '4/3' }}>
                           <img
                             src={currentCh.photo}
                             alt={currentCh.photoAlt}
                             className="storybook-photo-img"
+                            style={{ objectPosition: currentCh.objectPosition || 'center center' }}
                             loading="lazy"
                           />
                         </div>
