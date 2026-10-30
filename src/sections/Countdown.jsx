@@ -100,7 +100,7 @@ export default function Countdown() {
             onClick={handleDownloadCalendar}
           >
             <CalendarPlus size={16} strokeWidth={1.75} className="muhurtham-btn-icon-svg" />
-            <span>Save to Calendar (.ics)</span>
+            <span>Save to Calendar</span>
           </button>
         </div>
       </div>

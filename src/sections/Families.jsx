@@ -266,7 +266,7 @@ export default function Families() {
               {/* Lineage Tree */}
               <div className="lineage-detail-tree">
                 <span className="lineage-relation-label">Daughter of</span>
-                <p className="lineage-parent-name">Mr. M. Muthu Kumar</p>
+                <p className="lineage-parent-name">Mr. M. Muthukumar</p>
                 <span className="lineage-gold-flourish" aria-hidden="true">❖</span>
                 <p className="lineage-parent-name">Mrs. Subashini</p>
 
@@ -278,7 +278,7 @@ export default function Families() {
                 </div>
 
                 <span className="lineage-relation-label">Brother</span>
-                <p className="lineage-sibling-name">Tharun Kumar</p>
+                <p className="lineage-sibling-name">Tarun Kumar</p>
 
                 {/* Location Capsule */}
                 <div className="lineage-location-capsule">
