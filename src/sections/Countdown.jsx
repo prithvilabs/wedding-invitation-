@@ -6,7 +6,7 @@ import CountdownPlaque from '../components/invitation/CountdownPlaque';
 
 export default function Countdown() {
   const [timeLeft, setTimeLeft] = useState({
-    days: '000',
+    days: '00',
     hours: '00',
     minutes: '00',
     seconds: '00'
@@ -21,7 +21,7 @@ export default function Countdown() {
       const diff = targetDate - now;
 
       if (diff <= 0) {
-        setTimeLeft({ days: '000', hours: '00', minutes: '00', seconds: '00' });
+        setTimeLeft({ days: '00', hours: '00', minutes: '00', seconds: '00' });
         return;
       }
 
@@ -31,7 +31,7 @@ export default function Countdown() {
       const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
       setTimeLeft({
-        days: String(days).padStart(3, '0'),
+        days: String(days).padStart(2, '0'),
         hours: String(hours).padStart(2, '0'),
         minutes: String(minutes).padStart(2, '0'),
         seconds: String(seconds).padStart(2, '0')
