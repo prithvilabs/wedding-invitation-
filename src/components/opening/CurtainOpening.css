@@ -163,10 +163,13 @@
      neighbouring folds share the same shape):
      --crest  where the lit crest sits across the fold
      --depth  how deep the shadowed trough is
-     --spread how broad/soft the crest is */
+     --spread how broad/soft the crest is
+     --lean   slight angle of the light across the fold, so folds bow and lean
+              instead of standing perfectly straight */
   --crest: 44%;
   --depth: 0%;
   --spread: 12%;
+  --lean: 0deg;
   flex: 1 1 0;
   height: 100%;
   position: relative;
@@ -186,6 +189,27 @@
 .co-fold:nth-child(7n + 5) { --crest: 50%; --depth: 5%; --spread: 14%; }
 .co-fold:nth-child(7n + 6) { --crest: 46%; --depth: 0%; --spread: 8%; }
 .co-fold:nth-child(7n + 7) { --crest: 38%; --depth: 6%; --spread: 17%; }
+/* Lean runs on a different cycle (5) than the shape (7), so the combination
+   never repeats across a curtain */
+.co-fold:nth-child(5n + 1) { --lean: 1.6deg; }
+.co-fold:nth-child(5n + 2) { --lean: -0.8deg; }
+.co-fold:nth-child(5n + 3) { --lean: 0.4deg; }
+.co-fold:nth-child(5n + 4) { --lean: -1.9deg; }
+.co-fold:nth-child(5n + 5) { --lean: 1deg; }
+
+/* Depth around the centre: the leading folds sit in a deeper, soft shadow
+   where the two curtains meet */
+.co-curtain--left .co-fold--inner .co-fold__cloth {
+  box-shadow:
+    inset 10px 0 16px -10px rgba(78, 40, 20, 0.18),
+    inset -22px 0 26px -16px rgba(70, 34, 16, 0.24);
+}
+
+.co-curtain--right .co-fold--inner .co-fold__cloth {
+  box-shadow:
+    inset 10px 0 16px -10px rgba(78, 40, 20, 0.18),
+    inset 22px 0 26px -16px rgba(70, 34, 16, 0.24);
+}
 
 /*
  * One fold of champagne-ivory satin. Horizontally the light rolls over the
@@ -199,15 +223,25 @@
   --L: calc(var(--tone) * 100%);
   position: absolute;
   inset: 0 -2px;
+  --a: calc(90deg + var(--lean));
   background:
+    /* warm light from above; weight and depth gathering toward the hem */
     linear-gradient(180deg,
       rgba(255, 238, 210, 0.26) 0%,
       rgba(255, 238, 210, 0.06) 22%,
-      rgba(0, 0, 0, 0) 50%,
-      rgba(0, 0, 0, 0) 76%,
-      rgba(84, 42, 22, 0.2) 94%,
-      rgba(70, 34, 16, 0.3) 100%),
-    linear-gradient(90deg,
+      rgba(0, 0, 0, 0) 48%,
+      rgba(84, 42, 22, 0.06) 70%,
+      rgba(84, 42, 22, 0.18) 90%,
+      rgba(70, 34, 16, 0.32) 100%),
+    /* narrow satin highlight running along the raised crest */
+    linear-gradient(var(--a),
+      rgba(255, 251, 240, 0) calc(var(--crest) - var(--spread) * 0.35),
+      rgba(255, 251, 240, 0.42) var(--crest),
+      rgba(255, 251, 240, 0) calc(var(--crest) + var(--spread) * 0.3)),
+    /* lower fabric: the crest still catches light near the hem while the
+       recesses deepen, so the bottom of the drape reads as rounded folds */
+    radial-gradient(60% 34% at var(--crest) 100%, rgba(255, 238, 212, 0.16), rgba(255, 238, 212, 0) 70%),
+    linear-gradient(var(--a),
       hsl(33 28% calc(60% - var(--depth) + var(--L))) 0%,
       hsl(34 32% calc(66% - var(--depth) * 0.6 + var(--L))) calc(var(--crest) * 0.22),
       hsl(36 40% calc(75% + var(--L))) calc(var(--crest) * 0.55),
@@ -234,10 +268,13 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: 0.09;
+  opacity: 0.1;
   mix-blend-mode: multiply;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85 0.32' numOctaves='2' seed='7' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.42 0 0 0 0 0.32 0 0 0 0 0.22 0 0 0 0.9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-  background-size: 180px 180px;
+  /* fine weft lines + soft noise = woven silk, not smooth plastic */
+  background-image:
+    repeating-linear-gradient(0deg, rgba(96, 66, 40, 0.22) 0 1px, rgba(96, 66, 40, 0) 1px 3px),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85 0.32' numOctaves='2' seed='7' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.42 0 0 0 0 0.32 0 0 0 0 0.22 0 0 0 0.9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  background-size: auto, 180px 180px;
 }
 
 /* Satin sheen: a soft reflection riding the curve of each crest, brightest
@@ -256,6 +293,8 @@
     rgba(255, 250, 240, 0.13) 100%);
   border-radius: 50%;
   filter: blur(10px);
+  /* lean with the fold's light so the glow follows its curve */
+  transform: skewX(calc(var(--lean) * -1));
 }
 
 .co-fold__shade {

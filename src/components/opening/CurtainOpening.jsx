@@ -30,8 +30,9 @@ const EASE_FILM = [0.65, 0, 0.35, 1]; // smooth in-out, no bounce
 const EASE_PUSH = [0.5, 0, 0.75, 0]; // camera push accelerates into the reveal
 const EASE_EXIT = [0.55, 0, 0.9, 0.4];
 
-// Irregular fold widths (relative) so the drape doesn't read as stripes
-const WIDTHS = [1.25, 0.85, 1.5, 1.0, 0.75, 1.35, 1.1, 0.9, 1.45, 1.05, 0.8, 1.2];
+// Irregular fold widths (relative): broad soft waves between narrow compressed
+// folds, with no repeating rhythm, so the drape never reads as stripes
+const WIDTHS = [2.1, 0.62, 1.15, 0.5, 1.75, 0.95, 0.58, 1.4, 2.3, 0.7, 1.05, 0.55];
 
 /**
  * One silk curtain made of vertical fold strips. On open, each fold first
