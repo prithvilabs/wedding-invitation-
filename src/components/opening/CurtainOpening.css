@@ -303,19 +303,6 @@
   background: radial-gradient(ellipse 75% 70% at 50% 48%, transparent 45%, rgba(34, 14, 6, 0.55) 100%);
 }
 
-/* Letterbox bars (film frame) */
-.co-bar {
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 7vh;
-  background: #0d0705;
-  pointer-events: none;
-}
-
-.co-bar--top { top: 0; transform-origin: 50% 0; }
-.co-bar--bottom { bottom: 0; transform-origin: 50% 100%; }
-
 /* Fade up from warm darkness */
 .co-fade {
   position: absolute;
@@ -325,7 +312,6 @@
 }
 
 @media (max-width: 640px) {
-  .co-bar { height: 4.5vh; }
   .co-shaft { width: 70vw; margin-left: -35vw; }
 }
 

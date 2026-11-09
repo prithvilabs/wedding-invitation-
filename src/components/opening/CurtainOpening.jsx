@@ -5,7 +5,7 @@ import './CurtainOpening.css';
 
 /*
  * Timeline
- * Page load:  fade up from warm darkness, letterboxed; slow bands of warm light
+ * Page load:  fade up from warm darkness to full-screen silk; slow bands of warm light
  *             travel across the closed silk; the PH medallion breathes softly.
  *             The curtains wait here until the visitor touches/clicks.
  * Touch +0:   medallion presses; a ripple of light runs outward through the silk
@@ -14,7 +14,7 @@ import './CurtainOpening.css';
  *             tableau sweep (inner hems lift in a diagonal swag while the folds
  *             gather outward, hems trailing); camera pushes through;
  *             a shaft of golden light pours through the gap;
- *             letterbox bars retract, vignette lifts
+ *             vignette lifts
  * Touch +2.1  gathered silk slips off-screen; overlay removed ~2.75s after touch
  */
 const PRESS = 0.35; // medallion press + light ripple before the curtains move
@@ -317,22 +317,6 @@ export default function CurtainOpening({ onDone, onOpen }) {
             transition={{ duration: 1.05, ease: [0.25, 0.6, 0.3, 1], times: [0, 0.3, 1] }}
           />
         ))}
-
-      {/* Letterbox bars retract as the scene opens */}
-      <motion.div
-        className="co-bar co-bar--top"
-        aria-hidden="true"
-        initial={{ scaleY: 1 }}
-        animate={{ scaleY: opening ? 0 : 1 }}
-        transition={{ delay: 0.4, duration: 0.9, ease: EASE_FILM }}
-      />
-      <motion.div
-        className="co-bar co-bar--bottom"
-        aria-hidden="true"
-        initial={{ scaleY: 1 }}
-        animate={{ scaleY: opening ? 0 : 1 }}
-        transition={{ delay: 0.4, duration: 0.9, ease: EASE_FILM }}
-      />
 
       {/* Fade up from warm darkness once the page is ready */}
       <motion.div
