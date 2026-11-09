@@ -1,0 +1,335 @@
+/* Silk curtain opening overlay (CurtainOpening.jsx) — transform/opacity only */
+
+.co-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  overflow: hidden;
+  pointer-events: auto;
+}
+
+.co-overlay.is-opening {
+  pointer-events: none;
+}
+
+/* Waiting for a touch: the whole curtain is the target */
+.co-overlay.is-waiting {
+  cursor: pointer;
+}
+
+/* ---------- PH medallion at the centre of the curtains ---------- */
+.co-medallion-anchor {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.co-medallion {
+  --size: clamp(118px, 15vw, 176px);
+  display: block; /* no inline line-box gap, so it sits exactly centred */
+  position: relative;
+  width: var(--size);
+  height: var(--size);
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.co-medallion:disabled {
+  cursor: default;
+}
+
+/* Ivory disc with a fine double antique-gold rim, resting on the silk */
+.co-medallion__disc {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 42% 35%, #fffdf7 0%, #fbf3e4 62%, #f0e2c8 100%);
+  border: 2px solid #c39a4f;
+  box-shadow:
+    0 0 0 4px rgba(255, 250, 238, 0.9),
+    0 0 0 5px rgba(167, 122, 49, 0.75),
+    0 14px 30px rgba(70, 34, 16, 0.32),
+    0 3px 8px rgba(70, 34, 16, 0.22),
+    inset 0 2px 6px rgba(255, 255, 255, 0.8),
+    inset 0 -3px 8px rgba(167, 122, 49, 0.18);
+}
+
+.co-medallion__logo {
+  width: 84%;
+  height: 84%;
+  object-fit: contain;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Medallion halves after the seal breaks (same disc, clipped down the middle) */
+.co-medallion-half {
+  position: absolute;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+}
+
+.co-medallion-half--left { clip-path: inset(-20% 50% -20% -20%); }
+.co-medallion-half--right { clip-path: inset(-20% -20% -20% 50%); }
+
+/* Ripple of light running outward from the touch */
+.co-ripple {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 16vw;
+  margin-left: -8vw;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(255, 244, 220, 0.55) 45%, rgba(255, 250, 236, 0.8) 50%, rgba(255, 244, 220, 0.55) 55%, transparent);
+  mix-blend-mode: soft-light;
+  will-change: transform, opacity;
+}
+
+/* Soft breathing glow: invites a touch without any text */
+.co-medallion__halo {
+  position: absolute;
+  inset: -16%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 228, 176, 0.55) 0%, rgba(255, 220, 160, 0.18) 45%, transparent 70%);
+  animation: co-breathe 2.8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes co-breathe {
+  0%, 100% { transform: scale(0.94); opacity: 0.55; }
+  50% { transform: scale(1.06); opacity: 1; }
+}
+
+.co-medallion:focus-visible {
+  outline: none;
+}
+
+.co-medallion:focus-visible .co-medallion__disc {
+  box-shadow:
+    0 0 0 4px rgba(255, 250, 238, 0.9),
+    0 0 0 7px #8a6424,
+    0 14px 30px rgba(70, 34, 16, 0.32);
+}
+
+/* Camera rig: scales the whole curtain set for the push-through */
+.co-rig {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 46%;
+  will-change: transform;
+}
+
+.co-curtain {
+  position: absolute;
+  top: -1%;
+  bottom: -1%;
+  /* extends 7% past the screen edge (hidden) so skew/push never reveals a sliver
+     at the outer edge; slight overlap at the centre seam */
+  width: 57.8%;
+  will-change: transform;
+}
+
+.co-curtain--left { left: -7%; }
+.co-curtain--right { right: -7%; }
+
+/* Skews while moving so the hem trails the top (silk inertia) */
+.co-drape {
+  position: absolute;
+  inset: 0;
+  perspective: 1600px;
+  transform-origin: 50% 0;
+  will-change: transform;
+}
+
+.co-folds {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  transform-style: preserve-3d;
+}
+
+.co-fold {
+  flex: 1 1 0;
+  height: 100%;
+  position: relative;
+  will-change: transform;
+  /* each fold casts a soft shadow onto the one beside it */
+  box-shadow: 0 0 22px rgba(70, 34, 16, 0.14);
+}
+
+/*
+ * One fold of champagne-ivory silk. Horizontal: soft trough -> broad lit crest
+ * -> gentle secondary ripple -> trough. Vertical: warm light from above, deeper
+ * tone and weight at the hem. Both live on the fold so they travel with it.
+ */
+.co-fold__cloth {
+  --tone: 0;
+  position: absolute;
+  inset: 0 -2px;
+  background:
+    linear-gradient(180deg,
+      rgba(255, 238, 210, 0.28) 0%,
+      rgba(255, 238, 210, 0) 28%,
+      rgba(0, 0, 0, 0) 78%,
+      rgba(84, 42, 22, 0.24) 96%,
+      rgba(70, 34, 16, 0.32) 100%),
+    linear-gradient(90deg,
+      hsl(34 30% calc(66% + var(--tone) * 100%)) 0%,
+      hsl(37 42% calc(78% + var(--tone) * 100%)) 14%,
+      hsl(40 58% calc(87% + var(--tone) * 100%)) 34%,
+      hsl(42 66% calc(90% + var(--tone) * 100%)) 44%,
+      hsl(39 50% calc(84% + var(--tone) * 100%)) 58%,
+      hsl(38 46% calc(81% + var(--tone) * 100%)) 66%,
+      hsl(39 52% calc(85% + var(--tone) * 100%)) 74%,
+      hsl(35 36% calc(73% + var(--tone) * 100%)) 90%,
+      hsl(33 28% calc(64% + var(--tone) * 100%)) 100%);
+  filter: blur(0.4px); /* removes gradient banding, keeps the silk soft */
+  transform-origin: 50% 0;
+  animation: co-sway 3.6s ease-in-out infinite alternate;
+}
+
+/* Silk sheen: soft highlight running down the crest */
+.co-fold__cloth::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 36%;
+  width: 10%;
+  background: linear-gradient(180deg, rgba(255, 252, 244, 0.4), rgba(255, 248, 236, 0.08) 60%, rgba(255, 252, 244, 0.28));
+  filter: blur(3px);
+}
+
+.co-fold__shade {
+  position: absolute;
+  inset: 0 -2px;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(74, 36, 18, 0.9), rgba(96, 52, 26, 0.55) 50%, rgba(74, 36, 18, 0.9));
+}
+
+@keyframes co-sway {
+  from { transform: skewX(0.22deg) scaleX(1); }
+  to { transform: skewX(-0.22deg) scaleX(1.012); }
+}
+
+/* Antique-gold edge with a thin burgundy band on the leading (centre) edge */
+.co-fold__trim {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 11px;
+  pointer-events: none;
+}
+
+.co-curtain--left .co-fold__trim {
+  right: -1px;
+  background: linear-gradient(90deg, rgba(110, 74, 28, 0.6) 0, #a77a31 2px, #e6c98a 5px, #b88a3e 7px, #6e1f2c 8px 11px);
+}
+
+.co-curtain--right .co-fold__trim {
+  left: -1px;
+  background: linear-gradient(270deg, rgba(110, 74, 28, 0.6) 0, #a77a31 2px, #e6c98a 5px, #b88a3e 7px, #6e1f2c 8px 11px);
+}
+
+/* Soft shadow where the curtains meet (closed only) */
+.co-seam {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 70px;
+  margin-left: -35px;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(60, 26, 12, 0.2) 50%, transparent);
+  transition: opacity 0.35s ease;
+}
+
+.co-overlay.is-opening .co-seam {
+  opacity: 0;
+}
+
+/* Slow band of warm light travelling across the closed silk */
+.co-sweep {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -40%;
+  right: -40%;
+  pointer-events: none;
+  background: linear-gradient(
+    100deg,
+    transparent 34%,
+    rgba(255, 236, 205, 0.18) 42%,
+    rgba(255, 244, 222, 0.5) 50%,
+    rgba(255, 236, 205, 0.18) 58%,
+    transparent 66%
+  );
+  mix-blend-mode: soft-light;
+  will-change: transform, opacity;
+}
+
+/* Shaft of golden light pouring through the parting curtains */
+.co-shaft {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 46vw;
+  margin-left: -23vw;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 50% 40% at 50% 38%, rgba(255, 240, 210, 0.75), transparent 75%),
+    linear-gradient(90deg, transparent, rgba(255, 222, 170, 0.5) 50%, transparent);
+  mix-blend-mode: screen;
+  transform-origin: 50% 50%;
+  will-change: transform, opacity;
+}
+
+/* Depth while closed: darker edges, lifts on reveal */
+.co-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse 75% 70% at 50% 48%, transparent 45%, rgba(34, 14, 6, 0.55) 100%);
+}
+
+/* Letterbox bars (film frame) */
+.co-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 7vh;
+  background: #0d0705;
+  pointer-events: none;
+}
+
+.co-bar--top { top: 0; transform-origin: 50% 0; }
+.co-bar--bottom { bottom: 0; transform-origin: 50% 100%; }
+
+/* Fade up from warm darkness */
+.co-fade {
+  position: absolute;
+  inset: 0;
+  background: #120a06;
+  pointer-events: none;
+}
+
+@media (max-width: 640px) {
+  .co-bar { height: 4.5vh; }
+  .co-shaft { width: 70vw; margin-left: -35vw; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .co-fold__cloth,
+  .co-medallion__halo { animation: none; }
+}

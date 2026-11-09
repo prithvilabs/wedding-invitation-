@@ -3,22 +3,33 @@ import { defineConfig, devices } from '@playwright/test';
 /**
  * Playwright setup for the visual/functional verification loop:
  * IMPLEMENTATION -> PLAYWRIGHT -> VISUAL + FUNCTIONAL VERIFICATION -> ITERATE.
- * Assumes `npm run dev` is already serving the app at baseURL.
+ * Reuses an already-running `npm run dev` at baseURL, or starts one itself.
+ *
+ * Browser: Playwright's standard managed Chromium (`npx playwright install chromium`).
+ * To use a pre-installed browser instead (e.g. the Linux sandbox's
+ * /opt/pw-browsers/chromium), set PW_CHROMIUM_PATH. See docs/playwright-linux.md.
  */
+const chromiumPath = process.env.PW_CHROMIUM_PATH;
+
 export default defineConfig({
   testDir: './tests/e2e',
   fullyParallel: true,
+  // Keep parallel browsers modest so animation timings stay reliable on
+  // integrated-GPU machines.
+  workers: 2,
   retries: 0,
   reporter: [['list']],
   use: {
     baseURL: 'http://localhost:3000/wedding-invitation-/',
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
-    // This environment ships a pre-installed Chromium pinned to a specific
-    // revision under /opt/pw-browsers rather than whatever revision this
-    // @playwright/test version would normally fetch. Point at it directly
-    // instead of downloading a matching browser (do not run `playwright install`).
-    launchOptions: { executablePath: '/opt/pw-browsers/chromium' }
+    ...(chromiumPath ? { launchOptions: { executablePath: chromiumPath } } : {})
+  },
+  webServer: {
+    command: 'npm run dev',
+    url: 'http://localhost:3000/wedding-invitation-/',
+    reuseExistingServer: true,
+    timeout: 120_000
   },
   projects: [
     {
