@@ -159,55 +159,103 @@
 }
 
 .co-fold {
+  /* Per-fold drape character (varied below with :nth-child so no two
+     neighbouring folds share the same shape):
+     --crest  where the lit crest sits across the fold
+     --depth  how deep the shadowed trough is
+     --spread how broad/soft the crest is */
+  --crest: 44%;
+  --depth: 0%;
+  --spread: 12%;
   flex: 1 1 0;
   height: 100%;
   position: relative;
   will-change: transform;
-  /* each fold casts a soft shadow onto the one beside it */
-  box-shadow: 0 0 22px rgba(70, 34, 16, 0.14);
+  /* soft, layered shadows where folds overlap: a close contact shadow
+     plus a wider ambient one, giving the silk thickness */
+  box-shadow:
+    -3px 0 6px rgba(70, 34, 16, 0.12),
+    0 0 26px rgba(70, 34, 16, 0.12);
 }
 
+/* Irregular drape: broad soft folds next to narrow compressed ones */
+.co-fold:nth-child(7n + 1) { --crest: 36%; --depth: 4%; --spread: 16%; }
+.co-fold:nth-child(7n + 2) { --crest: 54%; --depth: 1%; --spread: 9%; }
+.co-fold:nth-child(7n + 3) { --crest: 42%; --depth: 7%; --spread: 18%; }
+.co-fold:nth-child(7n + 4) { --crest: 30%; --depth: 2%; --spread: 11%; }
+.co-fold:nth-child(7n + 5) { --crest: 50%; --depth: 5%; --spread: 14%; }
+.co-fold:nth-child(7n + 6) { --crest: 46%; --depth: 0%; --spread: 8%; }
+.co-fold:nth-child(7n + 7) { --crest: 38%; --depth: 6%; --spread: 17%; }
+
 /*
- * One fold of champagne-ivory silk. Horizontal: soft trough -> broad lit crest
- * -> gentle secondary ripple -> trough. Vertical: warm light from above, deeper
- * tone and weight at the hem. Both live on the fold so they travel with it.
+ * One fold of champagne-ivory satin. Horizontally the light rolls over the
+ * curved fold: a soft shadowed trough, a gradual rise to a broad lit crest,
+ * a gentle secondary ripple, then the fall into the next trough. Vertically:
+ * warm light from above, deeper tone and weight at the hem. Everything lives
+ * on the fold so it travels with it when the curtain gathers.
  */
 .co-fold__cloth {
   --tone: 0;
+  --L: calc(var(--tone) * 100%);
   position: absolute;
   inset: 0 -2px;
   background:
     linear-gradient(180deg,
-      rgba(255, 238, 210, 0.28) 0%,
-      rgba(255, 238, 210, 0) 28%,
-      rgba(0, 0, 0, 0) 78%,
-      rgba(84, 42, 22, 0.24) 96%,
-      rgba(70, 34, 16, 0.32) 100%),
+      rgba(255, 238, 210, 0.26) 0%,
+      rgba(255, 238, 210, 0.06) 22%,
+      rgba(0, 0, 0, 0) 50%,
+      rgba(0, 0, 0, 0) 76%,
+      rgba(84, 42, 22, 0.2) 94%,
+      rgba(70, 34, 16, 0.3) 100%),
     linear-gradient(90deg,
-      hsl(34 30% calc(66% + var(--tone) * 100%)) 0%,
-      hsl(37 42% calc(78% + var(--tone) * 100%)) 14%,
-      hsl(40 58% calc(87% + var(--tone) * 100%)) 34%,
-      hsl(42 66% calc(90% + var(--tone) * 100%)) 44%,
-      hsl(39 50% calc(84% + var(--tone) * 100%)) 58%,
-      hsl(38 46% calc(81% + var(--tone) * 100%)) 66%,
-      hsl(39 52% calc(85% + var(--tone) * 100%)) 74%,
-      hsl(35 36% calc(73% + var(--tone) * 100%)) 90%,
-      hsl(33 28% calc(64% + var(--tone) * 100%)) 100%);
-  filter: blur(0.4px); /* removes gradient banding, keeps the silk soft */
+      hsl(33 28% calc(60% - var(--depth) + var(--L))) 0%,
+      hsl(34 32% calc(66% - var(--depth) * 0.6 + var(--L))) calc(var(--crest) * 0.22),
+      hsl(36 40% calc(75% + var(--L))) calc(var(--crest) * 0.55),
+      hsl(39 52% calc(83% + var(--L))) calc(var(--crest) - var(--spread) * 0.9),
+      hsl(41 60% calc(88% + var(--L))) calc(var(--crest) - var(--spread) * 0.3),
+      hsl(42 66% calc(90% + var(--L))) var(--crest),
+      hsl(41 60% calc(88% + var(--L))) calc(var(--crest) + var(--spread) * 0.35),
+      hsl(39 50% calc(83% + var(--L))) calc(var(--crest) + var(--spread) * 0.95),
+      hsl(37 44% calc(79% + var(--L))) calc(var(--crest) + var(--spread) + 8%),
+      hsl(38 48% calc(82% + var(--L))) calc(var(--crest) + var(--spread) + 15%),
+      hsl(36 40% calc(76% + var(--L))) calc(var(--crest) + var(--spread) + 24%),
+      hsl(34 32% calc(67% - var(--depth) * 0.5 + var(--L))) 93%,
+      hsl(33 28% calc(61% - var(--depth) + var(--L))) 100%);
+  /* inner contact shadow on the side tucked under the neighbouring fold */
+  box-shadow: inset 10px 0 16px -10px rgba(78, 40, 20, 0.18);
   transform-origin: 50% 0;
   animation: co-sway 3.6s ease-in-out infinite alternate;
 }
 
-/* Silk sheen: soft highlight running down the crest */
+/* Extremely fine silk grain (inline SVG noise, no external asset) so the
+   surface never reads as smooth plastic; also breaks up gradient banding */
+.co-fold__cloth::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.09;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85 0.32' numOctaves='2' seed='7' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.42 0 0 0 0 0.32 0 0 0 0 0.22 0 0 0 0.9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  background-size: 180px 180px;
+}
+
+/* Satin sheen: a soft reflection riding the curve of each crest, brightest
+   near the top where the light falls, fading toward the hem */
 .co-fold__cloth::after {
   content: '';
   position: absolute;
   top: 0;
   bottom: 0;
-  left: 36%;
-  width: 10%;
-  background: linear-gradient(180deg, rgba(255, 252, 244, 0.4), rgba(255, 248, 236, 0.08) 60%, rgba(255, 252, 244, 0.28));
-  filter: blur(3px);
+  left: calc(var(--crest) - var(--spread) * 0.9);
+  width: calc(var(--spread) * 1.8);
+  background: linear-gradient(180deg,
+    rgba(255, 252, 244, 0.34) 0%,
+    rgba(255, 250, 240, 0.16) 30%,
+    rgba(255, 248, 236, 0.05) 62%,
+    rgba(255, 250, 240, 0.13) 100%);
+  border-radius: 50%;
+  filter: blur(10px);
 }
 
 .co-fold__shade {
