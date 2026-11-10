@@ -243,7 +243,7 @@ export default function Events() {
             <React.Fragment key={idx}>
               <motion.article className="schedule-event-row" variants={itemVariants}>
                 {/* LEFT: Date & Time Pod */}
-                <div className="schedule-date-pod">
+                <div className="schedule-date-pod event-date-card">
                   <span className="schedule-date-day">{evt.day}</span>
                   <span className="schedule-date-month">{evt.monthYear}</span>
                   <div className="schedule-time-tag">
