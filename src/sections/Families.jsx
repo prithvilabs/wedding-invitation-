@@ -122,7 +122,7 @@ export default function Families() {
         <div className="families-stationery-layout">
           {/* LEFT CARD: Groom's Family */}
           <motion.div
-            className="family-stationery-card groom-card"
+            className="family-stationery-card family-card groom-card"
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.15 }}
@@ -159,8 +159,8 @@ export default function Families() {
 
             {/* Card Content */}
             <div className="card-content-stack">
-              {/* GROOM'S LINEAGE Badge */}
-              <div className="lineage-capsule-badge">GROOM'S LINEAGE</div>
+              {/* GROOM'S FAMILY Badge */}
+              <div className="lineage-capsule-badge">GROOM'S FAMILY</div>
 
               {/* Prithvi Raj in Romantic Script */}
               <h3 className="family-calligraphy-name">Prithvi Raj</h3>
@@ -172,7 +172,7 @@ export default function Families() {
                 <span className="name-divider-line" />
               </div>
 
-              {/* Lineage Tree */}
+              {/* Family Tree */}
               <div className="lineage-detail-tree">
                 <span className="lineage-relation-label">Son of</span>
                 <p className="lineage-parent-name">Mr. G. Venkatesan</p>
@@ -186,7 +186,7 @@ export default function Families() {
                   <span className="sibling-sep-line" />
                 </div>
 
-                <span className="lineage-relation-label">Brother</span>
+                <span className="lineage-relation-label">Brother of</span>
                 <p className="lineage-sibling-name">Jayavarshan</p>
 
                 {/* Location Capsule */}
@@ -213,7 +213,7 @@ export default function Families() {
 
           {/* RIGHT CARD: Bride's Family */}
           <motion.div
-            className="family-stationery-card bride-card"
+            className="family-stationery-card family-card bride-card"
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.15 }}
@@ -250,8 +250,8 @@ export default function Families() {
 
             {/* Card Content */}
             <div className="card-content-stack">
-              {/* BRIDE'S LINEAGE Badge */}
-              <div className="lineage-capsule-badge">BRIDE'S LINEAGE</div>
+              {/* BRIDE'S FAMILY Badge */}
+              <div className="lineage-capsule-badge">BRIDE'S FAMILY</div>
 
               {/* Harshini in Romantic Script */}
               <h3 className="family-calligraphy-name">Harshini</h3>
@@ -263,7 +263,7 @@ export default function Families() {
                 <span className="name-divider-line" />
               </div>
 
-              {/* Lineage Tree */}
+              {/* Family Tree */}
               <div className="lineage-detail-tree">
                 <span className="lineage-relation-label">Daughter of</span>
                 <p className="lineage-parent-name">Mr. M. Muthukumar</p>
@@ -277,7 +277,7 @@ export default function Families() {
                   <span className="sibling-sep-line" />
                 </div>
 
-                <span className="lineage-relation-label">Brother</span>
+                <span className="lineage-relation-label">Sister of</span>
                 <p className="lineage-sibling-name">Tarun Kumar</p>
 
                 {/* Location Capsule */}

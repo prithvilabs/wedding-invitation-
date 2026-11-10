@@ -1398,25 +1398,30 @@ body {
   position: relative;
 }
 
-/* Family Stationery Card */
-.family-stationery-card {
+/* Family Stationery Card - Frosted Glass (Glassmorphism) */
+.family-stationery-card,
+.family-card {
   position: relative;
-  background: #FDFBF7;
-  border: 1.5px solid rgba(200, 160, 95, 0.7);
+  background: rgba(255, 245, 240, 0.22);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.55);
   border-radius: 18px;
   padding: 34px 28px 28px;
   text-align: center;
-  box-shadow: 0 12px 35px -8px rgba(70, 25, 35, 0.1), 0 0 18px rgba(235, 210, 180, 0.15);
+  box-shadow: 0 8px 25px rgba(80, 35, 35, 0.08);
   display: flex;
   flex-direction: column;
   align-items: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
   overflow: hidden;
 }
 
-.family-stationery-card:hover {
+.family-stationery-card:hover,
+.family-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 18px 42px -6px rgba(70, 25, 35, 0.16), 0 0 24px rgba(235, 210, 180, 0.25);
+  box-shadow: 0 12px 30px rgba(80, 35, 35, 0.12);
+  background: rgba(255, 245, 240, 0.28);
 }
 
 /* Inner Gold Hairline Frame */
@@ -2032,32 +2037,45 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 14px;
   margin: 24px auto 0;
-  padding: 9px 24px;
-  background: rgba(255, 253, 249, 0.92);
-  backdrop-filter: blur(8px);
-  border: 1px dashed rgba(201, 162, 74, 0.65);
-  border-radius: 30px;
+  padding: 10px 28px;
+  background: rgba(255, 252, 247, 0.94);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(209, 166, 84, 0.6);
+  border-radius: 999px;
   width: fit-content;
+  max-width: calc(100% - 32px);
   font-family: var(--font-sans, "DM Sans", sans-serif);
-  font-size: 0.72rem;
+  font-size: clamp(0.7rem, 1.4vw, 0.76rem);
   font-weight: 700;
-  letter-spacing: 0.2em;
-  color: #5A1F2B;
+  letter-spacing: 0.22em;
+  color: #531824;
   text-transform: uppercase;
-  box-shadow: 0 4px 16px rgba(90, 31, 43, 0.08);
-  animation: pulseGuidance 2.8s infinite ease-in-out;
+  box-shadow: 0 4px 18px rgba(74, 21, 33, 0.08), 0 0 12px rgba(209, 166, 84, 0.18), inset 0 0 0 1px rgba(255, 255, 255, 0.85);
+  animation: pulseGuidance 3s infinite ease-in-out;
+  user-select: none;
 }
 
 @keyframes pulseGuidance {
-  0%, 100% { opacity: 0.8; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.02); }
+  0%, 100% {
+    opacity: 0.92;
+    transform: scale(1);
+    box-shadow: 0 4px 18px rgba(74, 21, 33, 0.08), 0 0 10px rgba(209, 166, 84, 0.15), inset 0 0 0 1px rgba(255, 255, 255, 0.85);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.025);
+    box-shadow: 0 6px 24px rgba(74, 21, 33, 0.12), 0 0 16px rgba(209, 166, 84, 0.32), inset 0 0 0 1px rgba(255, 255, 255, 0.95);
+  }
 }
 
 .guidance-dot {
   color: #C9A24A;
-  font-size: 0.7rem;
+  font-size: 0.78rem;
+  line-height: 1;
+  text-shadow: 0 0 6px rgba(201, 162, 74, 0.45);
 }
 
 /* 3. Luxury Wedding Storybook Card */
@@ -3606,7 +3624,7 @@ body {
   padding: 60px 20px 90px;
   border-top: 1px solid rgba(207, 160, 73, 0.35);
   position: relative;
-  background: rgba(20, 4, 8, 0.92);
+  background: #1D0D10;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
@@ -3685,6 +3703,166 @@ body {
 .footer-divider-flourish {
   margin-top: 8px;
   max-width: 240px;
+}
+
+/* ==========================================================================
+   MINIMAL EDITORIAL WEDDING WISHES & DEVELOPER SIGNATURE (NO CARDS)
+   ========================================================================== */
+.footer-wishes-flow {
+  margin-top: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 680px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+/* Small Centered Gold Lotus */
+.wishes-lotus-wrap {
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Heading with Thin Gold Hairlines: —— WITH WARM WISHES —— */
+.wishes-heading-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
+  max-width: 380px;
+  margin-bottom: 18px;
+}
+
+.wishes-heading-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(213, 180, 107, 0.65), transparent);
+}
+
+.wishes-sub-heading {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #D5B46B;
+  white-space: nowrap;
+}
+
+/* Main Message: 2 lines on desktop, warm ivory, elegant italic serif */
+.wishes-main-quote {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(1.4rem, 3.2vw, 2.05rem);
+  font-weight: 400;
+  line-height: 1.4;
+  color: #F4E5C7;
+  margin: 0 0 24px 0;
+  text-align: center;
+  max-width: 580px;
+}
+
+.wishes-desktop-break {
+  display: block;
+}
+
+@media (max-width: 600px) {
+  .wishes-desktop-break {
+    display: inline;
+  }
+}
+
+/* Thin Gold Horizontal Divider with Diamond: —— ❖ —— */
+.wishes-mid-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 190px;
+  margin: 0 auto 24px;
+}
+
+.wishes-mid-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(213, 180, 107, 0.55), transparent);
+}
+
+.wishes-mid-diamond {
+  color: #D5B46B;
+  font-size: 0.65rem;
+  line-height: 1;
+  opacity: 0.9;
+}
+
+/* Personal Message */
+.wishes-creation-text {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(1.05rem, 2vw, 1.25rem);
+  font-weight: 400;
+  color: #F4E5C7;
+  margin: 0 0 24px 0;
+  letter-spacing: 0.02em;
+  text-align: center;
+}
+
+/* Developer Signature & Social Links Single Horizontal Row */
+.dev-signature-row {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: nowrap;
+  margin: 0 auto;
+}
+
+.dev-signature-credit {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: #D5B46B;
+  white-space: nowrap;
+}
+
+.dev-signature-pipe {
+  width: 1px;
+  height: 14px;
+  background: rgba(213, 180, 107, 0.45);
+  flex-shrink: 0;
+}
+
+.dev-signature-socials {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dev-signature-icon-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #D5B46B;
+  text-decoration: none;
+  transition: transform 0.2s ease, color 0.2s ease, filter 0.2s ease;
+  line-height: 1;
+  padding: 3px;
+  border-radius: 4px;
+}
+
+.dev-signature-icon-link:hover,
+.dev-signature-icon-link:focus-visible {
+  color: #F4E5C7;
+  transform: translateY(-2px);
+  filter: drop-shadow(0 0 7px rgba(213, 180, 107, 0.65));
+  outline: none;
 }
 
 /* ==========================================================================
