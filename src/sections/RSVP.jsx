@@ -239,7 +239,7 @@ export default function RSVP() {
 
   return (
     <AnimatedSection className="section-block rsvp-section" id="rsvp">
-      <div className="section-container text-safe-zone rsvp-compact-shell">
+      <div className="section-container rsvp-compact-shell">
         <div className="rsvp-editorial-card">
           {/* RSVP Header */}
           <div className="editorial-heading-stack text-center rsvp-header-compact">

@@ -2,74 +2,9 @@ import React from 'react';
 import AnimatedSection from '../animations/AnimatedSection';
 
 /**
- * Decorative Gold Lotus Motif
- */
-const LotusIcon = ({ width = 30, height = 19 }) => (
-  <svg
-    width={width}
-    height={height}
-    viewBox="0 0 36 22"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    aria-hidden="true"
-    style={{ display: 'inline-block', verticalAlign: 'middle' }}
-  >
-    <defs>
-      <linearGradient id="footerLotusGold" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#DFB35A" />
-        <stop offset="50%" stopColor="#D5B46B" />
-        <stop offset="100%" stopColor="#A47524" />
-      </linearGradient>
-    </defs>
-    <path
-      d="M 18 2 C 15.6 6.8, 15.6 13, 18 18.2 C 20.4 13, 20.4 6.8, 18 2 Z"
-      stroke="url(#footerLotusGold)"
-      strokeWidth="1.2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M 18 18.2 C 14.5 16, 11 11.2, 11.8 6.5 C 14.2 9, 16.6 12, 18 14"
-      stroke="url(#footerLotusGold)"
-      strokeWidth="1.15"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M 18 18.2 C 21.5 16, 25 11.2, 24.2 6.5 C 21.8 9, 19.4 12, 18 14"
-      stroke="url(#footerLotusGold)"
-      strokeWidth="1.15"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M 16 18.2 C 12 17.2, 6.2 14.8, 5.5 10.8 C 8.6 12.2, 12.2 14.8, 14.8 16.8"
-      stroke="url(#footerLotusGold)"
-      strokeWidth="1.15"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M 20 18.2 C 24 17.2, 29.8 14.8, 30.5 10.8 C 27.4 12.2, 23.8 14.8, 21.2 16.8"
-      stroke="url(#footerLotusGold)"
-      strokeWidth="1.15"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M 12 19.2 C 15 21.2, 21 21.2, 24 19.2"
-      stroke="url(#footerLotusGold)"
-      strokeWidth="1.15"
-      strokeLinecap="round"
-    />
-    <circle cx="18" cy="18.2" r="0.9" fill="#D5B46B" />
-  </svg>
-);
-
-/**
  * Gold Vector Icons for LinkedIn & WhatsApp
  */
-const LinkedInIcon = ({ size = 16, className = '' }) => (
+const LinkedInIcon = ({ size = 15, className = '' }) => (
   <svg
     viewBox="0 0 24 24"
     width={size}
@@ -84,7 +19,7 @@ const LinkedInIcon = ({ size = 16, className = '' }) => (
   </svg>
 );
 
-const WhatsAppIcon = ({ size = 16, className = '' }) => (
+const WhatsAppIcon = ({ size = 15, className = '' }) => (
   <svg
     viewBox="0 0 24 24"
     width={size}
@@ -103,79 +38,48 @@ export default function Footer() {
   return (
     <footer className="final-ceremonial-footer">
       <AnimatedSection className="footer-inner text-center">
-        {/* 1. Existing Wedding Header */}
+        {/* Wedding Quote Passage */}
         <p className="footer-quote-passage">
           "Two lives, two hearts, joined together in friendship and love for a lifetime."
         </p>
 
+        {/* Couple Names Lead */}
         <h2 className="footer-couple-lead">
           Prithvi Raj <span>&amp;</span> Harshini
         </h2>
 
+        {/* Date & Location Stamp */}
         <div className="footer-date-stamp">28TH JANUARY 2027 · CHENNAI, TAMIL NADU</div>
 
+        {/* Decorative Gold Flourish Divider */}
         <div className="gold-divider-flourish footer-divider-flourish" aria-hidden="true">
           <span className="flourish-line" />
           <span className="flourish-node">❈ ❖ ❈</span>
           <span className="flourish-line" />
         </div>
 
-        {/* 2. Wedding Wishes & Developer Signature Section (Minimal, no cards) */}
-        <div className="footer-wishes-flow">
-          {/* Centered Small Gold Lotus */}
-          <div className="wishes-lotus-wrap" aria-hidden="true">
-            <LotusIcon width={28} height={18} />
-          </div>
-
-          {/* Heading with Thin Gold Hairlines: —— WITH WARM WISHES —— */}
-          <div className="wishes-heading-row">
-            <span className="wishes-heading-line" aria-hidden="true" />
-            <span className="wishes-sub-heading">WITH WARM WISHES</span>
-            <span className="wishes-heading-line" aria-hidden="true" />
-          </div>
-
-          {/* Main Message: 2 lines on desktop, warm ivory, elegant italic serif */}
-          <p className="wishes-main-quote">
-            Wishing you a lifetime of love,<br className="wishes-desktop-break" />
-            happiness &amp; togetherness.
-          </p>
-
-          {/* Thin Gold Horizontal Divider with Symmetrical Diamond: —— ❖ —— */}
-          <div className="wishes-mid-divider" aria-hidden="true">
-            <span className="wishes-mid-line" />
-            <span className="wishes-mid-diamond">❖</span>
-            <span className="wishes-mid-line" />
-          </div>
-
-          {/* Personal Message */}
-          <p className="wishes-creation-text">
-            A special creation for Prithvi &amp; Harshini
-          </p>
-
-          {/* Developer Signature & Social Links Row: Crafted by Prasanna | [LinkedIn] [WhatsApp] */}
-          <div className="dev-signature-row">
-            <span className="dev-signature-credit">Crafted by Prasanna</span>
-            <span className="dev-signature-pipe" aria-hidden="true" />
-            <div className="dev-signature-socials" role="group" aria-label="Developer contacts">
-              <a
-                href="https://www.linkedin.com/in/prasanna-raj-r-0b50a7282/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="dev-signature-icon-link"
-                aria-label="Connect with Prasanna on LinkedIn"
-              >
-                <LinkedInIcon size={16} />
-              </a>
-              <a
-                href="https://wa.me/917810096062"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="dev-signature-icon-link"
-                aria-label="Message Prasanna on WhatsApp"
-              >
-                <WhatsAppIcon size={16} />
-              </a>
-            </div>
+        {/* Minimal Developer Attribution */}
+        <div className="footer-dev-attribution">
+          <span className="footer-dev-text">Designed &amp; developed by Prasanna</span>
+          <div className="footer-dev-icons" role="group" aria-label="Developer contacts">
+            <a
+              href="https://www.linkedin.com/in/prasanna-raj-r-0b50a7282/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="footer-dev-link"
+              aria-label="Connect with Prasanna on LinkedIn"
+            >
+              <LinkedInIcon size={14} />
+            </a>
+            <a
+              href="https://wa.me/917810096062"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="footer-dev-link"
+              aria-label="Message Prasanna on WhatsApp"
+            >
+              <WhatsAppIcon size={14} />
+            </a>
           </div>
         </div>
       </AnimatedSection>
