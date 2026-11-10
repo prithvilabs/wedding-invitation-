@@ -812,12 +812,12 @@ body {
 
 .muhurtham-display-title {
   font-family: var(--font-display);
-  font-size: clamp(1.75rem, 3.4vw, 2.45rem);
+  font-size: clamp(1.45rem, 3.1vw, 2.15rem);
   font-weight: 600;
   color: #380a15;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  margin: 8px 0 12px;
+  margin: 6px 0 10px;
   line-height: 1.25;
   text-shadow: 0 1px 12px rgba(255, 248, 240, 0.85);
 }
@@ -1166,8 +1166,23 @@ body {
 }
 
 /* ==========================================================================
-   3. MUHURTHAM LIVE COUNTDOWN
+   3. MUHURTHAM LIVE COUNTDOWN (Matching Reference Design)
    ========================================================================== */
+.countdown-header-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 440px;
+  margin: 8px auto 20px;
+}
+
+.countdown-header-divider-svg {
+  width: 100%;
+  height: 18px;
+  display: block;
+}
+
 .muhurtham-countdown-grid,
 .countdown-grid {
   display: flex;
@@ -1176,114 +1191,208 @@ body {
   gap: 16px;
   margin: 18px auto 0;
   flex-wrap: nowrap;
-  max-width: 580px;
+  max-width: 620px;
+  width: 100%;
 }
 
+/* Frosted-Glass Countdown Cards matching reference image */
+.countdown-card,
 .countdown-plaque-item {
   position: relative;
-  width: 110px;
-  height: 110px;
-  flex: 0 0 110px;
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  cursor: default;
-}
-
-.countdown-plaque-item:hover {
-  transform: translateY(-3px) scale(1.025);
-}
-
-.countdown-plaque-svg {
-  width: 100%;
-  height: 100%;
-  display: block;
-  overflow: visible;
-}
-
-@media (max-width: 540px) {
-  .muhurtham-countdown-grid,
-  .countdown-grid {
-    gap: 8px;
-  }
-  .countdown-plaque-item {
-    width: 76px;
-    height: 76px;
-    flex: 0 0 76px;
-  }
-}
-
-.muhurtham-time-pod,
-.time-pod {
-  background: rgba(255, 252, 246, 0.95);
-  border: 1.5px solid rgba(207, 160, 73, 0.55);
-  border-radius: 14px;
-  padding: 16px 20px;
-  min-width: 105px;
+  width: 126px;
+  height: 116px;
+  flex: 0 0 126px;
+  background: linear-gradient(180deg, rgba(255, 248, 240, 0.48) 0%, rgba(255, 238, 225, 0.35) 100%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 20px;
+  box-shadow:
+    0 10px 28px rgba(75, 30, 25, 0.08),
+    0 2px 6px rgba(75, 30, 25, 0.04),
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.88),
+    inset 0 -1.5px 2px rgba(255, 230, 205, 0.35);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 6px 10px;
   text-align: center;
-  box-shadow: 0 12px 32px rgba(45, 10, 18, 0.22), 0 0 16px rgba(207, 160, 73, 0.2);
-  backdrop-filter: blur(10px);
+  cursor: default;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, background 0.25s ease;
 }
 
-.muhurtham-pod-digits,
-.pod-digits {
+.countdown-card:hover,
+.countdown-plaque-item:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(180deg, rgba(255, 252, 246, 0.58) 0%, rgba(255, 242, 232, 0.44) 100%);
+  box-shadow:
+    0 14px 34px rgba(75, 30, 25, 0.12),
+    0 4px 8px rgba(75, 30, 25, 0.06),
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.95);
+}
+
+.countdown-number {
   display: block;
-  font-family: var(--font-display);
-  font-size: clamp(2rem, 3.8vw, 2.5rem);
-  font-weight: 800;
-  color: var(--crimson-maroon);
+  font-family: var(--font-display), "Cinzel", "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(2.35rem, 3.6vw, 2.75rem);
+  font-weight: 700;
+  color: #380a15;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.countdown-card-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 6px 0 8px;
+  width: 100%;
+  line-height: 0;
+}
+
+.countdown-label {
+  display: block;
+  font-family: var(--font-display), "Cinzel", Georgia, serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #4a101d;
   line-height: 1;
 }
 
-.muhurtham-pod-label,
-.pod-label {
-  display: block;
-  font-family: var(--font-sans);
-  font-size: 0.68rem;
-  font-weight: 800;
-  letter-spacing: 0.2em;
-  color: var(--ink-muted);
-  margin-top: 6px;
+@media (max-width: 540px) {
+  .muhurtham-display-title {
+    font-size: clamp(1.22rem, 5.2vw, 1.55rem);
+    letter-spacing: 0.12em;
+  }
+
+  .countdown-header-divider {
+    max-width: 260px;
+    margin: 6px auto 16px;
+  }
+
+  .muhurtham-countdown-grid,
+  .countdown-grid {
+    gap: 8px;
+    padding: 0 8px;
+  }
+
+  .countdown-card,
+  .countdown-plaque-item {
+    width: 76px;
+    height: 86px;
+    flex: 0 0 76px;
+    border-radius: 16px;
+    padding: 8px 3px 6px;
+  }
+
+  .countdown-number {
+    font-size: clamp(1.45rem, 5.2vw, 1.75rem);
+  }
+
+  .countdown-card-divider {
+    margin: 3px 0 5px;
+  }
+
+  .countdown-card-divider svg {
+    width: 48px;
+    height: 8px;
+  }
+
+  .countdown-label {
+    font-size: 0.52rem;
+    letter-spacing: 0.18em;
+  }
+
+  .muhurtham-calendar-btn {
+    padding: 10px 22px;
+    font-size: 0.74rem;
+    letter-spacing: 0.14em;
+  }
 }
 
-.muhurtham-pod-colon,
-.pod-colon {
-  font-family: var(--font-display);
-  font-size: 2rem;
-  font-weight: 800;
-  color: var(--gold-foil);
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+@media (max-width: 360px) {
+  .muhurtham-countdown-grid,
+  .countdown-grid {
+    gap: 6px;
+    padding: 0 4px;
+  }
+
+  .countdown-card,
+  .countdown-plaque-item {
+    width: 70px;
+    height: 80px;
+    flex: 0 0 70px;
+    border-radius: 14px;
+  }
+
+  .countdown-number {
+    font-size: 1.35rem;
+  }
+
+  .countdown-label {
+    font-size: 0.48rem;
+    letter-spacing: 0.12em;
+  }
 }
 
+/* Save to Calendar Button */
 .muhurtham-calendar-action-row,
 .calendar-action-row {
-  margin-top: 20px;
+  margin-top: 24px;
   display: flex;
   justify-content: center;
 }
 
 .muhurtham-calendar-btn,
 .gold-luxury-btn {
-  background: linear-gradient(135deg, #dfb35a 0%, #b88628 100%);
-  color: #24050b;
-  border: none;
-  font-family: var(--font-sans);
-  font-size: 0.84rem;
-  font-weight: 800;
-  letter-spacing: 0.14em;
+  background: linear-gradient(180deg, #E8B95D 0%, #D8A040 50%, #C4892A 100%);
+  color: #2D0813;
+  border: 1px solid rgba(255, 245, 215, 0.85);
+  font-family: var(--font-sans), "DM Sans", -apple-system, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  padding: 14px 28px;
-  border-radius: 30px;
+  padding: 11px 28px;
+  border-radius: 9999px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  box-shadow: 0 8px 24px rgba(45, 10, 18, 0.28), 0 0 20px rgba(223, 179, 90, 0.45);
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+  box-shadow:
+    0 8px 24px rgba(95, 42, 18, 0.24),
+    0 2px 6px rgba(110, 50, 15, 0.16),
+    inset 0 1px 2px rgba(255, 255, 255, 0.75),
+    inset 0 -1px 2px rgba(130, 80, 20, 0.25);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, filter 0.25s ease;
 }
 
 .muhurtham-calendar-btn:hover,
 .gold-luxury-btn:hover {
-  transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 12px 30px rgba(45, 10, 18, 0.35), 0 0 28px rgba(223, 179, 90, 0.65);
+  transform: translateY(-2px);
+  filter: brightness(1.04);
+  box-shadow:
+    0 12px 30px rgba(95, 42, 18, 0.30),
+    0 4px 10px rgba(110, 50, 15, 0.22),
+    inset 0 1px 2.5px rgba(255, 255, 255, 0.9);
+}
+
+.muhurtham-calendar-btn:active,
+.gold-luxury-btn:active {
+  transform: translateY(0);
+  filter: brightness(0.98);
+}
+
+.muhurtham-btn-icon-svg {
+  color: #2D0813;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
 }
 
 /* ==========================================================================
