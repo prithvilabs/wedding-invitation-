@@ -18,6 +18,7 @@ playwright-report
 blob-report
 playwright/.cache
 tests/screenshots
+shots/
 
 # Editor directories and files
 .vscode/*

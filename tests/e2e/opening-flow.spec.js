@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
-// Desktop project runs at 1440x900, mobile project at 390x844
-const viewportFor = (project) => (project === 'mobile' ? { width: 390, height: 844 } : { width: 1440, height: 900 });
+// Desktop project runs at 1440x900; phone projects (Android/iPhone) at 390x844
+const viewportFor = (project) => (project === 'desktop' ? { width: 1440, height: 900 } : { width: 390, height: 844 });
 
 /** Page time is controlled by the test so every beat is captured exactly. */
 async function openPausedAtLoad(page) {
@@ -12,6 +12,7 @@ async function openPausedAtLoad(page) {
 
 test.describe('curtain opening', () => {
   test('waits closed with the PH medallion, opens on touch, reveals the homepage', async ({ page }, testInfo) => {
+    test.setTimeout(60_000); // five full-page screenshots; slower when WebKit runs alongside
     const errors = [];
     page.on('pageerror', (err) => errors.push(err.message));
     await page.setViewportSize(viewportFor(testInfo.project.name));
@@ -85,7 +86,9 @@ test.describe('curtain opening', () => {
     expect(vp2.width - (dock.x + dock.width)).toBeLessThan(40);
     expect(vp2.height - (dock.y + dock.height)).toBeLessThan(40);
 
-    await page.mouse.wheel(0, 900);
+    // (mobile WebKit has no mouse wheel; scroll by script there)
+    if (testInfo.project.name === 'iphone') await page.evaluate(() => window.scrollBy(0, 900));
+    else await page.mouse.wheel(0, 900);
     await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
 
     expect(errors).toEqual([]);
@@ -106,9 +109,18 @@ test.describe('curtain opening', () => {
       const isSong = (el) => /wedding-song/.test(el.currentSrc || el.src || '');
       const { play, pause } = HTMLMediaElement.prototype;
       HTMLMediaElement.prototype.play = function () {
-        if (isSong(this)) window.__audioLog.push('play');
+        if (isSong(this)) {
+          window.__audioLog.push('play');
+          if (!window.__playAt) window.__playAt = performance.now();
+        }
         return play.call(this).catch(() => {});
       };
+      // Exact moment the curtains finish (independent of test timing)
+      new MutationObserver(() => {
+        const el = document.querySelector('[data-testid="curtain-opening"]');
+        if (el) window.__curtainSeen = true;
+        else if (window.__curtainSeen && !window.__curtainGoneAt) window.__curtainGoneAt = performance.now();
+      }).observe(document, { childList: true, subtree: true });
       HTMLMediaElement.prototype.pause = function () {
         if (isSong(this)) window.__audioLog.push('pause');
         return pause.call(this);
@@ -121,10 +133,12 @@ test.describe('curtain opening', () => {
     // Touch the PH medallion: music starts immediately, while the curtains open
     await page.getByRole('button', { name: 'Open the wedding invitation' }).click({ force: true });
     expect(await log()).toContain('play');
-    await expect(page.getByTestId('curtain-opening')).toBeAttached();
 
     // After the reveal, pausing via the music player isn't overridden by a later click handler
     await expect(page.getByTestId('curtain-opening')).toHaveCount(0, { timeout: 6000 });
+    // The song started on the touch, well before the curtains finished opening
+    const { playAt, goneAt } = await page.evaluate(() => ({ playAt: window.__playAt, goneAt: window.__curtainGoneAt }));
+    expect(goneAt - playAt).toBeGreaterThan(2000);
     const playsBefore = (await log()).filter((e) => e === 'play').length;
     await page.locator('#floatingMusicBtn').click();
     await page.locator('#hero').click({ position: { x: 20, y: 200 }, force: true });
@@ -158,17 +172,103 @@ test.describe('curtain opening', () => {
     await expect(name).toHaveValue('Test Guest');
   });
 
-  test('once per visit: after opening, a reload goes straight to the homepage', async ({ page }) => {
-    await page.goto('/');
-    // Reloading before opening shows the curtains again
-    await page.reload();
+  test('every refresh starts with the curtains fully closed again', async ({ page }) => {
     const medallion = page.getByRole('button', { name: 'Open the wedding invitation' });
+    const curtains = page.getByTestId('curtain-opening');
+
+    // First visit: open the curtains all the way into the site
+    await page.goto('/');
     await medallion.click({ force: true });
-    await expect(page.getByTestId('curtain-opening')).toHaveCount(0, { timeout: 5000 });
-    // Opened once -> not shown again this visit
-    await page.reload();
-    await expect(page.locator('#hero')).toBeAttached();
-    await expect(page.getByTestId('curtain-opening')).toHaveCount(0);
+    await expect(curtains).toHaveCount(0, { timeout: 6000 });
+
+    // Refresh (twice): closed curtains every time, homepage hidden behind them
+    for (let i = 0; i < 2; i++) {
+      await page.reload();
+      await expect(curtains).toBeAttached();
+      await expect(curtains).not.toHaveClass(/is-opening/);
+      await expect(curtains).toHaveCSS('pointer-events', 'auto');
+      expect(await page.evaluate(() => window.scrollY)).toBe(0);
+    }
+    // ...and they still open normally
+    await medallion.click({ force: true });
+    await expect(curtains).toHaveCount(0, { timeout: 6000 });
+  });
+
+  test('no flash: the page paints warm-dark before the curtains fade up', async ({ page }) => {
+    await page.goto('/');
+    const bg = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);
+    expect(bg).toBe('rgb(18, 10, 6)');
+  });
+
+  test('the homepage backdrop artwork stays visible after the curtains open', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('button', { name: 'Open the wedding invitation' }).click({ force: true });
+    await expect(page.getByTestId('curtain-opening')).toHaveCount(0, { timeout: 6000 });
+    // The fixed backdrop (z-index -10) must not be covered by a page background:
+    // the topmost element at a bare spot of the hero is the backdrop layer, not <body>/<html>
+    const topEl = await page.evaluate(() => {
+      const el = document.elementFromPoint(8, Math.round(window.innerHeight * 0.55));
+      return el ? el.className || el.tagName : null;
+    });
+    expect(String(topEl)).not.toMatch(/^(BODY|HTML)$/);
+    const html = await page.evaluate(() => getComputedStyle(document.documentElement).backgroundColor);
+    expect(html).toBe('rgba(0, 0, 0, 0)');
+  });
+
+  test('autoplay blocked: the music control invites one tap, and that tap plays the music', async ({ page }) => {
+    // Simulate a browser that refuses the first play() (strict autoplay policy)
+    await page.addInitScript(() => {
+      const real = HTMLMediaElement.prototype.play;
+      let refused = false;
+      HTMLMediaElement.prototype.play = function () {
+        if (!refused && /wedding-song/.test(this.currentSrc || this.src || '')) {
+          refused = true;
+          return Promise.reject(new DOMException('blocked', 'NotAllowedError'));
+        }
+        return real.call(this);
+      };
+    });
+    await page.goto('/');
+    await page.getByRole('button', { name: 'Open the wedding invitation' }).click({ force: true });
+    await expect(page.getByTestId('curtain-opening')).toHaveCount(0, { timeout: 6000 });
+
+    // Never shows music as playing; clearly offers to enable it
+    const btn = page.locator('#floatingMusicBtn');
+    await expect(btn).toHaveAttribute('aria-pressed', 'false');
+    await expect(btn).toHaveAttribute('aria-label', 'Tap to play wedding music');
+    await expect(page.getByText('Tap for music')).toBeVisible();
+
+    // One tap starts it (force: the button gently pulses, so it's never "stable")
+    await btn.click({ force: true });
+    await expect(btn).toHaveAttribute('aria-pressed', 'true', { timeout: 8000 });
+    await expect(page.getByText('Tap for music')).toHaveCount(0);
+  });
+
+  test('music toggle pauses and resumes real playback; one song instance only', async ({ page }) => {
+    // Track every <audio> element created for the song
+    await page.addInitScript(() => {
+      window.__songs = [];
+      const play = HTMLMediaElement.prototype.play;
+      HTMLMediaElement.prototype.play = function () {
+        if (/wedding-song/.test(this.currentSrc || this.src || '') && !window.__songs.includes(this)) window.__songs.push(this);
+        return play.call(this);
+      };
+    });
+    await page.goto('/');
+    await page.reload(); // refresh before opening: still exactly one song afterwards
+    await page.getByRole('button', { name: 'Open the wedding invitation' }).click({ force: true });
+
+    const btn = page.locator('#floatingMusicBtn');
+    await expect(btn).toHaveAttribute('aria-pressed', 'true', { timeout: 8000 });
+    await expect(page.getByTestId('curtain-opening')).toHaveCount(0, { timeout: 6000 });
+
+    await btn.click(); // pause
+    await expect(btn).toHaveAttribute('aria-pressed', 'false');
+    expect(await page.evaluate(() => window.__songs.every((a) => a.paused))).toBe(true);
+
+    await btn.click(); // resume
+    await expect(btn).toHaveAttribute('aria-pressed', 'true', { timeout: 8000 });
+    expect(await page.evaluate(() => window.__songs.filter((a) => !a.paused).length)).toBe(1);
   });
 
   test('reduced motion: no curtains, homepage shown immediately', async ({ browser }, testInfo) => {

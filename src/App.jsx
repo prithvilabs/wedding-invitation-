@@ -15,23 +15,10 @@ import RSVP from './sections/RSVP';
 import Footer from './sections/Footer';
 import CurtainOpening from './components/opening/CurtainOpening';
 
-// The opening plays once per visit (per browser tab session).
-const OPENING_SEEN_KEY = 'prh-invitation-opened';
-
-function hasSeenOpening() {
-  try {
-    return window.sessionStorage.getItem(OPENING_SEEN_KEY) === '1';
-  } catch {
-    return false;
-  }
-}
-
-function markOpeningSeen() {
-  try {
-    window.sessionStorage.setItem(OPENING_SEEN_KEY, '1');
-  } catch {
-    // Storage unavailable (private mode etc.): the opening simply shows again next load.
-  }
+// The curtains play on every load, refresh and revisit: no stored "seen" state.
+// Always start at the top, not at a scroll position restored from a previous load.
+if (typeof window !== 'undefined' && 'scrollRestoration' in window.history) {
+  window.history.scrollRestoration = 'manual';
 }
 
 function prefersReducedMotion() {
@@ -43,21 +30,33 @@ function prefersReducedMotion() {
 }
 
 function WeddingApp() {
-  const { playMusic } = useMusic();
-  // Curtains play once per visit, and never for reduced-motion users
-  const [showCurtains, setShowCurtains] = useState(() => !hasSeenOpening() && !prefersReducedMotion());
+  const { playMusic, pauseMusic } = useMusic();
+  // Curtains play on every page load (skipped only for reduced-motion users)
+  const [showCurtains, setShowCurtains] = useState(() => !prefersReducedMotion());
+  const [curtainKey, setCurtainKey] = useState(0);
   // Camera push after the curtains: 'held' (waiting behind them) -> 'zoom' -> 'none'
   const [entrance, setEntrance] = useState(() => (showCurtains ? 'held' : 'none'));
-
-  useEffect(() => {
-    if (!showCurtains) return;
-    // Always reveal the hero, not a scroll position restored from a previous load
-    if ('scrollRestoration' in window.history) window.history.scrollRestoration = 'manual';
-  }, [showCurtains]);
 
   // Music starts on the visitor's first touch/click: the curtain touch when the
   // curtains are shown, otherwise the first touch/click anywhere on the page.
   const musicStartedRef = useRef(false);
+
+  // Mobile Safari / Chrome can restore this page from the back/forward cache
+  // without reloading it. Treat that as a revisit: close the curtains again,
+  // stop the music, and let the next curtain touch start it.
+  useEffect(() => {
+    const onPageShow = (e) => {
+      if (!e.persisted || prefersReducedMotion()) return;
+      pauseMusic();
+      musicStartedRef.current = false;
+      window.scrollTo(0, 0);
+      setEntrance('held');
+      setShowCurtains(true);
+      setCurtainKey((k) => k + 1);
+    };
+    window.addEventListener('pageshow', onPageShow);
+    return () => window.removeEventListener('pageshow', onPageShow);
+  }, [pauseMusic]);
   const startMusic = () => {
     if (musicStartedRef.current) return;
     musicStartedRef.current = true;
@@ -86,15 +85,14 @@ function WeddingApp() {
       {/* The existing website is rendered from the start, behind the curtains */}
       <MainWebsite entrance={entrance} onEntered={() => setEntrance('none')} />
 
-      {/* One-time silk curtain overlay: waits for a touch, then opens.
-          Marked as seen only once actually opened. Its completion callback
-          starts the camera push into the homepage. */}
+      {/* Silk curtain overlay on every load: waits for a touch, then opens.
+          Its completion callback starts the camera push into the homepage. */}
       {showCurtains && (
         <CurtainOpening
+          key={curtainKey}
           // Music starts with the touch that opens the curtains
           onOpen={startMusic}
           onDone={() => {
-            markOpeningSeen();
             setShowCurtains(false);
             setEntrance('zoom');
           }}

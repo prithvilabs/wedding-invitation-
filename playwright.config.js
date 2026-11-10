@@ -33,10 +33,17 @@ export default defineConfig({
   },
   projects: [
     {
-      // Chromium-based mobile emulation (this environment only ships Chromium,
-      // not WebKit, so device profiles like 'iPhone 13' are not usable here).
+      // Android Chrome: Chromium with Pixel 7 emulation (touch, mobile UA)
       name: 'mobile',
       use: { ...devices['Pixel 7'] }
+    },
+    {
+      // iPhone Safari: WebKit with iPhone 13 emulation. Opening/music flow only.
+      // Needs `npx playwright install webkit` once.
+      name: 'iphone',
+      use: { ...devices['iPhone 13'] },
+      testMatch: /opening-flow\.spec\.js/,
+      timeout: 60_000 // WebKit screenshots are slower on Windows
     },
     {
       name: 'desktop',

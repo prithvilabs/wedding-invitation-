@@ -13,6 +13,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Allura&family=Cinzel:wght@500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Great+Vibes&family=Pinyon+Script&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="/styles.css">
+
+  <!-- First paint matches the curtains' fade-up from warm darkness, so a refresh
+       never flashes white or the invitation before the curtains appear -->
+  <meta name="theme-color" content="#120a06">
+  <!-- body only: a background on <html> would stop body's colour propagating to
+       the canvas and hide the site's fixed backdrop (z-index: -10) -->
+  <style>body { background: #120a06; }</style>
 </head>
 <body>
   <div id="root"></div>

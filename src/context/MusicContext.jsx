@@ -12,6 +12,9 @@ export function MusicProvider({ children }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
+  // The browser refused to start playback (autoplay policy): the music control
+  // invites a tap instead of pretending the music is on.
+  const [playBlocked, setPlayBlocked] = useState(false);
 
   useEffect(() => {
     // 1. Initialize Single Global Audio Instance
@@ -22,34 +25,48 @@ export function MusicProvider({ children }) {
     audioRef.current = audio;
 
     // 2. Synchronize Event Listeners
-    const handlePlay = () => setIsPlaying(true);
+    // "playing" (not "play") so the UI only shows music as on once sound is
+    // actually playing; a blocked or still-buffering start never shows as playing.
+    const handlePlaying = () => {
+      setIsPlaying(true);
+      setPlayBlocked(false);
+    };
     const handlePause = () => setIsPlaying(false);
     const handleVolumeChange = () => setIsMuted(audio.muted || audio.volume === 0);
 
-    audio.addEventListener('play', handlePlay);
+    audio.addEventListener('playing', handlePlaying);
     audio.addEventListener('pause', handlePause);
+    audio.addEventListener('ended', handlePause);
     audio.addEventListener('volumechange', handleVolumeChange);
 
     return () => {
-      audio.removeEventListener('play', handlePlay);
+      audio.removeEventListener('playing', handlePlaying);
       audio.removeEventListener('pause', handlePause);
+      audio.removeEventListener('ended', handlePause);
       audio.removeEventListener('volumechange', handleVolumeChange);
       audio.pause();
       audio.src = '';
     };
   }, []);
 
-  // Global Play Handler (called on user gesture)
+  // Global Play Handler: must be called synchronously inside a user gesture
+  // (the curtain touch or the music button) for mobile browsers to allow it.
   const playMusic = useCallback(() => {
     const audio = audioRef.current;
     if (!audio) return;
     setHasInteracted(true);
     audio.muted = false;
+    if (!audio.paused) return; // already playing: never start a second, overlapping play
     const playPromise = audio.play();
     if (playPromise !== undefined) {
-      playPromise.catch((err) => {
-        console.warn('Audio playback handled gracefully:', err);
-      });
+      playPromise
+        .then(() => setPlayBlocked(false))
+        .catch((err) => {
+          // NotAllowedError = blocked by the browser's autoplay policy.
+          // AbortError = interrupted by a pause; not a failure.
+          if (err && err.name === 'NotAllowedError') setPlayBlocked(true);
+          console.warn('Audio playback handled gracefully:', err);
+        });
     }
   }, []);
 
@@ -86,6 +103,7 @@ export function MusicProvider({ children }) {
         isPlaying,
         isMuted,
         hasInteracted,
+        playBlocked,
         playMusic,
         pauseMusic,
         toggleMusic,

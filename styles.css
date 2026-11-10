@@ -63,7 +63,7 @@ html {
 
 body {
   min-height: 100vh;
-  background-color: #17070b;
+  background-color: #120a06;
   color: var(--ink-primary);
   font-family: var(--font-serif);
   line-height: 1.6;
@@ -474,6 +474,43 @@ body {
   width: 22px;
   height: 22px;
   display: block;
+}
+
+/* Autoplay was blocked: make the control a clear, gentle invitation to tap */
+.floating-music-dock {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.floating-music-icon-btn.needs-tap {
+  opacity: 1;
+  color: var(--gold-shimmer);
+  animation: music-tap-pulse 2s ease-in-out infinite;
+}
+
+.music-tap-hint {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold-shimmer);
+  background: rgba(23, 7, 11, 0.72);
+  border: 1px solid var(--gold-border);
+  border-radius: 999px;
+  padding: 6px 12px;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+@keyframes music-tap-pulse {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.65)); }
+  50% { transform: scale(1.12); filter: drop-shadow(0 0 12px rgba(223, 179, 90, 0.85)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floating-music-icon-btn.needs-tap { animation: none; }
 }
 
 /* ==========================================================================
