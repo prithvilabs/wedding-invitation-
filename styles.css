@@ -904,41 +904,101 @@ body {
   margin: 0 auto;
 }
 
-/* Royal Rosette Dividers matching reference design */
-.royal-rosette-divider {
+/* 1. Top Rosette Line Divider Matching Reference */
+.std-top-rosette-line {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 12px;
   width: 100%;
   max-width: 320px;
-  margin: 0 auto;
+  margin: 0 auto 10px;
 }
 
-.rosette-divider-svg {
-  width: 100%;
-  height: 24px;
+.std-line-segment {
+  flex: 1;
+  height: 1px;
+}
+
+.std-top-rosette-line .std-line-segment:first-child {
+  background: linear-gradient(90deg, transparent, rgba(184, 138, 66, 0.85));
+}
+
+.std-top-rosette-line .std-line-segment:last-child {
+  background: linear-gradient(90deg, rgba(184, 138, 66, 0.85), transparent);
+}
+
+.std-node-dot {
+  width: 3.5px;
+  height: 3.5px;
+  border-radius: 50%;
+  background: #B88A42;
+  flex-shrink: 0;
+}
+
+.std-center-rosette {
+  width: 22px;
+  height: 22px;
   display: block;
+  flex-shrink: 0;
 }
 
-.muhurtham-top-rosette {
-  margin: 0 auto 6px;
-  max-width: 290px;
+/* 2. SAVE THE DATE Heading Row with Flanking Gold Lines */
+.std-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto 10px;
 }
 
-.muhurtham-mid-rosette {
-  margin: 16px auto 0;
-  max-width: 260px;
+.std-flank-line {
+  flex: 1;
+  height: 1px;
+  max-width: 120px;
 }
 
-.muhurtham-countdown-rosette {
-  margin: 6px auto 20px;
-  max-width: 260px;
+.std-title-row .std-flank-line:first-child {
+  background: linear-gradient(90deg, transparent, rgba(184, 138, 66, 0.9));
 }
 
+.std-title-row .std-flank-line:last-child {
+  background: linear-gradient(90deg, rgba(184, 138, 66, 0.9), transparent);
+}
+
+.std-main-heading {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3.5vw, 2.55rem);
+  font-weight: 700;
+  color: #420A17;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin: 0;
+  line-height: 1.15;
+  text-shadow: 0 1px 12px rgba(255, 248, 240, 0.85);
+  white-space: nowrap;
+}
+
+/* 3. Subtitle Text */
+.std-subtitle-text {
+  font-family: var(--font-serif);
+  font-size: clamp(1.05rem, 2.1vw, 1.25rem);
+  color: #4B1423;
+  font-style: italic;
+  max-width: 780px;
+  margin: 0 auto 24px;
+  line-height: 1.5;
+  text-shadow: 0 1px 10px rgba(255, 248, 240, 0.8);
+}
+
+/* 4. Golden Scratch-to-Reveal Card Plaque */
 .luxury-scratch-card-wrapper,
 .scratch-card-wrapper {
   position: relative;
-  max-width: 500px;
+  max-width: 680px;
+  width: 100%;
   margin: 0 auto;
 }
 
@@ -946,23 +1006,96 @@ body {
 .scratch-card-box {
   position: relative;
   width: 100%;
-  height: 245px;
-  border-radius: 18px;
+  aspect-ratio: 677 / 266;
+  border-radius: 22px;
   overflow: hidden;
-  box-shadow: 0 16px 45px rgba(50, 15, 25, 0.12), 0 2px 10px rgba(214, 182, 137, 0.16);
-  border: 1.5px solid rgba(220, 185, 140, 0.65);
-  background: #fdfaf4;
+  background: #E8C178;
+  box-shadow: 
+    0 16px 42px rgba(65, 20, 28, 0.16),
+    0 4px 14px rgba(160, 110, 50, 0.20);
+  border: 2px solid #E4BC72;
+}
+
+@media (max-width: 600px) {
+  .luxury-stationery-card,
+  .scratch-card-box {
+    border-radius: 16px;
+    border-width: 1.5px;
+    box-shadow: 
+      0 10px 24px rgba(65, 20, 28, 0.14),
+      0 2px 8px rgba(160, 110, 50, 0.16);
+  }
+
+  .scratch-swipe-hand-img {
+    width: 32px;
+    height: 30px;
+  }
+
+  .std-title-row {
+    gap: 12px;
+  }
+
+  .std-flank-line {
+    max-width: 40px;
+  }
+
+  .std-top-rosette-line {
+    max-width: 240px;
+  }
+
+  .parchment-inner-border {
+    padding: 6px 10px;
+    border-radius: 10px;
+  }
+
+  .card-corner-flourish {
+    width: 18px;
+    height: 18px;
+  }
+
+  .card-bottom-lotus {
+    display: none;
+  }
+
+  .parchment-content-stack {
+    gap: 4px;
+  }
+
+  .revealed-header-badge {
+    font-size: 0.58rem;
+    padding: 2px 8px;
+    margin-bottom: 0;
+  }
+
+  .revealed-main-date {
+    font-size: 0.98rem;
+    margin: 1px 0;
+  }
+
+  .revealed-muhurtham-row,
+  .revealed-venue-row {
+    font-size: 0.78rem;
+    gap: 4px;
+  }
+
+  .std-bottom-message-row {
+    gap: 10px;
+  }
+
+  .std-bottom-line {
+    max-width: 35px;
+  }
 }
 
 .luxury-revealed-parchment,
 .scratch-revealed-layer {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at center, #fffefc 0%, #fdf5ea 100%);
+  background: radial-gradient(circle at center, #FFFDF8 0%, #FBF1DF 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 13px;
+  padding: 14px;
   text-align: center;
 }
 
@@ -970,12 +1103,12 @@ body {
   position: relative;
   width: 100%;
   height: 100%;
-  border: 1px solid rgba(205, 168, 120, 0.45);
-  border-radius: 11px;
+  border: 1px solid rgba(184, 138, 66, 0.55);
+  border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 12px 16px;
+  padding: 12px 18px;
 }
 
 .card-corner-flourish {
@@ -1074,12 +1207,15 @@ body {
 .luxury-scratch-canvas,
 #scratchCanvas {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
   cursor: crosshair;
   z-index: 3;
   touch-action: none;
+  border-radius: 20px;
 }
 
 /* Full-Screen Celebratory Flower Confetti Canvas */
@@ -1099,69 +1235,69 @@ body {
   will-change: contents;
 }
 
-.foil-light-sheen {
+/* 5. Animated Swipe Indicator Hand + Curved Arrow Overlay */
+.scratch-swipe-indicator {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 50%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
-  transform: skewX(-20deg);
+  top: 76.5%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   pointer-events: none;
-  z-index: 4;
+  z-index: 5;
 }
 
-.luxury-scratch-cue-pill,
-.scratch-cue-pill {
-  position: absolute;
-  bottom: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 5;
-  background: rgba(36, 7, 13, 0.92);
-  border: 1px solid var(--gold-foil);
-  color: var(--gold-light);
-  padding: 6px 18px;
-  border-radius: 24px;
+.scratch-swipe-hand-cluster {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  font-family: var(--font-sans);
-  font-size: 0.74rem;
-  font-weight: 800;
-  letter-spacing: 0.16em;
+  justify-content: center;
   pointer-events: none;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
 }
 
-.cue-sparkle-icon {
-  color: var(--gold-foil);
+.scratch-swipe-hand-img {
+  width: 44px;
+  height: 42px;
+  display: block;
+  pointer-events: none;
+  filter: drop-shadow(0 1px 2px rgba(60, 10, 20, 0.15));
 }
 
-.scratch-disclaimer {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: 1.05rem;
-  color: var(--ink-primary);
-  margin-top: 14px;
-  text-shadow: 0 1px 8px rgba(255, 255, 255, 0.85);
+/* 6. Bottom Thank-You Message Row with Flanking Gold Lines */
+.std-bottom-message-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  max-width: 760px;
+  margin: 22px auto 0;
+  padding: 0 16px;
 }
 
-.muhurtham-supporting-message {
+.std-bottom-line {
+  flex: 1;
+  max-width: 100px;
+  height: 1px;
+}
+
+.std-bottom-message-row .std-bottom-line:first-child {
+  background: linear-gradient(90deg, transparent, rgba(184, 138, 66, 0.85));
+}
+
+.std-bottom-message-row .std-bottom-line:last-child {
+  background: linear-gradient(90deg, rgba(184, 138, 66, 0.85), transparent);
+}
+
+.std-bottom-message {
   font-family: var(--font-serif);
   font-style: italic;
   font-weight: 400;
-  font-size: clamp(1.04rem, 2.1vw, 1.16rem);
-  color: #501925;
+  font-size: clamp(1.05rem, 2.1vw, 1.25rem);
+  color: #451220;
   text-align: center;
-  letter-spacing: 0.03em;
-  line-height: 1.5;
-  margin: 18px auto 0;
-  max-width: 580px;
-  background: transparent;
-  border: none;
-  box-shadow: none;
-  quotes: none;
+  letter-spacing: 0.02em;
+  line-height: 1.45;
+  margin: 0;
   text-shadow: 0 1px 10px rgba(255, 248, 240, 0.85);
 }
 
@@ -4010,7 +4146,8 @@ body {
 @media (max-width: 600px) {
   .luxury-stationery-card,
   .scratch-card-box {
-    height: 270px;
+    height: auto;
+    aspect-ratio: 677 / 266;
   }
 
   .muhurtham-time-pod,
