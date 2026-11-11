@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useRef, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useRef, useState, useEffect, useCallback, useMemo } from 'react';
 import weddingSong from '../assets/wedding-song.mp3';
 
 const MusicContext = createContext(null);
