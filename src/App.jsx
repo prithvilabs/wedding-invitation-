@@ -72,7 +72,7 @@ function WeddingApp() {
     };
 
     window.addEventListener('click', handleFirstInteraction, { once: true });
-    window.addEventListener('touchstart', handleFirstInteraction, { once: true });
+    window.addEventListener('touchstart', handleFirstInteraction, { once: true, passive: true });
 
     return () => {
       window.removeEventListener('click', handleFirstInteraction);
@@ -109,7 +109,7 @@ const ENTRANCE_FROM = 0.92;
 const ENTRANCE_DURATION = 1.5;
 const EASE_DOLLY = [0.22, 0.61, 0.36, 1]; // gentle start, long soft settle, no overshoot
 
-function MainWebsite({ entrance = 'none', onEntered }) {
+const MainWebsite = React.memo(function MainWebsite({ entrance = 'none', onEntered }) {
   // Scale around the centre of the visible viewport (main is much taller than the screen)
   const [origin] = useState(() => `50% ${Math.round(window.innerHeight / 2)}px`);
 
@@ -155,7 +155,7 @@ function MainWebsite({ entrance = 'none', onEntered }) {
       </motion.main>
     </div>
   );
-}
+});
 
 export default function App() {
   return (

@@ -11,7 +11,8 @@ export default function ScratchCard() {
   const cardBoxRef = useRef(null);
   const coverImageRef = useRef(null);
   const [scratchState, setScratchState] = useState('idle'); // 'idle' | 'scratching' | 'revealed'
-  const [revealedPercent, setRevealedPercent] = useState(0);
+  const scratchStateRef = useRef(scratchState);
+  scratchStateRef.current = scratchState;
   const [showConfetti, setShowConfetti] = useState(false);
   const [confettiOrigin, setConfettiOrigin] = useState(null);
   const isDrawingRef = useRef(false);
@@ -39,7 +40,7 @@ export default function ScratchCard() {
     img.src = coverPlaqueSrc;
     img.onload = () => {
       coverImageRef.current = img;
-      if (scratchState === 'idle') {
+      if (scratchStateRef.current === 'idle') {
         initCanvas();
       }
     };
@@ -74,7 +75,7 @@ export default function ScratchCard() {
       tempImg.src = coverPlaqueSrc;
       tempImg.onload = () => {
         coverImageRef.current = tempImg;
-        if (scratchState === 'idle' && canvasRef.current) {
+        if (scratchStateRef.current === 'idle' && canvasRef.current) {
           const freshCtx = canvasRef.current.getContext('2d', { willReadFrequently: true });
           if (freshCtx) {
             freshCtx.drawImage(tempImg, 0, 0, width, height);
@@ -82,20 +83,20 @@ export default function ScratchCard() {
         }
       };
     }
-  }, [scratchState]);
+  }, []);
 
   useEffect(() => {
     initCanvas();
 
     const handleResize = () => {
-      if (scratchState === 'idle') {
+      if (scratchStateRef.current === 'idle') {
         initCanvas();
       }
     };
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [initCanvas, scratchState]);
+  }, [initCanvas]);
 
   // Scratch Drawing & 38% Threshold Check (Unified Pointer & Touch)
   useEffect(() => {
@@ -119,7 +120,7 @@ export default function ScratchCard() {
     };
 
     const scratch = (pos) => {
-      if (scratchState === 'revealed') return;
+      if (scratchStateRef.current === 'revealed') return;
       ctx.globalCompositeOperation = 'destination-out';
 
       if (lastPosRef.current) {
@@ -138,26 +139,25 @@ export default function ScratchCard() {
 
       lastPosRef.current = pos;
 
-      if (scratchState === 'idle') {
+      if (scratchStateRef.current === 'idle') {
         setScratchState('scratching');
       }
     };
 
     const checkRevealedPercentage = (isEnding = false) => {
-      if (scratchState === 'revealed') return;
+      if (scratchStateRef.current === 'revealed') return;
       try {
         const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
         const pixels = imgData.data;
         let transparentCount = 0;
         const total = pixels.length / 4;
-        const sampleStep = 16;
+        const sampleStep = 24;
 
         for (let i = 3; i < pixels.length; i += sampleStep * 4) {
           if (pixels[i] === 0) transparentCount++;
         }
 
         const pct = Math.min(100, Math.round((transparentCount / (total / sampleStep)) * 100));
-        setRevealedPercent(pct);
 
         // Responsive threshold: Reveal once 38% scratched, or 25% on pointer up/release
         if (pct >= 38 || (isEnding && pct >= 25)) {
@@ -168,7 +168,7 @@ export default function ScratchCard() {
 
     // Unified Pointer Events for Desktop
     const handlePointerDown = (e) => {
-      if (scratchState === 'revealed') return;
+      if (scratchStateRef.current === 'revealed') return;
       isDrawingRef.current = true;
       try {
         if (e.currentTarget.setPointerCapture) {
@@ -181,7 +181,7 @@ export default function ScratchCard() {
     };
 
     const handlePointerMove = (e) => {
-      if (!isDrawingRef.current || scratchState === 'revealed') return;
+      if (!isDrawingRef.current || scratchStateRef.current === 'revealed') return;
       e.preventDefault();
       scratch(getPos(e));
 
@@ -207,7 +207,7 @@ export default function ScratchCard() {
 
     // Native Touch Event Listeners for smooth mobile swipe without page scroll
     const handleTouchStart = (e) => {
-      if (scratchState === 'revealed') return;
+      if (scratchStateRef.current === 'revealed') return;
       isDrawingRef.current = true;
       const pos = getPos(e);
       lastPosRef.current = pos;
@@ -215,7 +215,7 @@ export default function ScratchCard() {
     };
 
     const handleTouchMove = (e) => {
-      if (!isDrawingRef.current || scratchState === 'revealed') return;
+      if (!isDrawingRef.current || scratchStateRef.current === 'revealed') return;
       e.preventDefault();
       scratch(getPos(e));
 
@@ -255,7 +255,7 @@ export default function ScratchCard() {
       canvas.removeEventListener('touchend', handleTouchEnd);
       canvas.removeEventListener('touchcancel', handleTouchEnd);
     };
-  }, [scratchState]);
+  }, []);
 
   return (
     <AnimatedSection className="section-block muhurtham-floating-section" id="scratchSection">

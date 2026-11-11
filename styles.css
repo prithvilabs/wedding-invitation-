@@ -305,7 +305,7 @@ body {
   -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid rgba(207, 160, 73, 0.35);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  will-change: transform, opacity;
 }
 
 .header-brand-link {
@@ -1016,77 +1016,6 @@ body {
   border: 2px solid #E4BC72;
 }
 
-@media (max-width: 600px) {
-  .luxury-stationery-card,
-  .scratch-card-box {
-    border-radius: 16px;
-    border-width: 1.5px;
-    box-shadow: 
-      0 10px 24px rgba(65, 20, 28, 0.14),
-      0 2px 8px rgba(160, 110, 50, 0.16);
-  }
-
-  .scratch-swipe-hand-img {
-    width: 32px;
-    height: 30px;
-  }
-
-  .std-title-row {
-    gap: 12px;
-  }
-
-  .std-flank-line {
-    max-width: 40px;
-  }
-
-  .std-top-rosette-line {
-    max-width: 240px;
-  }
-
-  .parchment-inner-border {
-    padding: 6px 10px;
-    border-radius: 10px;
-  }
-
-  .card-corner-flourish {
-    width: 18px;
-    height: 18px;
-  }
-
-  .card-bottom-lotus {
-    display: none;
-  }
-
-  .parchment-content-stack {
-    gap: 4px;
-  }
-
-  .revealed-header-badge {
-    font-size: 0.58rem;
-    padding: 2px 8px;
-    margin-bottom: 0;
-  }
-
-  .revealed-main-date {
-    font-size: 0.98rem;
-    margin: 1px 0;
-  }
-
-  .revealed-muhurtham-row,
-  .revealed-venue-row {
-    font-size: 0.78rem;
-    gap: 4px;
-  }
-
-  .std-bottom-message-row {
-    gap: 10px;
-  }
-
-  .std-bottom-line {
-    max-width: 35px;
-  }
-}
-
 .luxury-revealed-parchment,
 .scratch-revealed-layer {
   position: absolute;
@@ -1129,23 +1058,7 @@ body {
 .card-corner-flourish.corner-br { bottom: 4px; right: 4px; transform: scale(-1); }
 
 .card-bottom-lotus {
-  position: absolute;
-  bottom: -9px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 44px;
-  height: 18px;
-  pointer-events: none;
-  background: #fdf6ec;
-  padding: 0 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.card-bottom-lotus svg {
-  width: 100%;
-  height: 100%;
-  display: block;
+  display: none;
 }
 
 .parchment-content-stack {
@@ -1164,7 +1077,7 @@ body {
   align-items: center;
   gap: 6px;
   font-family: var(--font-sans);
-  font-size: 0.68rem;
+  font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.18em;
   color: #782b3d;
@@ -1202,6 +1115,89 @@ body {
 .revealed-clock-icon,
 .revealed-map-icon {
   color: #782b3d;
+}
+
+@media (max-width: 600px) {
+  .luxury-stationery-card,
+  .scratch-card-box {
+    aspect-ratio: auto !important;
+    height: 180px !important;
+    min-height: 175px !important;
+    border-radius: 18px !important;
+    border-width: 2px !important;
+    box-shadow: 
+      0 10px 24px rgba(65, 20, 28, 0.14),
+      0 2px 8px rgba(160, 110, 50, 0.16) !important;
+  }
+
+  .luxury-revealed-parchment,
+  .scratch-revealed-layer {
+    padding: 10px 12px !important;
+  }
+
+  .parchment-inner-border {
+    padding: 10px 12px !important;
+    border-radius: 12px !important;
+  }
+
+  .parchment-content-stack {
+    gap: 5px !important;
+    width: 100% !important;
+  }
+
+  .revealed-header-badge {
+    font-size: 0.6rem !important;
+    padding: 2.5px 9px !important;
+    margin-bottom: 1px !important;
+  }
+
+  .revealed-main-date,
+  .revealed-date-title {
+    font-size: clamp(0.9rem, 3.8vw, 1.04rem) !important;
+    letter-spacing: 0.01em !important;
+    margin: 1px 0 2px !important;
+    white-space: nowrap !important;
+  }
+
+  .revealed-muhurtham-row,
+  .revealed-venue-row {
+    font-size: 0.82rem !important;
+    gap: 5px !important;
+  }
+
+  .card-corner-flourish {
+    width: 18px !important;
+    height: 18px !important;
+  }
+  .card-corner-flourish.corner-tl { top: 4px !important; left: 4px !important; }
+  .card-corner-flourish.corner-tr { top: 4px !important; right: 4px !important; }
+  .card-corner-flourish.corner-bl { bottom: 4px !important; left: 4px !important; }
+  .card-corner-flourish.corner-br { bottom: 4px !important; right: 4px !important; }
+
+  .scratch-swipe-hand-img {
+    width: 36px !important;
+    height: 34px !important;
+  }
+
+  .std-title-row {
+    gap: 12px !important;
+  }
+
+  .std-flank-line {
+    max-width: 40px !important;
+  }
+
+  .std-top-rosette-line {
+    max-width: 240px !important;
+  }
+
+  .std-bottom-message-row {
+    gap: 10px !important;
+  }
+
+  .std-bottom-line {
+    max-width: 35px !important;
+  }
 }
 
 .luxury-scratch-canvas,
@@ -4146,8 +4142,9 @@ body {
 @media (max-width: 600px) {
   .luxury-stationery-card,
   .scratch-card-box {
-    height: auto;
-    aspect-ratio: 677 / 266;
+    height: 180px;
+    min-height: 175px;
+    aspect-ratio: auto;
   }
 
   .muhurtham-time-pod,

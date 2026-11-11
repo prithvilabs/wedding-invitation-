@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import weddingLogo from '../../assets/wedding-logo.png';
@@ -7,22 +7,30 @@ export default function Navigation({ isVisible = true }) {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
   const [navVisible, setNavVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
+  const lastScrollYRef = useRef(0);
+  const isMobileOpenRef = useRef(isMobileOpen);
+  isMobileOpenRef.current = isMobileOpen;
 
-  const navLinks = [
-    { href: '#hero', label: 'HOME' },
-    { href: '#countdown', label: 'MUHURTHAM' },
-    { href: '#families', label: 'FAMILIES' },
-    { href: '#story', label: 'OUR STORY' },
-    { href: '#events', label: 'SCHEDULE' },
-    { href: '#rsvp', label: 'RSVP' },
-  ];
+  const navLinks = useMemo(
+    () => [
+      { href: '#hero', label: 'HOME' },
+      { href: '#countdown', label: 'MUHURTHAM' },
+      { href: '#families', label: 'FAMILIES' },
+      { href: '#story', label: 'OUR STORY' },
+      { href: '#events', label: 'SCHEDULE' },
+      { href: '#rsvp', label: 'RSVP' },
+    ],
+    []
+  );
 
   useEffect(() => {
     if (!isVisible) return;
 
-    const handleScroll = () => {
+    let ticking = false;
+
+    const updateOnScroll = () => {
       const currentScrollY = window.scrollY;
+      const lastScrollY = lastScrollYRef.current;
 
       // 1. Detect Active Section on Scroll
       const scrollPos = currentScrollY + 220;
@@ -33,24 +41,31 @@ export default function Navigation({ isVisible = true }) {
           const top = section.offsetTop;
           const height = section.offsetHeight;
           if (scrollPos >= top && scrollPos < top + height) {
-            setActiveSection(id);
+            setActiveSection((prev) => (prev !== id ? id : prev));
             break;
           }
         }
       }
 
       // 2. Hide on Scroll Down, Reveal on Scroll Up
-      if (currentScrollY > 100 && currentScrollY > lastScrollY && !isMobileOpen) {
-        setNavVisible(false);
-      } else {
-        setNavVisible(true);
+      const shouldHide = currentScrollY > 100 && currentScrollY > lastScrollY && !isMobileOpenRef.current;
+      setNavVisible((prev) => (prev !== !shouldHide ? !shouldHide : prev));
+      lastScrollYRef.current = currentScrollY;
+      ticking = false;
+    };
+
+    const handleScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(updateOnScroll);
       }
-      setLastScrollY(currentScrollY);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [isVisible, lastScrollY, isMobileOpen]);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [isVisible, navLinks]);
 
   if (!isVisible) return null;
 

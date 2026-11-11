@@ -96,20 +96,23 @@ export function MusicProvider({ children }) {
     setIsMuted(audio.muted);
   }, []);
 
+  const contextValue = useMemo(
+    () => ({
+      audio: audioRef.current,
+      isPlaying,
+      isMuted,
+      hasInteracted,
+      playBlocked,
+      playMusic,
+      pauseMusic,
+      toggleMusic,
+      toggleMute,
+    }),
+    [isPlaying, isMuted, hasInteracted, playBlocked, playMusic, pauseMusic, toggleMusic, toggleMute]
+  );
+
   return (
-    <MusicContext.Provider
-      value={{
-        audio: audioRef.current,
-        isPlaying,
-        isMuted,
-        hasInteracted,
-        playBlocked,
-        playMusic,
-        pauseMusic,
-        toggleMusic,
-        toggleMute,
-      }}
-    >
+    <MusicContext.Provider value={contextValue}>
       {children}
     </MusicContext.Provider>
   );

@@ -9,7 +9,7 @@ import React from 'react';
  * - Delicate gold diamond-and-whisker divider flourish
  * - Tracked serif uppercase label (DAYS, HOURS, MINUTES, SECONDS)
  */
-export default function CountdownPlaque({ digits, label }) {
+function CountdownPlaque({ digits, label }) {
   return (
     <div
       className="countdown-card countdown-plaque-item"
@@ -46,4 +46,6 @@ export default function CountdownPlaque({ digits, label }) {
   );
 }
 
-export { CountdownPlaque as CountdownCard };
+const MemoizedCountdownPlaque = React.memo(CountdownPlaque);
+export default MemoizedCountdownPlaque;
+export { MemoizedCountdownPlaque as CountdownCard };
