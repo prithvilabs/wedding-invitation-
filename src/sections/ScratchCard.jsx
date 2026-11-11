@@ -1,10 +1,9 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { MapPin, Clock3, CalendarDays } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { MapPin, Clock3 } from 'lucide-react';
 import AnimatedSection from '../animations/AnimatedSection';
 import FlowerConfetti from '../components/invitation/FlowerConfetti';
-import coverPlaqueSrc from '../assets/scratch_gold_card_cover.png';
-import handArrowSrc from '../assets/scratch_swipe_hand_arrow.png';
+import coverPlaqueSrc from '../assets/scratch_blush_card_cover.png';
 
 export default function ScratchCard() {
   const canvasRef = useRef(null);
@@ -13,6 +12,7 @@ export default function ScratchCard() {
   const [scratchState, setScratchState] = useState('idle'); // 'idle' | 'scratching' | 'revealed'
   const scratchStateRef = useRef(scratchState);
   scratchStateRef.current = scratchState;
+  const initialTransparentCountRef = useRef(0);
   const [showConfetti, setShowConfetti] = useState(false);
   const [confettiOrigin, setConfettiOrigin] = useState(null);
   const isDrawingRef = useRef(false);
@@ -34,7 +34,7 @@ export default function ScratchCard() {
     }
   }, [isRevealed]);
 
-  // Preload golden cover plaque image
+  // Preload blush cover plaque image
   useEffect(() => {
     const img = new Image();
     img.src = coverPlaqueSrc;
@@ -46,7 +46,7 @@ export default function ScratchCard() {
     };
   }, []);
 
-  // Initialize Canvas with exact reference golden cover plaque
+  // Initialize Canvas with exact reference blush cover plaque
   const initCanvas = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -54,8 +54,9 @@ export default function ScratchCard() {
     if (!ctx) return;
 
     const container = cardBoxRef.current || canvas.parentElement;
-    const width = container ? container.offsetWidth : (canvas.offsetWidth || 677);
-    const height = container ? container.offsetHeight : (canvas.offsetHeight || 266);
+    const rect = container ? container.getBoundingClientRect() : canvas.getBoundingClientRect();
+    const width = rect.width || 706;
+    const height = rect.height || 210;
     const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
 
     if (width === 0 || height === 0) {
@@ -63,13 +64,29 @@ export default function ScratchCard() {
       return;
     }
 
-    canvas.width = Math.round(width * dpr);
-    canvas.height = Math.round(height * dpr);
+    const targetWidth = Math.round(width * dpr);
+    const targetHeight = Math.round(height * dpr);
 
-    ctx.scale(dpr, dpr);
+    canvas.width = targetWidth;
+    canvas.height = targetHeight;
+
+    const renderCover = (img) => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      try {
+        const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const pixels = imgData.data;
+        let transparentCount = 0;
+        const sampleStep = 24;
+        for (let i = 3; i < pixels.length; i += sampleStep * 4) {
+          if (pixels[i] === 0) transparentCount++;
+        }
+        initialTransparentCountRef.current = transparentCount;
+      } catch (err) {}
+    };
 
     if (coverImageRef.current && coverImageRef.current.complete) {
-      ctx.drawImage(coverImageRef.current, 0, 0, width, height);
+      renderCover(coverImageRef.current);
     } else {
       const tempImg = new Image();
       tempImg.src = coverPlaqueSrc;
@@ -78,7 +95,18 @@ export default function ScratchCard() {
         if (scratchStateRef.current === 'idle' && canvasRef.current) {
           const freshCtx = canvasRef.current.getContext('2d', { willReadFrequently: true });
           if (freshCtx) {
-            freshCtx.drawImage(tempImg, 0, 0, width, height);
+            freshCtx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+            freshCtx.drawImage(tempImg, 0, 0, canvasRef.current.width, canvasRef.current.height);
+            try {
+              const imgData = freshCtx.getImageData(0, 0, canvasRef.current.width, canvasRef.current.height);
+              const pixels = imgData.data;
+              let transparentCount = 0;
+              const sampleStep = 24;
+              for (let i = 3; i < pixels.length; i += sampleStep * 4) {
+                if (pixels[i] === 0) transparentCount++;
+              }
+              initialTransparentCountRef.current = transparentCount;
+            } catch (err) {}
           }
         }
       };
@@ -88,6 +116,17 @@ export default function ScratchCard() {
   useEffect(() => {
     initCanvas();
 
+    const container = cardBoxRef.current;
+    let resizeObserver;
+    if (typeof ResizeObserver !== 'undefined' && container) {
+      resizeObserver = new ResizeObserver(() => {
+        if (scratchStateRef.current === 'idle') {
+          initCanvas();
+        }
+      });
+      resizeObserver.observe(container);
+    }
+
     const handleResize = () => {
       if (scratchStateRef.current === 'idle') {
         initCanvas();
@@ -95,7 +134,10 @@ export default function ScratchCard() {
     };
 
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      if (resizeObserver) resizeObserver.disconnect();
+    };
   }, [initCanvas]);
 
   // Scratch Drawing & 38% Threshold Check (Unified Pointer & Touch)
@@ -113,18 +155,22 @@ export default function ScratchCard() {
         clientX = e.touches[0].clientX;
         clientY = e.touches[0].clientY;
       }
+      const scaleX = canvas.width / b.width;
+      const scaleY = canvas.height / b.height;
       return {
-        x: clientX - b.left,
-        y: clientY - b.top,
+        x: (clientX - b.left) * scaleX,
+        y: (clientY - b.top) * scaleY,
+        scale: scaleX,
       };
     };
 
     const scratch = (pos) => {
       if (scratchStateRef.current === 'revealed') return;
       ctx.globalCompositeOperation = 'destination-out';
+      const brushRadius = 28 * (pos.scale || 1);
 
       if (lastPosRef.current) {
-        ctx.lineWidth = 58;
+        ctx.lineWidth = brushRadius * 2;
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
         ctx.beginPath();
@@ -133,7 +179,7 @@ export default function ScratchCard() {
         ctx.stroke();
       } else {
         ctx.beginPath();
-        ctx.arc(pos.x, pos.y, 29, 0, Math.PI * 2);
+        ctx.arc(pos.x, pos.y, brushRadius, 0, Math.PI * 2);
         ctx.fill();
       }
 
@@ -157,7 +203,10 @@ export default function ScratchCard() {
           if (pixels[i] === 0) transparentCount++;
         }
 
-        const pct = Math.min(100, Math.round((transparentCount / (total / sampleStep)) * 100));
+        const baseline = initialTransparentCountRef.current;
+        const totalCardPixels = Math.max(1, (total / sampleStep) - baseline);
+        const scratchedPixels = Math.max(0, transparentCount - baseline);
+        const pct = Math.min(100, Math.round((scratchedPixels / totalCardPixels) * 100));
 
         // Responsive threshold: Reveal once 38% scratched, or 25% on pointer up/release
         if (pct >= 38 || (isEnding && pct >= 25)) {
@@ -267,20 +316,19 @@ export default function ScratchCard() {
       />
 
       <div className="muhurtham-floating-container text-center">
-        {/* 1. Top Rosette Line Divider Matching Reference */}
+        {/* 1. Top Lotus Line Divider Matching Reference */}
         <div className="std-top-rosette-line" aria-hidden="true">
           <span className="std-line-segment" />
-          <span className="std-node-dot" />
-          <svg className="std-center-rosette" viewBox="0 0 24 24" fill="none">
-            <g fill="#B88A42">
-              <path d="M 12 2 C 12.5 5.5, 13 7.5, 15.5 7.5 C 13 7.5, 12.5 9.5, 12 13 C 11.5 9.5, 11 7.5, 8.5 7.5 C 11 7.5, 11.5 5.5, 12 2 Z" />
-              <path d="M 12 22 C 12.5 18.5, 13 16.5, 15.5 16.5 C 13 16.5, 12.5 14.5, 12 11 C 11.5 14.5, 11 16.5, 8.5 16.5 C 11 16.5, 11.5 18.5, 12 22 Z" />
-              <path d="M 2 12 C 5.5 12.5, 7.5 13, 7.5 15.5 C 7.5 13, 9.5 12.5, 13 12 C 9.5 11.5, 7.5 11, 7.5 8.5 C 7.5 11, 5.5 11.5, 2 12 Z" />
-              <path d="M 22 12 C 18.5 12.5, 16.5 13, 16.5 15.5 C 16.5 13, 14.5 12.5, 11 12 C 14.5 11.5, 16.5 11, 16.5 8.5 C 16.5 11, 18.5 11.5, 22 12 Z" />
-              <circle cx="12" cy="12" r="2" fill="#FAF1DE" stroke="#B88A42" strokeWidth="0.8" />
+          <svg className="std-center-rosette" viewBox="0 0 32 20" fill="none">
+            <g fill="#A66816">
+              <path d="M 16 2 C 14.8 5.5, 14.8 11.5, 16 15 C 17.2 11.5, 17.2 5.5, 16 2 Z" />
+              <path d="M 15 5 C 12 8, 10.5 12, 13 15.5 C 14.5 12.5, 15 9, 15 5 Z" />
+              <path d="M 17 5 C 20 8, 21.5 12, 19 15.5 C 17.5 12.5, 17 9, 17 5 Z" />
+              <path d="M 13 9 C 9 11, 7 14, 10.5 16.5 C 12.5 14.5, 13.5 12, 13 9 Z" />
+              <path d="M 19 9 C 23 11, 25 14, 21.5 16.5 C 19.5 14.5, 18.5 12, 19 9 Z" />
+              <path d="M 11 16.5 C 14 18, 18 18, 21 16.5 C 19 17.2, 13 17.2, 11 16.5 Z" />
             </g>
           </svg>
-          <span className="std-node-dot" />
           <span className="std-line-segment" />
         </div>
 
@@ -296,9 +344,16 @@ export default function ScratchCard() {
           A new chapter begins, and we would be honoured to have you with us as we step into forever.
         </p>
 
+        {/* Delicate Diamond Divider */}
+        <div className="std-subtitle-diamond-line" aria-hidden="true">
+          <span className="std-sub-flank-line" />
+          <span className="std-center-diamond">◆</span>
+          <span className="std-sub-flank-line" />
+        </div>
+
         {/* Accessible announcement for Screen Readers */}
         <div className="sr-only" aria-live="polite">
-          Save the Date: Thursday, 28th January 2027. Subha Muhurtham: 9:00 AM – 10:30 AM at Shri Umadri Mahal, Chennai.
+          Save the Date: Thursday, 28th January 2027. Subha Wedding: 9:00 AM – 10:30 AM at Shri Umadri Mahal, Chennai.
         </div>
 
         {/* 4. Exact Golden Scratch-to-Reveal Card Plaque */}
@@ -312,145 +367,47 @@ export default function ScratchCard() {
           <div className="luxury-stationery-card" ref={cardBoxRef}>
             {/* Underlying Revealed Invitation Parchment Layer */}
             <div className="luxury-revealed-parchment" id="scratchRevealedLayer">
-              <div className="parchment-inner-border">
-                {/* 4 Corner Botanical Flourishes */}
-                <div className="card-corner-flourish corner-tl" aria-hidden="true">
-                  <svg viewBox="0 0 36 36" fill="none">
-                    <g fill="#A66816">
-                      <path d="M 6 6 C 14 10, 18 16, 22 22 C 16 18, 10 14, 6 6 Z" />
-                      <path d="M 22 22 C 25 25, 27 28, 28 30 C 26 29, 23 27, 20 24 Z" />
-                      <path d="M 12 8 C 18 8, 24 11, 26 13 C 22 14, 16 13, 12 8 Z" />
-                      <path d="M 8 12 C 8 18, 11 24, 13 26 C 14 22, 13 16, 8 12 Z" />
-                      <path d="M 25 10 C 28 8, 32 9, 34 11 C 31 12, 28 13, 25 10 Z" />
-                      <path d="M 10 25 C 8 28, 9 32, 11 34 C 12 31, 13 28, 10 25 Z" />
-                    </g>
-                  </svg>
-                </div>
-                <div className="card-corner-flourish corner-tr" aria-hidden="true">
-                  <svg viewBox="0 0 36 36" fill="none">
-                    <g fill="#A66816">
-                      <path d="M 6 6 C 14 10, 18 16, 22 22 C 16 18, 10 14, 6 6 Z" />
-                      <path d="M 22 22 C 25 25, 27 28, 28 30 C 26 29, 23 27, 20 24 Z" />
-                      <path d="M 12 8 C 18 8, 24 11, 26 13 C 22 14, 16 13, 12 8 Z" />
-                      <path d="M 8 12 C 8 18, 11 24, 13 26 C 14 22, 13 16, 8 12 Z" />
-                      <path d="M 25 10 C 28 8, 32 9, 34 11 C 31 12, 28 13, 25 10 Z" />
-                      <path d="M 10 25 C 8 28, 9 32, 11 34 C 12 31, 13 28, 10 25 Z" />
-                    </g>
-                  </svg>
-                </div>
-                <div className="card-corner-flourish corner-bl" aria-hidden="true">
-                  <svg viewBox="0 0 36 36" fill="none">
-                    <g fill="#A66816">
-                      <path d="M 6 6 C 14 10, 18 16, 22 22 C 16 18, 10 14, 6 6 Z" />
-                      <path d="M 22 22 C 25 25, 27 28, 28 30 C 26 29, 23 27, 20 24 Z" />
-                      <path d="M 12 8 C 18 8, 24 11, 26 13 C 22 14, 16 13, 12 8 Z" />
-                      <path d="M 8 12 C 8 18, 11 24, 13 26 C 14 22, 13 16, 8 12 Z" />
-                      <path d="M 25 10 C 28 8, 32 9, 34 11 C 31 12, 28 13, 25 10 Z" />
-                      <path d="M 10 25 C 8 28, 9 32, 11 34 C 12 31, 13 28, 10 25 Z" />
-                    </g>
-                  </svg>
-                </div>
-                <div className="card-corner-flourish corner-br" aria-hidden="true">
-                  <svg viewBox="0 0 36 36" fill="none">
-                    <g fill="#A66816">
-                      <path d="M 6 6 C 14 10, 18 16, 22 22 C 16 18, 10 14, 6 6 Z" />
-                      <path d="M 22 22 C 25 25, 27 28, 28 30 C 26 29, 23 27, 20 24 Z" />
-                      <path d="M 12 8 C 18 8, 24 11, 26 13 C 22 14, 16 13, 12 8 Z" />
-                      <path d="M 8 12 C 8 18, 11 24, 13 26 C 14 22, 13 16, 8 12 Z" />
-                      <path d="M 25 10 C 28 8, 32 9, 34 11 C 31 12, 28 13, 25 10 Z" />
-                      <path d="M 10 25 C 8 28, 9 32, 11 34 C 12 31, 13 28, 10 25 Z" />
-                    </g>
-                  </svg>
+              <motion.div
+                className="parchment-content-stack"
+                initial={{ opacity: 0.9, scale: 0.98, y: 4 }}
+                animate={isRevealed ? {
+                  opacity: 1,
+                  scale: 1,
+                  y: 0,
+                  transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] }
+                } : {
+                  opacity: 0.9,
+                  scale: 0.98,
+                  y: 4
+                }}
+              >
+                <h3 className="revealed-main-date">
+                  Thursday, 28th January 2027
+                </h3>
+
+                <div className="revealed-muhurtham-row">
+                  <Clock3 size={14} strokeWidth={1.75} className="revealed-clock-icon" />
+                  <span>9:00 AM – 10:30 AM</span>
                 </div>
 
-                <motion.div
-                  className="parchment-content-stack"
-                  initial={{ opacity: 0.9, scale: 0.98, y: 4 }}
-                  animate={isRevealed ? {
-                    opacity: 1,
-                    scale: 1,
-                    y: 0,
-                    transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] }
-                  } : {
-                    opacity: 0.9,
-                    scale: 0.98,
-                    y: 4
-                  }}
-                >
-                  <div className="revealed-header-badge">
-                    <CalendarDays size={13} strokeWidth={1.75} className="revealed-badge-icon" />
-                    <span>SUBHA MUHURTHAM</span>
-                  </div>
-
-                  <h3 className="revealed-main-date">
-                    Thursday, 28th January 2027
-                  </h3>
-
-                  <div className="revealed-muhurtham-row">
-                    <Clock3 size={14} strokeWidth={1.75} className="revealed-clock-icon" />
-                    <span>9:00 AM – 10:30 AM</span>
-                  </div>
-
-                  <div className="revealed-venue-row">
-                    <MapPin size={14} strokeWidth={1.75} className="revealed-map-icon" />
-                    <span>Shri Umadri Mahal, Chennai</span>
-                  </div>
-                </motion.div>
-              </div>
+                <div className="revealed-venue-row">
+                  <MapPin size={14} strokeWidth={1.75} className="revealed-map-icon" />
+                  <span>Shri Umadri Mahal, Chennai</span>
+                </div>
+              </motion.div>
             </div>
 
-            {/* Interactive Gold Plaque Scratch Canvas */}
-            <AnimatePresence>
-              {!isRevealed && (
-                <motion.canvas
-                  ref={canvasRef}
-                  id="scratchCanvas"
-                  className="luxury-scratch-canvas"
-                  aria-label="Interactive champagne-gold scratch surface. Swipe or drag to reveal wedding date and venue."
-                  initial={{ opacity: 1 }}
-                  exit={{
-                    opacity: 0,
-                    transition: { duration: 0.75, ease: [0.16, 1, 0.3, 1] }
-                  }}
-                />
-              )}
-            </AnimatePresence>
+            {/* Interactive Blush Scalloped Scratch Canvas */}
+            {!isRevealed && (
+              <canvas
+                ref={canvasRef}
+                id="scratchCanvas"
+                className="luxury-scratch-canvas"
+                aria-label="Interactive romantic heritage blush scratch surface. Scratch to reveal the wedding date and venue."
+              />
+            )}
 
-            {/* Subtle Animated Swipe Indicator Hand + Curved Arrow (Fades out when scratching begins) */}
-            <AnimatePresence>
-              {!isRevealed && (
-                <motion.div
-                  className="scratch-swipe-indicator"
-                  initial={{ opacity: 0 }}
-                  animate={{
-                    opacity: scratchState === 'idle' ? 1 : 0,
-                    transition: { duration: 0.3 },
-                  }}
-                  exit={{ opacity: 0, transition: { duration: 0.25 } }}
-                  aria-hidden="true"
-                >
-                  <motion.div
-                    className="scratch-swipe-hand-cluster"
-                    animate={
-                      scratchState === 'idle'
-                        ? { x: [-7, 7, -7] }
-                        : { x: 0 }
-                    }
-                    transition={{
-                      repeat: scratchState === 'idle' ? Infinity : 0,
-                      duration: 1.8,
-                      ease: 'easeInOut',
-                    }}
-                  >
-                    <img
-                      src={handArrowSrc}
-                      alt=""
-                      className="scratch-swipe-hand-img"
-                    />
-                  </motion.div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+
           </div>
 
           {/* 5. Bottom Thank-You Message with Flanking Gold Lines */}

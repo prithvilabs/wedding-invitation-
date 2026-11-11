@@ -101,8 +101,8 @@ export default function Countdown() {
       'DTSTAMP:20260914T000000Z',
       'DTSTART:20270128T033000Z',
       'DTEND:20270128T050000Z',
-      'SUMMARY:Prithvi Raj & Harshini — Subha Muhurtham Wedding',
-      'DESCRIPTION:South Indian Tamil Hindu Wedding of Prithvi Raj & Harshini.\\nSubha Muhurtham: 9:00 AM - 10:30 AM\\nShri Umadri Mahal, Chennai.',
+      'SUMMARY:Prithvi Raj & Harshini — Subha Wedding',
+      'DESCRIPTION:South Indian Tamil Hindu Wedding of Prithvi Raj & Harshini.\\nSubha Wedding: 9:00 AM - 10:30 AM\\nShri Umadri Mahal, Chennai.',
       'LOCATION:Shri Umadri Mahal, Chennai',
       'STATUS:CONFIRMED',
       'END:VEVENT',
@@ -130,7 +130,7 @@ export default function Countdown() {
         </div>
 
         {/* Subtle Frosted-Glass Countdown Cards matching reference image */}
-        <div className="muhurtham-countdown-grid" role="timer" aria-label="Live countdown to wedding Muhurtham">
+        <div className="muhurtham-countdown-grid" role="timer" aria-label="Live countdown to wedding">
           <CountdownPlaque digits={timeLeft.days} label="DAYS" />
           <CountdownPlaque digits={timeLeft.hours} label="HOURS" />
           <CountdownPlaque digits={timeLeft.minutes} label="MINUTES" />

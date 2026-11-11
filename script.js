@@ -181,11 +181,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
       ctx.fillStyle = '#6a1824';
       ctx.font = 'italic 14px "Cormorant Garamond", Georgia, serif';
-      ctx.fillText('Our Sacred Wedding Muhurtham Date', width / 2, height / 2 + 12);
+      ctx.fillText('Our Sacred Wedding Date', width / 2, height / 2 + 12);
 
       ctx.fillStyle = 'rgba(74, 8, 18, 0.6)';
       ctx.font = '11px "DM Sans", sans-serif';
-      ctx.fillText('Swipe or drag across the card with finger / mouse', width / 2, height / 2 + 34);
+      ctx.fillText('Scratch or drag across the card with finger / mouse', width / 2, height / 2 + 34);
     }
 
     initCanvasCover();
@@ -393,9 +393,9 @@ document.addEventListener('DOMContentLoaded', () => {
         'DTSTAMP:20260914T000000Z',
         'DTSTART:20270128T033000Z', // 9:00 AM IST
         'DTEND:20270128T050000Z',   // 10:30 AM IST
-        'SUMMARY:Prithvi Raj weds Harshini — Sacred Wedding Muhurtham',
+        'SUMMARY:Prithvi Raj weds Harshini — Sacred Wedding',
         'LOCATION:Shri Umadri Mahal, Chennai',
-        'DESCRIPTION:Join us to celebrate the sacred wedding Muhurtham of Prithvi Raj & Harshini.',
+        'DESCRIPTION:Join us to celebrate the sacred wedding of Prithvi Raj & Harshini.',
         'STATUS:CONFIRMED',
         'END:VEVENT',
         'END:VCALENDAR'

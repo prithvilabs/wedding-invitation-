@@ -58,7 +58,7 @@ export const ceremonies = [
   {
     id: 'muhurtham',
     number: '03',
-    title: 'Sacred Muhurtham',
+    title: 'Sacred Wedding',
     meaning: 'The auspicious wedding rites at the chosen hour',
     date: weddingDate.display,
     time: '9:00 AM IST',

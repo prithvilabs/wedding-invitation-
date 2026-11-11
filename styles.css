@@ -993,38 +993,64 @@ body {
   text-shadow: 0 1px 10px rgba(255, 248, 240, 0.8);
 }
 
-/* 4. Golden Scratch-to-Reveal Card Plaque */
+/* Subtitle Diamond Divider */
+.std-subtitle-diamond-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: -12px auto 26px;
+  max-width: 240px;
+}
+
+.std-sub-flank-line {
+  flex: 1;
+  max-width: 90px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(166, 104, 22, 0.7), transparent);
+}
+
+.std-center-diamond {
+  color: #A66816;
+  font-size: 0.62rem;
+  line-height: 1;
+}
+
+/* 4. Romantic Heritage Scalloped Scratch-to-Reveal Card Plaque */
 .luxury-scratch-card-wrapper,
 .scratch-card-wrapper {
   position: relative;
-  max-width: 680px;
+  max-width: 706px;
   width: 100%;
   margin: 0 auto;
+  filter: drop-shadow(0 14px 30px rgba(65, 20, 28, 0.16))
+          drop-shadow(0 4px 10px rgba(160, 110, 50, 0.14));
 }
 
 .luxury-stationery-card,
 .scratch-card-box {
   position: relative;
   width: 100%;
-  aspect-ratio: 677 / 266;
-  border-radius: 22px;
-  overflow: hidden;
-  background: #E8C178;
-  box-shadow: 
-    0 16px 42px rgba(65, 20, 28, 0.16),
-    0 4px 14px rgba(160, 110, 50, 0.20);
-  border: 2px solid #E4BC72;
+  aspect-ratio: 706 / 210;
+  border-radius: 0;
+  overflow: visible;
+  background: transparent;
+  box-shadow: none;
+  border: none;
 }
 
 .luxury-revealed-parchment,
 .scratch-revealed-layer {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at center, #FFFDF8 0%, #FBF1DF 100%);
+  background-image: url('./src/assets/scratch_revealed_card_bg.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 14px;
+  padding: 16px 28px;
   text-align: center;
 }
 
@@ -1032,12 +1058,11 @@ body {
   position: relative;
   width: 100%;
   height: 100%;
-  border: 1px solid rgba(184, 138, 66, 0.55);
-  border-radius: 14px;
+  border: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 12px 18px;
+  padding: 0;
 }
 
 .card-corner-flourish {
@@ -1066,7 +1091,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 7px;
+  gap: 10px;
   width: 100%;
   z-index: 2;
 }
@@ -1121,39 +1146,31 @@ body {
   .luxury-stationery-card,
   .scratch-card-box {
     aspect-ratio: auto !important;
-    height: 180px !important;
-    min-height: 175px !important;
-    border-radius: 18px !important;
-    border-width: 2px !important;
-    box-shadow: 
-      0 10px 24px rgba(65, 20, 28, 0.14),
-      0 2px 8px rgba(160, 110, 50, 0.16) !important;
+    height: 190px !important;
+    min-height: 185px !important;
+    border-radius: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
   }
 
   .luxury-revealed-parchment,
   .scratch-revealed-layer {
-    padding: 10px 12px !important;
+    padding: 12px 16px !important;
   }
 
   .parchment-inner-border {
-    padding: 10px 12px !important;
-    border-radius: 12px !important;
+    padding: 0 !important;
+    border: none !important;
   }
 
   .parchment-content-stack {
-    gap: 5px !important;
+    gap: 8px !important;
     width: 100% !important;
-  }
-
-  .revealed-header-badge {
-    font-size: 0.6rem !important;
-    padding: 2.5px 9px !important;
-    margin-bottom: 1px !important;
   }
 
   .revealed-main-date,
   .revealed-date-title {
-    font-size: clamp(0.9rem, 3.8vw, 1.04rem) !important;
+    font-size: clamp(0.92rem, 3.8vw, 1.05rem) !important;
     letter-spacing: 0.01em !important;
     margin: 1px 0 2px !important;
     white-space: nowrap !important;
@@ -1161,23 +1178,14 @@ body {
 
   .revealed-muhurtham-row,
   .revealed-venue-row {
-    font-size: 0.82rem !important;
-    gap: 5px !important;
+    font-size: 0.84rem !important;
+    gap: 6px !important;
   }
 
   .card-corner-flourish {
-    width: 18px !important;
-    height: 18px !important;
+    display: none !important;
   }
-  .card-corner-flourish.corner-tl { top: 4px !important; left: 4px !important; }
-  .card-corner-flourish.corner-tr { top: 4px !important; right: 4px !important; }
-  .card-corner-flourish.corner-bl { bottom: 4px !important; left: 4px !important; }
-  .card-corner-flourish.corner-br { bottom: 4px !important; right: 4px !important; }
 
-  .scratch-swipe-hand-img {
-    width: 36px !important;
-    height: 34px !important;
-  }
 
   .std-title-row {
     gap: 12px !important;
@@ -1211,7 +1219,7 @@ body {
   cursor: crosshair;
   z-index: 3;
   touch-action: none;
-  border-radius: 20px;
+  border-radius: 0;
 }
 
 /* Full-Screen Celebratory Flower Confetti Canvas */
@@ -1231,33 +1239,7 @@ body {
   will-change: contents;
 }
 
-/* 5. Animated Swipe Indicator Hand + Curved Arrow Overlay */
-.scratch-swipe-indicator {
-  position: absolute;
-  top: 76.5%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-  z-index: 5;
-}
 
-.scratch-swipe-hand-cluster {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-}
-
-.scratch-swipe-hand-img {
-  width: 44px;
-  height: 42px;
-  display: block;
-  pointer-events: none;
-  filter: drop-shadow(0 1px 2px rgba(60, 10, 20, 0.15));
-}
 
 /* 6. Bottom Thank-You Message Row with Flanking Gold Lines */
 .std-bottom-message-row {
@@ -4192,9 +4174,9 @@ body {
 @media (max-width: 600px) {
   .luxury-stationery-card,
   .scratch-card-box {
-    height: 180px;
-    min-height: 175px;
-    aspect-ratio: auto;
+    height: 185px !important;
+    min-height: 180px !important;
+    aspect-ratio: auto !important;
   }
 
   .muhurtham-time-pod,

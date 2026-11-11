@@ -183,7 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'DTSTAMP:20260913T120000Z',
         'DTSTART:20270128T033000Z', // 9:00 AM IST
         'DTEND:20270128T050000Z',   // 10:30 AM IST
-        'SUMMARY:Prithvi Raj weds Harshini — Sacred Wedding Muhurtham',
+        'SUMMARY:Prithvi Raj weds Harshini — Sacred Wedding',
         'LOCATION:Shri Umadri Mahal, Chennai',
         'DESCRIPTION:Join us to celebrate the sacred wedding ceremony of Prithvi Raj & Harshini.',
         'STATUS:CONFIRMED',

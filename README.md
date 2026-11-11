@@ -4,7 +4,7 @@ A royal, cinematic, luxury South Indian wedding invitation web experience for **
 
 ## ✨ Features
 - **Cinematic Opening Video**: Fullscreen intro with tap-to-open and sound toggle.
-- **Scratch Card**: Interactive canvas reveal for wedding muhurtham.
+- **Scratch Card**: Interactive canvas reveal for wedding details.
 - **Live Countdown Timer**: Real-time ticker to the auspicious celebration.
 - **Lineage & Families**: Editorial family introduction with official wedding emblem.
 - **Our Story**: Interactive flight journey from Chennai to Boston.

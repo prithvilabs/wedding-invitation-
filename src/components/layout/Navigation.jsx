@@ -14,7 +14,7 @@ export default function Navigation({ isVisible = true }) {
   const navLinks = useMemo(
     () => [
       { href: '#hero', label: 'HOME' },
-      { href: '#countdown', label: 'MUHURTHAM' },
+      { href: '#countdown', label: 'WEDDING' },
       { href: '#families', label: 'FAMILIES' },
       { href: '#story', label: 'OUR STORY' },
       { href: '#events', label: 'SCHEDULE' },
