@@ -369,7 +369,7 @@ export default function Story() {
         {!activeChapter && (
           <div className="film-reel-guidance-pill" aria-live="polite">
             <span className="guidance-dot">✦</span>
-            <span className="guidance-text">SELECT A FRAME · RELIVE A MEMORY</span>
+            <span className="guidance-text"><span className="guidance-line">SELECT A FRAME</span><span className="guidance-divider" aria-hidden="true"> · </span><span className="guidance-line">RELIVE A MEMORY</span></span>
             <span className="guidance-dot">✦</span>
           </div>
         )}

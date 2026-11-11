@@ -2319,6 +2319,24 @@ body {
   text-shadow: 0 0 6px rgba(201, 162, 74, 0.45);
 }
 
+.guidance-text {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.guidance-line {
+  display: inline;
+  white-space: nowrap;
+}
+
+.guidance-divider {
+  display: inline;
+  margin: 0 0.15em;
+  opacity: 0.85;
+}
+
 /* 3. Luxury Wedding Storybook Card */
 .story-scenes-container {
   position: relative;
@@ -2807,6 +2825,38 @@ body {
   .storybook-nav-btn {
     padding: 6px 12px;
     font-size: 0.66rem;
+  }
+
+  .film-reel-guidance-pill {
+    padding: 8px 18px;
+    gap: 10px;
+    border-radius: 999px;
+    max-width: min(340px, calc(100% - 24px));
+  }
+
+  .guidance-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: clamp(0.62rem, 2.9vw, 0.68rem);
+    letter-spacing: 0.16em;
+    line-height: 1.45;
+  }
+
+  .guidance-line {
+    display: block;
+    white-space: nowrap;
+  }
+
+  .guidance-divider {
+    display: none;
+  }
+
+  .guidance-dot {
+    font-size: 0.7rem;
+    flex-shrink: 0;
   }
 }
 
