@@ -63,12 +63,14 @@ html {
 
 body {
   min-height: 100vh;
+  min-height: 100dvh;
   background-color: #120a06;
   color: var(--ink-primary);
   font-family: var(--font-serif);
   line-height: 1.6;
   overflow-x: hidden;
   position: relative;
+  touch-action: pan-y;
 }
 
 .sr-only {
@@ -89,8 +91,10 @@ body {
 .wedding-app-root {
   position: relative;
   min-height: 100vh;
+  min-height: 100dvh;
   width: 100%;
   overflow-x: hidden;
+  touch-action: pan-y;
 }
 
 .wedding-persistent-bg {
@@ -435,6 +439,10 @@ body {
   bottom: 24px;
   right: 24px;
   z-index: 850;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
 }
 
 .floating-music-icon-btn {
@@ -450,6 +458,7 @@ body {
   border-radius: 50%;
   transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease, filter 0.2s ease;
   filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.65));
+  pointer-events: auto;
 }
 
 .floating-music-icon-btn:hover {
@@ -477,12 +486,6 @@ body {
 }
 
 /* Autoplay was blocked: make the control a clear, gentle invitation to tap */
-.floating-music-dock {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
 .floating-music-icon-btn.needs-tap {
   opacity: 1;
   color: var(--gold-shimmer);
@@ -1138,11 +1141,26 @@ body {
 }
 
 .revealed-clock-icon,
-.revealed-map-icon {
+.revealed-map-icon,
+.revealed-badge-icon {
   color: #782b3d;
+  flex-shrink: 0;
 }
 
 @media (max-width: 600px) {
+  .revealed-header-badge,
+  .revealed-badge {
+    font-size: 0.64rem !important;
+    padding: 3px 11px !important;
+    margin-bottom: 0 !important;
+    gap: 5px !important;
+  }
+
+  .revealed-badge-icon {
+    width: 11px !important;
+    height: 11px !important;
+  }
+
   .luxury-stationery-card,
   .scratch-card-box {
     aspect-ratio: auto !important;
@@ -1618,12 +1636,14 @@ body {
   gap: 24px;
   max-width: 980px;
   margin: 0 auto;
+  padding-top: 76px;
   position: relative;
 }
 
 /* Family Stationery Card - Frosted Glass (Glassmorphism) */
 .family-stationery-card,
 .family-card {
+  --peek-width: 124px;
   position: relative;
   background: rgba(255, 245, 240, 0.22);
   backdrop-filter: blur(10px);
@@ -1637,7 +1657,43 @@ body {
   flex-direction: column;
   align-items: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
-  overflow: hidden;
+  overflow: visible;
+}
+
+/* Peeking Groom & Bride Caricatures Above Card Top Border */
+.family-peek-anchor {
+  position: absolute;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.family-peek-anchor-groom {
+  top: calc(-0.7979 * var(--peek-width) * 935 / 1024 + 1px);
+}
+
+.family-peek-anchor-bride {
+  top: calc(-0.7754 * var(--peek-width) * 935 / 1024 + 1px);
+}
+
+.family-peek-clip {
+  display: inline-block;
+  width: var(--peek-width);
+}
+
+.family-peek-img {
+  width: var(--peek-width);
+  height: auto;
+  aspect-ratio: 1024 / 935;
+  display: block;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+  filter: drop-shadow(0 6px 10px rgba(65, 20, 28, 0.16));
+  transform-origin: center bottom;
 }
 
 .family-stationery-card:hover,
@@ -1925,11 +1981,28 @@ body {
 }
 
 /* Responsive adjustments */
+@media (max-width: 1024px) {
+  .families-stationery-layout {
+    padding-top: 56px;
+  }
+
+  .family-stationery-card,
+  .family-card {
+    --peek-width: 94px;
+  }
+}
+
 @media (max-width: 840px) {
   .families-stationery-layout {
     grid-template-columns: 1fr;
-    gap: 32px;
+    gap: 78px;
+    padding-top: 52px;
     max-width: 440px;
+  }
+
+  .family-stationery-card,
+  .family-card {
+    --peek-width: 88px;
   }
   
   .families-gopuram-axis {
@@ -3915,9 +3988,10 @@ body {
   padding: 30px 20px 26px;
   border-top: 1px solid rgba(207, 160, 73, 0.35);
   position: relative;
-  background: #1D0D10;
+  background: rgba(29, 13, 16, 0.95);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  touch-action: pan-y;
 }
 
 .footer-inner {
@@ -4129,7 +4203,13 @@ body {
   .families-editorial-layout,
   .families-symmetric-grid {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 74px;
+    padding-top: 56px;
+  }
+
+  .family-stationery-card,
+  .family-card {
+    --peek-width: 92px;
   }
 
   .families-gopuram-axis {
@@ -4172,6 +4252,18 @@ body {
 }
 
 @media (max-width: 600px) {
+  .families-stationery-layout,
+  .families-editorial-layout,
+  .families-symmetric-grid {
+    gap: 68px;
+    padding-top: 44px;
+  }
+
+  .family-stationery-card,
+  .family-card {
+    --peek-width: 74px;
+  }
+
   .luxury-stationery-card,
   .scratch-card-box {
     height: 185px !important;
@@ -4202,15 +4294,18 @@ body {
   .floating-music-dock {
     bottom: 16px;
     right: 16px;
+    pointer-events: none !important;
   }
 
   .music-label {
     display: none;
   }
 
-  .floating-music-btn {
+  .floating-music-btn,
+  .floating-music-icon-btn {
     padding: 10px;
     border-radius: 50%;
+    pointer-events: auto !important;
   }
 
   /* Mobile RSVP Section Polish (< 600px) */

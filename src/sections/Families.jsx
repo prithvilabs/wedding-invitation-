@@ -1,9 +1,71 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useRef } from 'react';
+import { motion, useInView, useReducedMotion } from 'framer-motion';
 import { MapPin } from 'lucide-react';
 import AnimatedSection from '../animations/AnimatedSection';
+import groomPeekSrc from '../assets/groom-peek.png';
+import bridePeekSrc from '../assets/bride-peek.png';
 
 const ASSET_BASE = import.meta.env.BASE_URL;
+
+const CARICATURE_VARIANTS = {
+  hidden: {
+    opacity: 0,
+    y: '42%',
+    scale: 0.94,
+    transition: {
+      duration: 0.5,
+      ease: [0.4, 0, 0.2, 1],
+    },
+  },
+  visible: {
+    opacity: 1,
+    y: '0%',
+    scale: 1,
+    transition: {
+      duration: 0.55,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
+
+/**
+ * PeekingCaricature
+ * Single-motion scroll-triggered pop-in / pop-out illustration anchored above
+ * the card's top border.
+ */
+function PeekingCaricature({ src, role, inView, reducedMotion }) {
+  if (reducedMotion) {
+    return (
+      <div className={`family-peek-anchor family-peek-anchor-${role}`} aria-hidden="true">
+        <div className="family-peek-clip">
+          <img
+            src={src}
+            alt=""
+            className={`family-peek-img family-peek-img-${role}`}
+            style={{ opacity: inView ? 1 : 0, transition: 'opacity 0.2s ease' }}
+            decoding="async"
+          />
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className={`family-peek-anchor family-peek-anchor-${role}`} aria-hidden="true">
+      <div className="family-peek-clip">
+        <motion.img
+          src={src}
+          alt=""
+          className={`family-peek-img family-peek-img-${role}`}
+          initial="hidden"
+          animate={inView ? 'visible' : 'hidden'}
+          variants={CARICATURE_VARIANTS}
+          decoding="async"
+        />
+      </div>
+    </div>
+  );
+}
 
 /**
  * LotusOrnament SVG Component
@@ -92,6 +154,10 @@ function LotusOrnament({ width = 36, height = 22, className = '', id = 'default'
  * Exact 1:1 replica of the South Indian Wedding Editorial UI design
  */
 export default function Families() {
+  const layoutRef = useRef(null);
+  const isLayoutInView = useInView(layoutRef, { once: false, amount: 0.15 });
+  const shouldReduceMotion = useReducedMotion();
+
   return (
     <AnimatedSection className="section-block families-section" id="families">
       <div className="section-container families-container">
@@ -119,7 +185,7 @@ export default function Families() {
         </div>
 
         {/* 2. Main Two-Column Family Stationery Cards with Central Gopuram Axis */}
-        <div className="families-stationery-layout">
+        <div className="families-stationery-layout" ref={layoutRef}>
           {/* LEFT CARD: Groom's Family */}
           <motion.div
             className="family-stationery-card family-card groom-card"
@@ -128,6 +194,14 @@ export default function Families() {
             viewport={{ once: true, amount: 0.15 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           >
+            {/* Groom Caricature Peeking Over Top Border */}
+            <PeekingCaricature
+              src={groomPeekSrc}
+              role="groom"
+              inView={isLayoutInView}
+              reducedMotion={shouldReduceMotion}
+            />
+
             {/* 4 Delicate Botanical Watercolor Corner Accents */}
             <img
               src={`${ASSET_BASE}assets/card-corner-floral.png`}
@@ -219,6 +293,14 @@ export default function Families() {
             viewport={{ once: true, amount: 0.15 }}
             transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
           >
+            {/* Bride Caricature Peeking Over Top Border */}
+            <PeekingCaricature
+              src={bridePeekSrc}
+              role="bride"
+              inView={isLayoutInView}
+              reducedMotion={shouldReduceMotion}
+            />
+
             {/* 4 Delicate Botanical Watercolor Corner Accents */}
             <img
               src={`${ASSET_BASE}assets/card-corner-floral.png`}
