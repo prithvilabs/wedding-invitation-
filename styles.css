@@ -59,18 +59,25 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  overflow-y: auto;
+  height: 100%;
 }
 
 body {
-  min-height: 100vh;
-  min-height: 100dvh;
+  min-height: 100%;
   background-color: #120a06;
   color: var(--ink-primary);
   font-family: var(--font-serif);
   line-height: 1.6;
-  overflow-x: hidden;
   position: relative;
   touch-action: pan-y;
+  overflow: visible;
+}
+
+#root {
+  min-height: 100%;
+  position: relative;
+  overflow: visible;
 }
 
 .sr-only {
@@ -90,10 +97,9 @@ body {
    ========================================================================== */
 .wedding-app-root {
   position: relative;
-  min-height: 100vh;
-  min-height: 100dvh;
+  min-height: 100%;
   width: 100%;
-  overflow-x: hidden;
+  overflow: visible;
   touch-action: pan-y;
 }
 
