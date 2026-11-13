@@ -138,7 +138,7 @@ export default function Events() {
       title: 'POST WEDDING RECEPTION',
       venue: 'Anand Grand Palace · Hosur, Tamil Nadu',
       venueFull: 'Anand Grand Palace, Hosur, Tamil Nadu',
-      description: 'Join us for an evening of celebration, togetherness, and joyful memories as we continue the wedding celebrations with our family and friends.',
+      description: 'An evening of celebration and togetherness with family and friends.',
       mapUrl: 'https://maps.google.com/?q=Anand+Grand+Palace+Hosur+Tamil+Nadu',
       icon: `${ASSET_BASE}assets/event_icon_3.png`
     }
