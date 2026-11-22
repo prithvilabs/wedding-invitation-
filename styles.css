@@ -2032,904 +2032,8 @@ body {
 }
 
 /* ==========================================================================
-   5. OUR STORY — LUXURY SOUTH INDIAN WEDDING KEEPSAKE & FILM STORYBOOK
+   5. OUR STORY: styles live in src/sections/story-film.css (film reel + memory card)
    ========================================================================== */
-.story-cinematic-section {
-  position: relative;
-  padding: 36px 20px 32px;
-  overflow: hidden;
-  scroll-margin-top: 70px;
-}
-
-.story-cinematic-container {
-  position: relative;
-  width: 100%;
-  max-width: 1080px;
-  margin: 0 auto;
-  z-index: 2;
-}
-
-/* 1. Cinematic Hero / Opening Title Card */
-.story-cinematic-hero {
-  margin-bottom: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
-}
-
-.story-lotus-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-  margin-bottom: 8px;
-  width: 100%;
-}
-
-.story-lotus-line {
-  height: 1px;
-  width: 55px;
-  background: linear-gradient(to right, transparent, rgba(201, 162, 74, 0.7));
-}
-
-.story-lotus-row .story-lotus-line:last-child {
-  background: linear-gradient(to left, transparent, rgba(201, 162, 74, 0.7));
-}
-
-.story-names-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-family: var(--font-sans, "DM Sans", sans-serif);
-  font-size: 0.74rem;
-  font-weight: 600;
-  letter-spacing: 0.26em;
-  text-transform: uppercase;
-  color: #C9A24A;
-  margin-bottom: 8px;
-}
-
-.names-dot {
-  font-size: 0.65rem;
-  color: #C9A24A;
-}
-
-.story-cinematic-main-title {
-  font-family: 'Cinzel', serif;
-  font-size: clamp(2.4rem, 5.5vw, 3.8rem);
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  color: #5A1F2B;
-  margin: 0 0 8px;
-  line-height: 1.15;
-  text-shadow: 0 2px 12px rgba(90, 31, 43, 0.08);
-}
-
-.story-cinematic-main-quote {
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  font-style: italic;
-  font-size: clamp(1.2rem, 2.3vw, 1.6rem);
-  font-weight: 500;
-  line-height: 1.4;
-  color: #5A1F2B;
-  text-align: center;
-  margin: 0 auto 10px;
-}
-
-.story-cinematic-tagline-wrap {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--font-sans, "DM Sans", sans-serif);
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: #76564B;
-  margin-bottom: 12px;
-}
-
-.story-hero-rosette-divider {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-  margin-top: 4px;
-  width: 100%;
-}
-
-.rosette-line {
-  height: 1px;
-  width: 60px;
-  background: linear-gradient(to right, transparent, rgba(201, 162, 74, 0.65));
-}
-
-.story-hero-rosette-divider .rosette-line:last-child {
-  background: linear-gradient(to left, transparent, rgba(201, 162, 74, 0.65));
-}
-
-.rosette-symbol {
-  font-size: 0.72rem;
-  color: #C9A24A;
-  letter-spacing: 0.28em;
-}
-
-/* 2. Vintage Keepsake Film Roll (Warm Ivory, Champagne Gold & Burgundy) */
-.story-film-reel-dock {
-  position: relative;
-  width: 100%;
-  margin: 0 auto;
-  z-index: 10;
-}
-
-.film-strip-wrapper {
-  background: linear-gradient(135deg, rgba(255, 253, 249, 0.95) 0%, rgba(248, 241, 230, 0.97) 100%);
-  border: 1.5px solid rgba(201, 162, 74, 0.75);
-  border-radius: 16px;
-  box-shadow: 0 16px 40px -8px rgba(90, 31, 43, 0.12), 0 0 24px rgba(201, 162, 74, 0.18);
-  backdrop-filter: blur(12px);
-  overflow: hidden;
-}
-
-.film-sprockets-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 7px 14px;
-  background: rgba(242, 230, 215, 0.55);
-}
-
-.film-sprockets-row.top {
-  border-bottom: 1px solid rgba(201, 162, 74, 0.35);
-}
-
-.film-sprockets-row.bottom {
-  border-top: 1px solid rgba(201, 162, 74, 0.35);
-}
-
-.sprocket-hole {
-  width: 10px;
-  height: 7px;
-  background: #5A1F2B;
-  border-radius: 2px;
-  border: 1px solid rgba(201, 162, 74, 0.4);
-  flex-shrink: 0;
-}
-
-.film-edge-meta-track {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 5px 18px;
-  font-family: monospace;
-  font-size: 0.58rem;
-  font-weight: 600;
-  letter-spacing: 0.18em;
-  color: #76564B;
-  text-transform: uppercase;
-  background: rgba(255, 250, 243, 0.65);
-}
-
-.film-reel-frames-track {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 12px;
-  padding: 14px 16px;
-  background: rgba(255, 253, 249, 0.7);
-}
-
-.film-frame-tab {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  text-align: left;
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  outline: none;
-}
-
-.tab-frame-outer {
-  background: #FFFDF9;
-  border: 1.5px solid rgba(201, 162, 74, 0.45);
-  border-radius: 10px;
-  padding: 8px 6px;
-  box-shadow: 0 4px 12px rgba(90, 31, 43, 0.06);
-  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-}
-
-.film-frame-tab:hover .tab-frame-outer {
-  border-color: #5A1F2B;
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(90, 31, 43, 0.14);
-}
-
-.film-frame-tab.active-frame .tab-frame-outer {
-  border-color: #5A1F2B;
-  background: #FFF6EE;
-  transform: translateY(-4px);
-  box-shadow: 0 10px 24px rgba(90, 31, 43, 0.22), 0 0 18px rgba(201, 162, 74, 0.4);
-}
-
-.tab-frame-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-family: monospace;
-  font-size: 0.58rem;
-  letter-spacing: 0.1em;
-  margin-bottom: 5px;
-}
-
-.tab-frame-num {
-  color: #C9A24A;
-  font-weight: 700;
-}
-
-.tab-frame-year {
-  color: #5A1F2B;
-  font-weight: 700;
-}
-
-.tab-thumb-window {
-  aspect-ratio: 4/3;
-  overflow: hidden;
-  border-radius: 4px;
-  position: relative;
-  background: #FAF2EC;
-  border: 1px solid rgba(201, 162, 74, 0.3);
-}
-
-.tab-thumb-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.4s ease;
-  display: block;
-}
-
-.film-frame-tab:hover .tab-thumb-img {
-  transform: scale(1.04);
-}
-
-.tab-active-indicator {
-  position: absolute;
-  inset: 0;
-  border: 2px solid #5A1F2B;
-  box-shadow: inset 0 0 8px rgba(201, 162, 74, 0.4);
-  pointer-events: none;
-}
-
-.tab-frame-caption {
-  margin-top: 6px;
-  text-align: center;
-  width: 100%;
-  overflow: hidden;
-}
-
-.tab-chapter-title {
-  display: block;
-  font-family: 'Cinzel', serif;
-  font-size: clamp(0.6rem, 0.9vw, 0.68rem);
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: #5A1F2B !important;
-  text-transform: uppercase;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-align: center;
-  line-height: 1.25;
-  transition: color 0.25s ease;
-}
-
-.film-frame-tab:hover .tab-chapter-title,
-.film-frame-tab.active-frame .tab-chapter-title {
-  color: #8C2F3D !important;
-}
-
-/* Subtle Guidance Ribbon (When no chapter is open) */
-.film-reel-guidance-pill {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-  margin: 18px auto 0;
-  padding: 10px 28px;
-  background: rgba(255, 252, 247, 0.94);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(209, 166, 84, 0.6);
-  border-radius: 999px;
-  width: fit-content;
-  max-width: calc(100% - 32px);
-  font-family: var(--font-sans, "DM Sans", sans-serif);
-  font-size: clamp(0.7rem, 1.4vw, 0.76rem);
-  font-weight: 700;
-  letter-spacing: 0.22em;
-  color: #531824;
-  text-transform: uppercase;
-  box-shadow: 0 4px 18px rgba(74, 21, 33, 0.08), 0 0 12px rgba(209, 166, 84, 0.18), inset 0 0 0 1px rgba(255, 255, 255, 0.85);
-  animation: pulseGuidance 3s infinite ease-in-out;
-  user-select: none;
-}
-
-@keyframes pulseGuidance {
-  0%, 100% {
-    opacity: 0.92;
-    transform: scale(1);
-    box-shadow: 0 4px 18px rgba(74, 21, 33, 0.08), 0 0 10px rgba(209, 166, 84, 0.15), inset 0 0 0 1px rgba(255, 255, 255, 0.85);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.025);
-    box-shadow: 0 6px 24px rgba(74, 21, 33, 0.12), 0 0 16px rgba(209, 166, 84, 0.32), inset 0 0 0 1px rgba(255, 255, 255, 0.95);
-  }
-}
-
-.guidance-dot {
-  color: #C9A24A;
-  font-size: 0.78rem;
-  line-height: 1;
-  text-shadow: 0 0 6px rgba(201, 162, 74, 0.45);
-}
-
-.guidance-text {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  white-space: nowrap;
-}
-
-.guidance-line {
-  display: inline;
-  white-space: nowrap;
-}
-
-.guidance-divider {
-  display: inline;
-  margin: 0 0.15em;
-  opacity: 0.85;
-}
-
-/* 3. Luxury Wedding Storybook Card */
-.story-scenes-container {
-  position: relative;
-  width: 100%;
-  margin-top: 24px;
-}
-
-.story-scenes-container:empty {
-  display: none;
-  margin-top: 0;
-}
-
-.story-active-scene-wrapper {
-  position: relative;
-  width: 100%;
-}
-
-.storybook-card {
-  position: relative;
-  background: #FDFBF7;
-  border: 1.5px solid rgba(201, 162, 74, 0.75);
-  border-radius: 20px;
-  padding: 36px 32px 30px;
-  box-shadow: 0 20px 50px -10px rgba(90, 31, 43, 0.16), 0 0 24px rgba(235, 210, 180, 0.25);
-  overflow: hidden;
-  max-width: 960px;
-  margin: 0 auto;
-}
-
-/* Inner Gold Hairline Frame */
-.storybook-inner-frame {
-  position: absolute;
-  inset: 8px;
-  border: 1px solid rgba(201, 162, 74, 0.38);
-  border-radius: 14px;
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* Botanical Watercolor Corner Accents */
-.storybook-corner-floral {
-  position: absolute;
-  width: 55px;
-  height: 55px;
-  object-fit: contain;
-  pointer-events: none;
-  opacity: 0.92;
-  z-index: 2;
-}
-
-.storybook-corner-floral.corner-tl {
-  top: 4px;
-  left: 4px;
-}
-
-.storybook-corner-floral.corner-tr {
-  top: 4px;
-  right: 4px;
-  transform: scaleX(-1);
-}
-
-.storybook-corner-floral.corner-bl {
-  bottom: 4px;
-  left: 4px;
-  transform: scaleY(-1);
-}
-
-.storybook-corner-floral.corner-br {
-  bottom: 4px;
-  right: 4px;
-  transform: scale(-1);
-}
-
-/* Card Header Action Bar */
-.storybook-header-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
-  position: relative;
-  z-index: 3;
-  padding-bottom: 14px;
-  border-bottom: 1px solid rgba(201, 162, 74, 0.28);
-}
-
-.storybook-header-info {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.storybook-badge-pill {
-  background: #5A1F2B;
-  color: #FAF4E8;
-  font-family: var(--font-sans, "DM Sans", sans-serif);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  padding: 4px 12px;
-  border-radius: 20px;
-  box-shadow: 0 2px 6px rgba(90, 31, 43, 0.15);
-}
-
-.storybook-year-pill {
-  font-family: 'Cinzel', serif;
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: #76564B;
-  letter-spacing: 0.1em;
-}
-
-.storybook-route-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-family: var(--font-sans, "DM Sans", sans-serif);
-  font-size: 0.74rem;
-  font-weight: 700;
-  color: #5A1F2B;
-  background: rgba(201, 162, 74, 0.15);
-  border: 1px solid rgba(201, 162, 74, 0.4);
-  padding: 4px 10px;
-  border-radius: 16px;
-}
-
-.btn-storybook-close {
-  background: rgba(255, 255, 255, 0.85);
-  border: 1.5px solid rgba(201, 162, 74, 0.6);
-  border-radius: 20px;
-  padding: 6px 14px;
-  font-family: var(--font-sans, "DM Sans", sans-serif);
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: #5A1F2B;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  transition: all 0.25s ease;
-}
-
-.btn-storybook-close:hover {
-  background: #5A1F2B;
-  border-color: #5A1F2B;
-  color: #FAF4E8;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(90, 31, 43, 0.2);
-}
-
-/* Card Main Editorial Layout */
-.storybook-content-grid {
-  display: grid;
-  grid-template-columns: 1fr 1.15fr;
-  gap: 34px;
-  align-items: center;
-  position: relative;
-  z-index: 3;
-}
-
-/* Left Photo Column */
-.storybook-photo-matting {
-  background: #FFFDF9;
-  border: 1.5px solid rgba(201, 162, 74, 0.5);
-  border-radius: 14px;
-  padding: 10px;
-  box-shadow: 0 10px 24px rgba(90, 31, 43, 0.08);
-}
-
-.photo-inner-fillet {
-  border: 1px solid rgba(201, 162, 74, 0.3);
-  border-radius: 8px;
-  overflow: hidden;
-  aspect-ratio: 4/3;
-  background: #FAF2EC;
-}
-
-.storybook-photo-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.storybook-photo-caption {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 6px 2px;
-  font-family: monospace;
-  font-size: 0.62rem;
-  color: #76564B;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.caption-tag {
-  color: #C9A24A;
-  font-weight: 700;
-}
-
-/* Right Narrative Column */
-.storybook-narrative-header {
-  margin-bottom: 12px;
-}
-
-.narrative-lotus-ornament {
-  margin-bottom: 8px;
-}
-
-.storybook-chapter-subtitle {
-  display: block;
-  font-family: var(--font-sans, "DM Sans", sans-serif);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.2em;
-  color: #C9A24A;
-  text-transform: uppercase;
-  margin-bottom: 4px;
-}
-
-.storybook-scene-title {
-  font-family: 'Cinzel', serif;
-  font-size: clamp(1.6rem, 2.6vw, 2.1rem);
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  color: #5A1F2B;
-  margin: 0 0 10px;
-  line-height: 1.25;
-}
-
-.narrative-meta-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-family: var(--font-sans, "DM Sans", sans-serif);
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #5A1F2B;
-  background: rgba(242, 195, 174, 0.3);
-  border: 1px solid rgba(201, 162, 74, 0.4);
-  padding: 4px 10px;
-  border-radius: 12px;
-  margin-bottom: 12px;
-}
-
-.narrative-meta-badge.engaged-badge {
-  background: rgba(201, 162, 74, 0.2);
-  border-color: rgba(201, 162, 74, 0.6);
-}
-
-.storybook-main-quote {
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  font-style: italic;
-  font-size: clamp(1.15rem, 2.1vw, 1.4rem);
-  line-height: 1.55;
-  color: #5A1F2B;
-  border-left: 2.5px solid #C9A24A;
-  padding-left: 14px;
-  margin: 0 0 12px;
-}
-
-.storybook-story-body {
-  font-family: var(--font-sans, "DM Sans", sans-serif);
-  font-size: 0.92rem;
-  line-height: 1.7;
-  color: #4A352F;
-  margin: 0 0 16px;
-}
-
-.engaged-storybook-highlight {
-  margin-bottom: 14px;
-}
-
-.engaged-highlight-text {
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  font-style: italic;
-  font-size: 1.05rem;
-  font-weight: 600;
-  color: #7A2837;
-}
-
-.storybook-flourish-divider {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: 14px;
-}
-
-.flourish-hairline {
-  height: 1px;
-  width: 45px;
-  background: linear-gradient(to right, rgba(201, 162, 74, 0.6), transparent);
-}
-
-.storybook-flourish-divider .flourish-hairline:last-child {
-  background: linear-gradient(to left, rgba(201, 162, 74, 0.6), transparent);
-}
-
-.flourish-symbol {
-  font-size: 0.7rem;
-  color: #C9A24A;
-  letter-spacing: 0.25em;
-}
-
-/* Card Footer Navigation */
-.storybook-footer-nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 28px;
-  padding-top: 18px;
-  border-top: 1px solid rgba(201, 162, 74, 0.25);
-  position: relative;
-  z-index: 3;
-}
-
-.storybook-nav-btn {
-  background: rgba(255, 255, 255, 0.85);
-  border: 1.5px solid rgba(201, 162, 74, 0.5);
-  border-radius: 20px;
-  color: #5A1F2B;
-  padding: 7px 16px;
-  font-family: var(--font-sans, "DM Sans", sans-serif);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  transition: all 0.25s ease;
-}
-
-.storybook-nav-btn:hover {
-  background: #5A1F2B;
-  color: #FAF4E8;
-  border-color: #5A1F2B;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(90, 31, 43, 0.16);
-}
-
-.storybook-nav-btn.close {
-  border-color: rgba(201, 162, 74, 0.6);
-  background: rgba(248, 241, 230, 0.8);
-}
-
-.storybook-nav-btn.close:hover {
-  background: #5A1F2B;
-  color: #FAF4E8;
-  border-color: #5A1F2B;
-}
-
-/* Chapter 06 Grand Finale Epilogue */
-.storybook-epilogue-wrap {
-  margin-top: 36px;
-  padding-top: 28px;
-  border-top: 1px solid rgba(201, 162, 74, 0.3);
-  text-align: center;
-  position: relative;
-  z-index: 3;
-}
-
-.epilogue-ornament-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-  margin-bottom: 12px;
-}
-
-.epilogue-line {
-  height: 1px;
-  width: 55px;
-  background: linear-gradient(to right, transparent, rgba(201, 162, 74, 0.65));
-}
-
-.epilogue-ornament-row .epilogue-line:last-child {
-  background: linear-gradient(to left, transparent, rgba(201, 162, 74, 0.65));
-}
-
-.storybook-epilogue-tagline {
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  font-style: italic;
-  font-size: 1.35rem;
-  color: #5A1F2B;
-  margin: 0 0 6px;
-}
-
-.storybook-epilogue-names {
-  font-family: 'Cinzel', serif;
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: #3B1720;
-  letter-spacing: 0.12em;
-  margin-bottom: 4px;
-}
-
-.epilogue-ampersand {
-  color: #C9A24A;
-  margin: 0 8px;
-}
-
-.storybook-epilogue-year {
-  font-family: 'Cinzel', serif;
-  font-size: 0.85rem;
-  color: #C9A24A;
-  letter-spacing: 0.15em;
-  margin-bottom: 18px;
-}
-
-.storybook-epilogue-cta {
-  margin-top: 8px;
-}
-
-.btn-view-our-wedding {
-  background: linear-gradient(135deg, #7A2837 0%, #5A1F2B 100%);
-  border: 1.5px solid #C9A24A;
-  border-radius: 28px;
-  padding: 13px 32px;
-  color: #FAF4E8;
-  font-family: var(--font-sans, "DM Sans", sans-serif);
-  font-size: 0.76rem;
-  font-weight: 700;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  box-shadow: 0 10px 28px rgba(90, 31, 43, 0.22);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.btn-view-our-wedding:hover {
-  background: linear-gradient(135deg, #8C2F3E 0%, #682331 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 14px 34px rgba(90, 31, 43, 0.32);
-}
-
-/* Responsive Breakpoints for Our Story */
-@media (max-width: 960px) {
-  .storybook-content-grid {
-    grid-template-columns: 1fr;
-    gap: 24px;
-  }
-
-  .film-reel-frames-track {
-    grid-template-columns: repeat(6, 140px);
-    overflow-x: auto;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
-    padding-bottom: 12px;
-  }
-}
-
-@media (max-width: 640px) {
-  .story-cinematic-section {
-    padding: 30px 14px 28px;
-  }
-
-  .story-cinematic-main-title {
-    font-size: 2.2rem;
-  }
-
-  .film-edge-meta-track {
-    display: none;
-  }
-
-  .storybook-card {
-    padding: 26px 18px 22px;
-    border-radius: 16px;
-  }
-
-  .storybook-corner-floral {
-    width: 40px;
-    height: 40px;
-  }
-
-  .storybook-nav-btn {
-    padding: 6px 12px;
-    font-size: 0.66rem;
-  }
-
-  .film-reel-guidance-pill {
-    padding: 8px 18px;
-    gap: 10px;
-    border-radius: 999px;
-    max-width: min(340px, calc(100% - 24px));
-  }
-
-  .guidance-text {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    font-size: clamp(0.62rem, 2.9vw, 0.68rem);
-    letter-spacing: 0.16em;
-    line-height: 1.45;
-  }
-
-  .guidance-line {
-    display: block;
-    white-space: nowrap;
-  }
-
-  .guidance-divider {
-    display: none;
-  }
-
-  .guidance-dot {
-    font-size: 0.7rem;
-    flex-shrink: 0;
-  }
-}
-
-/* Reduced motion preference */
-@media (prefers-reduced-motion: reduce) {
-  .film-frame-tab,
-  .storybook-nav-btn,
-  .btn-view-our-wedding {
-    transition: none !important;
-    transform: none !important;
-  }
-}
 
 /* ==========================================================================
    6. SCHEDULE OF EVENTS (South Indian Editorial Stationery & Timeline)
@@ -3770,6 +2874,311 @@ body {
 }
 
 /* ==========================================================================
+   RSVP STEP FLOW (attendance -> fun questions -> details)
+   ========================================================================== */
+.rsvp-step {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.rsvp-step-question {
+  font-family: var(--font-serif);
+  font-size: clamp(1.35rem, 3.2vw, 1.7rem);
+  font-weight: 700;
+  font-style: italic;
+  color: var(--crimson-maroon);
+  text-align: center;
+  line-height: 1.25;
+  margin: 4px 0 6px;
+  outline: none;
+}
+
+.rsvp-step-question--small {
+  font-size: clamp(1.1rem, 2.6vw, 1.3rem);
+  margin: 0;
+  text-align: left;
+}
+
+/* Step 1: YES! / NO! */
+.rsvp-yesno-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.rsvp-yesno-btn {
+  min-height: 64px;
+  border-radius: 12px;
+  border: 1.5px solid rgba(207, 160, 73, 0.55);
+  background: #faf4e8;
+  color: var(--crimson-maroon);
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: transform 0.25s var(--ease-spring), background 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.rsvp-yesno-btn:hover {
+  transform: translateY(-2px);
+  border-color: var(--gold-rich);
+  box-shadow: 0 6px 18px rgba(45, 10, 18, 0.12);
+}
+
+.rsvp-yesno-btn.yes.selected,
+.rsvp-yesno-btn.yes:active {
+  background: var(--crimson-maroon);
+  border-color: var(--crimson-maroon);
+  color: #fffdf8;
+}
+
+.rsvp-yesno-btn.no.selected,
+.rsvp-yesno-btn.no:active {
+  background: #f3e6d6;
+  border-color: var(--crimson-soft);
+}
+
+/* Step 2: progress + options */
+.rsvp-quiz-progress {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.rsvp-quiz-count {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold-dark);
+}
+
+.rsvp-quiz-dots {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.rsvp-quiz-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(207, 160, 73, 0.3);
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.rsvp-quiz-dot.done {
+  background: var(--gold-rich);
+}
+
+.rsvp-quiz-dot.current {
+  background: var(--crimson-maroon);
+  transform: scale(1.25);
+}
+
+.rsvp-quiz-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.rsvp-quiz-option {
+  min-height: 52px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1.2px solid rgba(207, 160, 73, 0.45);
+  background: #ffffff;
+  color: var(--ink-primary);
+  font-family: var(--font-sans);
+  font-size: 0.86rem;
+  font-weight: 600;
+  line-height: 1.35;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.rsvp-quiz-option:hover {
+  border-color: var(--gold-rich);
+  background: #fffaf2;
+}
+
+.rsvp-quiz-option.selected {
+  border-color: var(--crimson-maroon);
+  background: rgba(77, 10, 22, 0.06);
+  box-shadow: 0 0 0 2px rgba(77, 10, 22, 0.12);
+}
+
+.rsvp-quiz-radio {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(207, 160, 73, 0.8);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fffdf8;
+}
+
+.rsvp-quiz-option.selected .rsvp-quiz-radio {
+  background: var(--crimson-maroon);
+  border-color: var(--crimson-maroon);
+}
+
+.rsvp-step-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2px;
+}
+
+.rsvp-step-back,
+.rsvp-step-next {
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1.2px solid rgba(207, 160, 73, 0.5);
+  background: #faf4e8;
+  color: var(--crimson-maroon);
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.rsvp-step-back:hover,
+.rsvp-step-next:hover {
+  border-color: var(--crimson-maroon);
+  background: #f7ede0;
+}
+
+.rsvp-step-next {
+  margin-left: auto;
+  background: var(--crimson-maroon);
+  border-color: var(--crimson-maroon);
+  color: #fffdf8;
+}
+
+.rsvp-step-next:hover {
+  background: var(--crimson-accent);
+}
+
+.rsvp-step-back--details {
+  align-self: flex-start;
+}
+
+/* Step 3: header row with attendance chip */
+.rsvp-details-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.rsvp-attend-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 0 12px;
+  border-radius: 999px;
+  font-family: var(--font-sans);
+  font-size: 0.74rem;
+  font-weight: 800;
+  cursor: pointer;
+  border: 1px solid;
+}
+
+.rsvp-attend-chip.accept {
+  background: rgba(20, 73, 41, 0.09);
+  color: #144929;
+  border-color: rgba(20, 73, 41, 0.35);
+}
+
+.rsvp-attend-chip.decline {
+  background: rgba(110, 19, 35, 0.08);
+  color: #6e1323;
+  border-color: rgba(110, 19, 35, 0.3);
+}
+
+.rsvp-attend-chip-change {
+  font-weight: 600;
+  text-decoration: underline;
+  opacity: 0.8;
+}
+
+/* Confirmation additions */
+.rsvp-confirmation-greeting {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  color: var(--ink-secondary);
+  margin: 6px 0 0;
+}
+
+.rsvp-confirmation-heading {
+  outline: none;
+}
+
+.summary-fun-answers {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 8px 0 0;
+  border-top: 1px solid rgba(207, 160, 73, 0.22);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.9rem;
+  color: var(--ink-secondary);
+}
+
+.summary-fun-answers:empty {
+  display: none;
+}
+
+.summary-fun-answers li::before {
+  content: '✦ ';
+  color: var(--gold-rich);
+  font-style: normal;
+}
+
+@media (max-width: 540px) {
+  .rsvp-quiz-options {
+    grid-template-columns: 1fr;
+  }
+
+  .rsvp-yesno-btn {
+    min-height: 58px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rsvp-yesno-btn,
+  .rsvp-quiz-option,
+  .rsvp-quiz-dot {
+    transition: none;
+  }
+}
+
+/* ==========================================================================
    RSVP LUXURY CONFIRMATION CARD
    ========================================================================== */
 .rsvp-confirmation-card {
@@ -4370,3 +3779,453 @@ body {
   }
 }
 
+
+/* ==========================================================================
+   RSVP COMPACT REFINEMENT
+   Scoped to .rsvp-section and placed last so it wins over the earlier
+   900px / 600px breakpoints. Only RSVP elements are affected.
+   ========================================================================== */
+.rsvp-section {
+  padding: 22px 16px;
+}
+
+.rsvp-section .rsvp-compact-shell {
+  max-width: 600px;
+}
+
+.rsvp-section .rsvp-editorial-card {
+  padding: 20px 26px 16px;
+  border-radius: 18px;
+}
+
+/* Header: tighter rhythm, clear hierarchy */
+.rsvp-section .rsvp-header-compact {
+  margin-bottom: 6px;
+}
+
+.rsvp-section .rsvp-crest-dock {
+  margin-bottom: 4px;
+}
+
+.rsvp-section .rsvp-crest-logo {
+  width: 46px;
+}
+
+.rsvp-section .editorial-eyebrow {
+  font-size: 0.66rem;
+  letter-spacing: 0.2em;
+  margin-bottom: 2px;
+}
+
+.rsvp-section .rsvp-title-compact {
+  font-size: clamp(1.5rem, 3vw, 1.85rem);
+  line-height: 1.15;
+}
+
+.rsvp-section .rsvp-script-compact {
+  font-size: clamp(1.2rem, 2.2vw, 1.42rem);
+  margin-bottom: 0;
+}
+
+.rsvp-section .flourish-compact {
+  max-width: 150px;
+  margin: 4px auto 6px;
+  gap: 10px;
+}
+
+.rsvp-section .flourish-compact .flourish-node {
+  font-size: 0.78rem;
+}
+
+.rsvp-section .rsvp-gentle-note {
+  font-size: 0.86rem;
+  max-width: 380px;
+  margin: 0 auto;
+  line-height: 1.38;
+}
+
+/* Steps */
+.rsvp-section .rsvp-form-grid {
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.rsvp-section .rsvp-step {
+  gap: 10px;
+}
+
+.rsvp-section .rsvp-step-question {
+  font-size: clamp(1.12rem, 2.3vw, 1.32rem);
+  margin: 0;
+}
+
+.rsvp-section .rsvp-step-question--small {
+  font-size: clamp(1rem, 2vw, 1.12rem);
+}
+
+/* Step 1: YES / NO, with a playground for the runaway NO */
+.rsvp-section .rsvp-yesno-row {
+  position: relative;
+  width: 100%;
+  max-width: 360px;
+  margin: 0 auto;
+  gap: 10px;
+  align-items: start;
+  min-height: 44px;
+  transition: min-height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.rsvp-section .rsvp-yesno-row.is-playing {
+  min-height: 128px;
+}
+
+.rsvp-section .rsvp-yesno-btn {
+  min-height: 0;
+  height: 44px;
+  border-radius: 10px;
+  font-size: 0.92rem;
+  letter-spacing: 0.12em;
+  gap: 6px;
+}
+
+.rsvp-section .rsvp-yesno-btn.no {
+  position: relative;
+  z-index: 2;
+  touch-action: manipulation;
+}
+
+.rsvp-section .rsvp-yesno-row.is-playing .rsvp-yesno-btn.no {
+  box-shadow: 0 6px 16px rgba(45, 10, 18, 0.16);
+}
+
+.rsvp-section .rsvp-yesno-hint {
+  position: absolute;
+  left: 0;
+  bottom: 2px;
+  margin: 0;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.82rem;
+  color: var(--ink-muted);
+  pointer-events: none;
+}
+
+/* Step 2: questions */
+.rsvp-section .rsvp-quiz-progress {
+  gap: 8px;
+}
+
+.rsvp-section .rsvp-quiz-count {
+  font-size: 0.64rem;
+}
+
+.rsvp-section .rsvp-quiz-dot {
+  width: 6px;
+  height: 6px;
+}
+
+.rsvp-section .rsvp-quiz-options {
+  gap: 8px;
+}
+
+.rsvp-section .rsvp-quiz-option {
+  min-height: 42px;
+  padding: 7px 12px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.3;
+  gap: 9px;
+}
+
+.rsvp-section .rsvp-quiz-radio {
+  width: 15px;
+  height: 15px;
+}
+
+.rsvp-section .rsvp-quiz-radio svg {
+  width: 10px;
+  height: 10px;
+}
+
+.rsvp-section .rsvp-step-back,
+.rsvp-section .rsvp-step-next {
+  min-height: 32px;
+  padding: 0 12px;
+  font-size: 0.7rem;
+}
+
+/* Step 3: details form */
+.rsvp-section .form-row-duo {
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.rsvp-section .form-control-pod {
+  gap: 3px;
+}
+
+.rsvp-section .form-control-pod label {
+  font-size: 0.64rem;
+  letter-spacing: 0.08em;
+}
+
+.rsvp-section .form-control-pod input,
+.rsvp-section .form-control-pod select {
+  height: 38px;
+  padding: 0 12px;
+  font-size: 0.86rem;
+  border-radius: 7px;
+}
+
+.rsvp-section .form-control-pod textarea {
+  min-height: 52px;
+  padding: 8px 12px;
+  font-size: 0.86rem;
+  border-radius: 7px;
+}
+
+.rsvp-section .form-actions-row {
+  grid-template-columns: 1.3fr 1fr;
+  gap: 10px;
+  margin-top: 2px;
+}
+
+.rsvp-section .submit-action-btn,
+.rsvp-section .whatsapp-action-btn {
+  height: 40px;
+  padding: 0 14px;
+  font-size: 0.74rem;
+  gap: 7px;
+}
+
+.rsvp-section .feedback-box {
+  padding: 8px 12px;
+  font-size: 0.8rem;
+  margin-top: 2px;
+}
+
+.rsvp-section .rsvp-attend-chip {
+  min-height: 28px;
+  padding: 0 10px;
+  font-size: 0.68rem;
+}
+
+/* Confirmation */
+.rsvp-section .rsvp-confirmation-card {
+  padding: 6px 4px 2px;
+}
+
+.rsvp-section .rsvp-success-crest-badge {
+  margin-bottom: 4px;
+}
+
+.rsvp-section .rsvp-check-ring {
+  width: 42px;
+  height: 42px;
+}
+
+.rsvp-section .rsvp-confirmation-heading {
+  font-size: clamp(1.15rem, 2.4vw, 1.45rem);
+  margin: 4px 0;
+}
+
+.rsvp-section .rsvp-confirmation-text {
+  font-size: 0.92rem;
+  margin-bottom: 10px;
+}
+
+.rsvp-section .rsvp-confirmation-summary {
+  padding: 10px 14px;
+  margin: 8px auto 12px;
+}
+
+.rsvp-section .summary-pill {
+  font-size: 0.7rem;
+  padding: 4px 10px;
+}
+
+.rsvp-section .rsvp-confirmation-actions {
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.rsvp-section .rsvp-reset-action-btn {
+  height: 40px;
+  font-size: 0.74rem;
+}
+
+/* Venue directions */
+.rsvp-section .venue-route-box {
+  margin-top: 14px;
+  padding-top: 10px;
+}
+
+.rsvp-section .route-lead-row {
+  font-size: 0.66rem;
+  margin-bottom: 6px;
+}
+
+.rsvp-section .venue-pill-link {
+  font-size: 0.7rem;
+  padding: 0 14px;
+  min-height: 36px;
+  box-sizing: border-box;
+}
+
+/* Phones */
+@media (max-width: 560px) {
+  .rsvp-section {
+    padding: 18px 12px;
+  }
+
+  .rsvp-section .rsvp-editorial-card {
+    padding: 16px 14px 14px;
+    border-radius: 16px;
+  }
+
+  .rsvp-section .rsvp-gentle-note {
+    font-size: 0.84rem;
+  }
+
+  .rsvp-section .rsvp-yesno-row {
+    max-width: none;
+  }
+
+  .rsvp-section .rsvp-yesno-btn {
+    height: 46px;
+  }
+
+  .rsvp-section .rsvp-yesno-row.is-playing {
+    min-height: 140px;
+  }
+
+  .rsvp-section .rsvp-quiz-options,
+  .rsvp-section .form-row-duo,
+  .rsvp-section .form-actions-row,
+  .rsvp-section .rsvp-confirmation-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .rsvp-section .rsvp-quiz-option {
+    min-height: 40px;
+  }
+
+  /* 16px keeps iOS from zooming into the field on focus */
+  .rsvp-section .form-control-pod input,
+  .rsvp-section .form-control-pod select,
+  .rsvp-section .form-control-pod textarea {
+    font-size: 16px;
+  }
+
+  .rsvp-section .form-control-pod input,
+  .rsvp-section .form-control-pod select {
+    height: 40px;
+  }
+
+  .rsvp-section .submit-action-btn,
+  .rsvp-section .whatsapp-action-btn,
+  .rsvp-section .rsvp-reset-action-btn {
+    height: 42px;
+  }
+
+  .rsvp-section .route-pill-list {
+    flex-direction: row;
+    gap: 6px;
+  }
+
+  .rsvp-section .venue-pill-link {
+    width: auto;
+    min-height: 40px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rsvp-section .rsvp-yesno-row {
+    transition: none;
+  }
+}
+
+/* ==========================================================================
+   FOOTER: keep the last row clear of the fixed music button on phones
+   (the button sits 16px from the bottom-right corner and is ~42px tall)
+   ========================================================================== */
+@media (max-width: 600px) {
+  .final-ceremonial-footer {
+    padding-bottom: 78px;
+  }
+}
+
+/* ==========================================================================
+   MOBILE PERFORMANCE
+   ========================================================================== */
+
+/* Near-opaque surfaces (94-98% solid) don't need a live background blur: it was
+   invisible but expensive, and the fixed header re-blurred on every scroll frame. */
+.editorial-header,
+.mobile-nav-panel,
+.final-ceremonial-footer,
+.text-safe-zone,
+.video-skip-btn {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* Phone petals (animated by FloatingRosePetals' MobilePetal with the Web Animations API,
+   transform + opacity only, so they run on the compositor). Static styles only here. */
+.petal-css-fall {
+  position: absolute;
+  top: 0;
+  pointer-events: none;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.petal-css-sway {
+  width: 100%;
+  height: 100%;
+  perspective: 600px;
+  will-change: transform;
+}
+
+.petal-css-spin {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+  filter: drop-shadow(0 5px 10px rgba(25, 3, 7, 0.35));
+  will-change: transform;
+}
+
+/* Phones: a live background blur under these cards was the main cause of scroll
+   stutter (every card re-blurs the fixed backdrop on every scroll frame). On phones
+   they use a slightly more opaque ivory tint instead, so text stays as readable. */
+@media (max-width: 767px) {
+  .countdown-plaque-item,
+  .family-card,
+  .event-date-card,
+  .rsvp-editorial-card {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .family-card,
+  .rsvp-editorial-card {
+    background: rgba(255, 247, 242, 0.58);
+  }
+
+  .event-date-card {
+    background: rgba(255, 247, 242, 0.6);
+  }
+
+  .countdown-plaque-item {
+    background: linear-gradient(180deg, rgba(255, 249, 242, 0.72) 0%, rgba(255, 240, 230, 0.62) 100%);
+  }
+
+  body .lf-memory-card-surface {
+    backdrop-filter: blur(10px) saturate(1.1);
+    -webkit-backdrop-filter: blur(10px) saturate(1.1);
+  }
+}

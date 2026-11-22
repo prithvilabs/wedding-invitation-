@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 
 // Real photographic rose petal assets
@@ -15,8 +15,11 @@ const PETAL_ASSETS = [petal1, petal2, petal3, petal4];
  * and multi-axis 3D tumbling Framer Motion physics.
  */
 export default function FloatingRosePetals() {
-  const [isMobile, setIsMobile] = useState(false);
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  // Read the real viewport on the first render, so phones never mount the desktop petals first
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth < 768);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  );
 
   useEffect(() => {
     const checkViewport = () => {
@@ -34,7 +37,7 @@ export default function FloatingRosePetals() {
   // Generate randomized, natural physical properties for each individual petal,
   // keeping the central 25-30% bottom area clean and unobstructed for caricature placement
   const petals = useMemo(() => {
-    const totalCount = prefersReducedMotion ? 6 : isMobile ? 10 : 20;
+    const totalCount = prefersReducedMotion ? 6 : isMobile ? 8 : 20;
     const items = [];
 
     for (let i = 0; i < totalCount; i++) {
@@ -105,6 +108,20 @@ export default function FloatingRosePetals() {
     return items;
   }, [isMobile, prefersReducedMotion]);
 
+  // Phones: the same fall, sway and tumble, started once with the Web Animations API.
+  // Transform/opacity animations with fixed values run on the compositor, so the phone's
+  // main thread stays free for scrolling and taps (the per-frame JS version kept it busy).
+  // No blur on phones.
+  if (isMobile) {
+    return (
+      <div className="floating-petals-stage" aria-hidden="true">
+        {petals.map((p) => (
+          <MobilePetal key={p.id} p={p} />
+        ))}
+      </div>
+    );
+  }
+
   return (
     <div className="floating-petals-stage" aria-hidden="true">
       {petals.map((p) => (
@@ -160,6 +177,74 @@ export default function FloatingRosePetals() {
           />
         </motion.div>
       ))}
+    </div>
+  );
+}
+
+/** One phone petal: compositor animations (fall + fade, sway, tumble); no per-frame JS. */
+function MobilePetal({ p }) {
+  const fallRef = useRef(null);
+  const swayRef = useRef(null);
+  const spinRef = useRef(null);
+
+  useEffect(() => {
+    const fall = fallRef.current;
+    const sway = swayRef.current;
+    const spin = spinRef.current;
+    if (!fall || !sway || !spin || typeof fall.animate !== 'function') return undefined;
+    const ms = p.duration * 1000;
+    const delay = p.startDelay * 1000; // negative: petals are already mid-flight on load
+    const loop = { duration: ms, delay, iterations: Infinity, easing: 'linear' };
+    const anims = [
+      fall.animate(
+        [{ transform: 'translate3d(0, -14vh, 0)' }, { transform: 'translate3d(0, 114vh, 0)' }],
+        loop
+      ),
+      fall.animate(
+        [
+          { opacity: 0, offset: 0 },
+          { opacity: p.maxOpacity, offset: 0.08 },
+          { opacity: p.maxOpacity * 0.92, offset: 0.92 },
+          { opacity: 0, offset: 1 }
+        ],
+        loop
+      ),
+      sway.animate(
+        [
+          { transform: `translate3d(${-p.swayX * 0.5}px, 0, 0)` },
+          { transform: `translate3d(${p.swayX}px, 0, 0)` }
+        ],
+        { duration: ms / 4, delay, iterations: Infinity, direction: 'alternate', easing: 'ease-in-out' }
+      ),
+      spin.animate(
+        [
+          { transform: `rotate(${p.rotZStart}deg) rotateX(0deg) rotateY(0deg)` },
+          {
+            transform: `rotate(${p.rotZStart + p.rotZDelta}deg) rotateX(${p.rotXCycles}deg) rotateY(${p.rotYCycles}deg)`
+          }
+        ],
+        loop
+      )
+    ];
+    return () => anims.forEach((a) => a.cancel());
+  }, [p]);
+
+  return (
+    <div
+      ref={fallRef}
+      className="petal-css-fall"
+      style={{ left: `${p.startX}%`, width: `${p.size}px`, height: `${p.size}px` }}
+    >
+      <div ref={swayRef} className="petal-css-sway">
+        <img
+          ref={spinRef}
+          src={p.imageSrc}
+          alt=""
+          className="photorealistic-petal-img petal-css-spin"
+          loading="eager"
+          draggable={false}
+        />
+      </div>
     </div>
   );
 }

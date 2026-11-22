@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { Send, MapPin, ArrowUpRight, Check, X, Loader2, RotateCcw } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
+import { Send, MapPin, ArrowUpRight, ArrowLeft, ArrowRight, Check, X, Loader2, RotateCcw } from 'lucide-react';
 import AnimatedSection from '../animations/AnimatedSection';
 import weddingLogo from '../assets/wedding-logo.png';
 
@@ -50,20 +51,200 @@ const validateAndNormalizePhone = (rawPhone) => {
   return { isValid: false, normalized: '' };
 };
 
+/**
+ * Fun multiple-choice questions, shown only to guests who say YES.
+ * `key` is the payload field sent to Google Sheets (columns I, J, K).
+ */
+const FUN_QUESTIONS = [
+  {
+    key: 'funSuperpower',
+    question: 'What is your main superpower as a wedding guest?',
+    options: [
+      'Finding the best lighting for group selfies.',
+      'Always knowing where the snacks or coffee are.',
+      'Hype-person for the couple all night long.',
+      'Keeping the energy up until the very last song.'
+    ]
+  },
+  {
+    key: 'funStayDuration',
+    question: 'How long will you stay at the party?',
+    options: [
+      'Until the very last song.',
+      'Only until dinner is over.',
+      'As long as my friends stay.',
+      'Until my feet start hurting.'
+    ]
+  },
+  {
+    key: 'funFirstThing',
+    question: 'What will you do first at the wedding?',
+    options: [
+      'Go straight to the food.',
+      'Hit the dance floor.',
+      'Take lots of photos.',
+      'Meet and talk with family and friends.'
+    ]
+  }
+];
+
+const EMPTY_FUN_ANSWERS = FUN_QUESTIONS.map(() => '');
+
+/*
+ * Playful NO button: the first time a guest reaches for NO it dodges around a
+ * small playground under the buttons for NO_JOKE_MS, then returns home and
+ * behaves normally. Runs once per page visit; skipped for keyboard use and
+ * for reduced-motion users, so declining is never blocked.
+ */
+const NO_JOKE_MS = 6000;
+const NO_STAGE_HEIGHT = { desktop: 128, phone: 140 }; // keep in sync with .rsvp-yesno-row.is-playing
+const NO_HINT_BOX = { w: 170, h: 26 };
+let noJokeUsed = false;
+
+const INITIAL_FORM = {
+  fullName: '',
+  phoneNumber: '',
+  // Chosen in step 1 ("Want to come to our wedding?"); stored as the original
+  // 'Joyfully Accept' / 'Regretfully Decline' values so the Attendance column stays consistent
+  attending: '',
+  guestCount: '2',
+  eventsAttending: 'All Events',
+  wishesMessage: ''
+};
+
 export default function RSVP() {
-  const [formData, setFormData] = useState({
-    fullName: '',
-    phoneNumber: '',
-    attending: 'Joyfully Accept',
-    guestCount: '2',
-    eventsAttending: 'All Events',
-    wishesMessage: ''
-  });
+  const [formData, setFormData] = useState(INITIAL_FORM);
+
+  // Step flow: 'attend' -> 'quiz' (YES only) -> 'details' -> confirmation
+  const [step, setStep] = useState('attend');
+  const [quizIndex, setQuizIndex] = useState(0);
+  const [funAnswers, setFunAnswers] = useState(EMPTY_FUN_ANSWERS);
+  const stepHeadingRef = useRef(null);
+  const hasNavigatedRef = useRef(false);
+  const advanceTimerRef = useRef(null);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [formStatus, setFormStatus] = useState(null);
   const [submittedData, setSubmittedData] = useState(null);
+
+  // Move keyboard / screen-reader focus to the new step's heading (not on first render)
+  useEffect(() => {
+    if (!hasNavigatedRef.current) return;
+    stepHeadingRef.current?.focus({ preventScroll: true });
+  }, [step, quizIndex, isSuccess]);
+
+  useEffect(() => () => clearTimeout(advanceTimerRef.current), []);
+
+  // Runaway NO button state
+  const reduceMotion = useReducedMotion();
+  const yesNoRowRef = useRef(null);
+  const yesBtnRef = useRef(null);
+  const noBtnRef = useRef(null);
+  const noJokeTimerRef = useRef(null);
+  const lastDodgeRef = useRef(0);
+  const noOffsetRef = useRef({ x: 0, y: 0 });
+  const [noJoke, setNoJoke] = useState(() => (noJokeUsed ? 'done' : 'idle')); // 'idle' | 'running' | 'done'
+  const [noOffset, setNoOffset] = useState({ x: 0, y: 0 });
+
+  useEffect(() => () => clearTimeout(noJokeTimerRef.current), []);
+
+  const moveNo = (offset) => {
+    noOffsetRef.current = offset;
+    setNoOffset(offset);
+  };
+
+  // Pick a new spot inside the playground: never over YES or the hint, never off-screen
+  const dodgeNo = () => {
+    const row = yesNoRowRef.current;
+    const no = noBtnRef.current;
+    const yes = yesBtnRef.current;
+    if (!row || !no || !yes) return;
+
+    // Playground = the full width of the step (inside the card) x the expanded row height.
+    // Coordinates below are relative to the row's top-left corner.
+    const stage = row.parentElement;
+    const rowRect = row.getBoundingClientRect();
+    const stageRect = stage.getBoundingClientRect();
+    const minX = stageRect.left - rowRect.left;
+    const stageH = window.innerWidth <= 560 ? NO_STAGE_HEIGHT.phone : NO_STAGE_HEIGHT.desktop;
+    const w = no.offsetWidth;
+    const h = no.offsetHeight;
+    const maxX = minX + stage.clientWidth - w;
+    const homeX = no.offsetLeft; // layout position, ignores the transform
+    const homeY = no.offsetTop;
+
+    // Stay on screen as well as inside the card
+    let minY = Math.max(0, 8 - rowRect.top);
+    let maxY = Math.min(stageH - h, window.innerHeight - 8 - rowRect.top - h);
+    if (maxY < minY) {
+      minY = 0;
+      maxY = stageH - h;
+    }
+
+    const pad = 8;
+    const blocked = [
+      { x: yes.offsetLeft - pad, y: yes.offsetTop - pad, w: yes.offsetWidth + pad * 2, h: yes.offsetHeight + pad * 2 },
+      { x: 0, y: stageH - NO_HINT_BOX.h, w: NO_HINT_BOX.w, h: NO_HINT_BOX.h }
+    ];
+    const cur = { x: homeX + noOffsetRef.current.x, y: homeY + noOffsetRef.current.y };
+    const minJump = Math.min(80, (maxX - minX) / 3);
+
+    let fallback = null;
+    for (let i = 0; i < 80; i++) {
+      const x = minX + Math.random() * Math.max(0, maxX - minX);
+      const y = minY + Math.random() * Math.max(0, maxY - minY);
+      if (blocked.some((b) => x < b.x + b.w && x + w > b.x && y < b.y + b.h && y + h > b.y)) continue;
+      const pos = { x: Math.round(x - homeX), y: Math.round(y - homeY) };
+      if (Math.hypot(x - cur.x, y - cur.y) >= minJump) {
+        moveNo(pos);
+        return;
+      }
+      fallback = fallback || pos;
+    }
+    if (fallback) moveNo(fallback);
+  };
+
+  // Mouse: only a real movement onto NO counts. Browsers send zero-movement "hover"
+  // events when the page scrolls under a resting cursor; those must not start the joke.
+  const handleNoPointerMove = (e) => {
+    if (e.pointerType !== 'mouse') return;
+    if (!e.movementX && !e.movementY) return;
+    handleNoReach();
+  };
+
+  const handleNoReach = () => {
+    if (noJoke === 'done' || reduceMotion) return;
+    if (Date.now() - lastDodgeRef.current < 250) return; // pointerenter + pointerdown + click of one touch
+    lastDodgeRef.current = Date.now();
+
+    if (noJoke === 'idle') {
+      noJokeUsed = true;
+      setNoJoke('running');
+      noJokeTimerRef.current = setTimeout(() => {
+        setNoJoke('done');
+        moveNo({ x: 0, y: 0 });
+      }, NO_JOKE_MS);
+    }
+    dodgeNo();
+  };
+
+  const handleNoClick = (e) => {
+    // Mouse / touch during the joke: dodge instead. Keyboard (detail 0) always selects NO.
+    if (noJoke !== 'done' && !reduceMotion && e.detail !== 0) {
+      handleNoReach();
+      return;
+    }
+    chooseAttendance('Regretfully Decline');
+  };
+
+  const goTo = (nextStep, nextQuizIndex = 0) => {
+    clearTimeout(advanceTimerRef.current);
+    hasNavigatedRef.current = true;
+    setFormStatus(null);
+    setQuizIndex(nextQuizIndex);
+    setStep(nextStep);
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -95,11 +276,47 @@ export default function RSVP() {
     }
   };
 
+  // Step 1: YES -> fun questions, NO -> straight to details (no questions, guests or events)
+  const chooseAttendance = (val) => {
+    handleAttendingChange(val);
+    if (val === 'Joyfully Accept') {
+      goTo('quiz', 0);
+    } else {
+      setFunAnswers(EMPTY_FUN_ANSWERS);
+      goTo('details');
+    }
+  };
+
+  // Step 2: one answer per question; selecting moves on after a short beat
+  const chooseFunAnswer = (option) => {
+    setFunAnswers((prev) => prev.map((a, i) => (i === quizIndex ? option : a)));
+    setFormStatus(null);
+    clearTimeout(advanceTimerRef.current);
+    advanceTimerRef.current = setTimeout(() => {
+      if (quizIndex < FUN_QUESTIONS.length - 1) goTo('quiz', quizIndex + 1);
+      else goTo('details');
+    }, 380);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isSubmitting) return;
 
     setFormStatus(null);
+
+    // 0. Attendance must be chosen (step 1); YES guests must answer every fun question (step 2)
+    if (formData.attending !== 'Joyfully Accept' && formData.attending !== 'Regretfully Decline') {
+      goTo('attend');
+      return;
+    }
+    if (formData.attending === 'Joyfully Accept') {
+      const firstUnanswered = funAnswers.findIndex((a) => !a);
+      if (firstUnanswered !== -1) {
+        goTo('quiz', firstUnanswered);
+        setFormStatus({ type: 'error', message: 'Please pick an answer to continue.' });
+        return;
+      }
+    }
 
     // 1. Validate Full Name
     const trimmedName = formData.fullName.trim();
@@ -146,7 +363,11 @@ export default function RSVP() {
       guestCount: isAttending ? guests : 0,
       events: isAttending ? (formData.eventsAttending || 'All Events') : 'Not Attending',
       wishes: formData.wishesMessage.trim(),
-      source: 'Wedding Website'
+      source: 'Wedding Website',
+      // Fun answers -> new Google Sheet columns I, J, K (blank for NO responses)
+      ...Object.fromEntries(
+        FUN_QUESTIONS.map((q, i) => [q.key, isAttending ? funAnswers[i] : ''])
+      )
     };
 
     setIsSubmitting(true);
@@ -219,15 +440,9 @@ export default function RSVP() {
   const handleResetForm = () => {
     setIsSuccess(false);
     setSubmittedData(null);
-    setFormData({
-      fullName: '',
-      phoneNumber: '',
-      attending: 'Joyfully Accept',
-      guestCount: '2',
-      eventsAttending: 'All Events',
-      wishesMessage: ''
-    });
-    setFormStatus(null);
+    setFormData(INITIAL_FORM);
+    setFunAnswers(EMPTY_FUN_ANSWERS);
+    goTo('attend');
   };
 
   // WhatsApp RSVP link message (independent of Google Sheets submission)
@@ -266,157 +481,279 @@ export default function RSVP() {
           {/* Form or Confirmation State */}
           {!isSuccess ? (
             <form id="rsvpForm" className="rsvp-form-grid" onSubmit={handleSubmit} noValidate>
-              {/* Row 1: Full Name & WhatsApp / Mobile */}
-              <div className="form-row-duo">
-                <div className="form-control-pod">
-                  <label htmlFor="fullName">Full Name *</label>
-                  <input
-                    type="text"
-                    id="fullName"
-                    name="fullName"
-                    required
-                    placeholder="Enter your full name"
-                    value={formData.fullName}
-                    onChange={handleChange}
-                    disabled={isSubmitting}
-                    autoComplete="name"
-                  />
-                </div>
-
-                <div className="form-control-pod">
-                  <label htmlFor="phoneNumber">WhatsApp / Mobile Number *</label>
-                  <input
-                    type="tel"
-                    id="phoneNumber"
-                    name="phoneNumber"
-                    required
-                    placeholder="+91 XXXXX XXXXX"
-                    value={formData.phoneNumber}
-                    onChange={handleChange}
-                    disabled={isSubmitting}
-                    autoComplete="tel"
-                  />
-                </div>
-              </div>
-
-              {/* Row 2: Attendance Toggle & Number of Guests (Only when Joyfully Accept) */}
-              <div className={`form-row-duo form-row-aligned ${!isAttending ? 'single-pod-row' : ''}`}>
-                <div className="form-control-pod">
-                  <label>Will you be attending? *</label>
-                  <div className="attend-toggle-row" role="radiogroup" aria-label="Will you be attending?">
+              {/* STEP 1: Attendance */}
+              {step === 'attend' && (
+                <div className="rsvp-step rsvp-fade-enter" key="attend">
+                  <h3 className="rsvp-step-question" ref={stepHeadingRef} tabIndex={-1}>
+                    Want to come to our wedding?
+                  </h3>
+                  <div
+                    className={`rsvp-yesno-row${noJoke === 'running' ? ' is-playing' : ''}`}
+                    role="group"
+                    aria-label="Want to come to our wedding?"
+                    ref={yesNoRowRef}
+                  >
                     <button
                       type="button"
-                      className={`attend-btn ${isAttending ? 'selected' : ''}`}
-                      onClick={() => handleAttendingChange('Joyfully Accept')}
-                      aria-pressed={isAttending}
-                      disabled={isSubmitting}
+                      ref={yesBtnRef}
+                      className={`rsvp-yesno-btn yes ${formData.attending === 'Joyfully Accept' ? 'selected' : ''}`}
+                      onClick={() => chooseAttendance('Joyfully Accept')}
+                      aria-pressed={formData.attending === 'Joyfully Accept'}
                     >
-                      <Check size={14} strokeWidth={2.4} className="attend-btn-icon" />
-                      <span>Joyfully Accept</span>
+                      <Check size={16} strokeWidth={2.6} aria-hidden="true" />
+                      <span>YES!</span>
                     </button>
-
-                    <button
+                    <motion.button
                       type="button"
-                      className={`attend-btn ${!isAttending ? 'selected' : ''}`}
-                      onClick={() => handleAttendingChange('Regretfully Decline')}
-                      aria-pressed={!isAttending}
-                      disabled={isSubmitting}
+                      ref={noBtnRef}
+                      className={`rsvp-yesno-btn no ${formData.attending === 'Regretfully Decline' ? 'selected' : ''}`}
+                      onPointerMove={handleNoPointerMove}
+                      onPointerDown={handleNoReach}
+                      onClick={handleNoClick}
+                      aria-pressed={formData.attending === 'Regretfully Decline'}
+                      animate={{ x: noOffset.x, y: noOffset.y }}
+                      transition={{ type: 'spring', stiffness: 240, damping: 20, mass: 0.8 }}
                     >
-                      <X size={14} strokeWidth={2.4} className="attend-btn-icon" />
-                      <span>Regretfully Decline</span>
-                    </button>
-                  </div>
-                </div>
-
-                {isAttending && (
-                  <div className="form-control-pod rsvp-fade-enter">
-                    <label htmlFor="guestCount">Number of Guests *</label>
-                    <input
-                      type="number"
-                      id="guestCount"
-                      name="guestCount"
-                      min="1"
-                      max="25"
-                      inputMode="numeric"
-                      placeholder="Enter number of guests"
-                      value={formData.guestCount}
-                      onChange={handleChange}
-                      disabled={isSubmitting}
-                      required
-                    />
-                  </div>
-                )}
-              </div>
-
-              {/* Row 3: Events You Will Attend (Appears when Joyfully Accept) */}
-              {isAttending && (
-                <div className="form-control-pod rsvp-fade-enter">
-                  <label htmlFor="eventsAttending">Events You Will Attend *</label>
-                  <div className="select-wrapper">
-                    <select
-                      id="eventsAttending"
-                      name="eventsAttending"
-                      value={formData.eventsAttending}
-                      onChange={handleChange}
-                      disabled={isSubmitting}
-                      className="rsvp-select-control"
-                    >
-                      <option value="All Events">All Events</option>
-                      <option value="Pre-Wedding Reception — 27 Jan">Pre-Wedding Reception — 27 Jan</option>
-                      <option value="Wedding Ceremony — 28 Jan">Wedding Ceremony — 28 Jan</option>
-                      <option value="Post-Wedding Reception — 7 Feb">Post-Wedding Reception — 7 Feb</option>
-                    </select>
+                      <X size={16} strokeWidth={2.6} aria-hidden="true" />
+                      <span>NO!</span>
+                    </motion.button>
+                    {noJoke === 'running' && (
+                      <p className="rsvp-yesno-hint" aria-hidden="true">
+                        Hmm… are you sure?
+                      </p>
+                    )}
                   </div>
                 </div>
               )}
 
-              {/* Row 4: Warm Wishes & Blessings */}
-              <div className="form-control-pod">
-                <label htmlFor="wishesMessage">Warm Wishes &amp; Blessings</label>
-                <textarea
-                  id="wishesMessage"
-                  name="wishesMessage"
-                  rows="2"
-                  placeholder="Write your heartfelt wishes for Prithvi Raj & Harshini..."
-                  value={formData.wishesMessage}
-                  onChange={handleChange}
-                  disabled={isSubmitting}
-                />
-              </div>
+              {/* STEP 2: Fun questions (YES only), one at a time */}
+              {step === 'quiz' && (
+                <div className="rsvp-step rsvp-fade-enter" key={`quiz-${quizIndex}`}>
+                  <div className="rsvp-quiz-progress">
+                    <span className="rsvp-quiz-count">
+                      Question {quizIndex + 1} of {FUN_QUESTIONS.length}
+                    </span>
+                    <span className="rsvp-quiz-dots" aria-hidden="true">
+                      {FUN_QUESTIONS.map((q, i) => (
+                        <span
+                          key={q.key}
+                          className={`rsvp-quiz-dot${i === quizIndex ? ' current' : ''}${funAnswers[i] ? ' done' : ''}`}
+                        />
+                      ))}
+                    </span>
+                  </div>
 
-              {/* Row 5: Action Buttons */}
-              <div className="form-actions-row">
-                <button
-                  type="submit"
-                  className="submit-action-btn"
-                  id="submitRsvpBtn"
-                  disabled={isSubmitting}
-                  aria-busy={isSubmitting}
-                >
-                  {isSubmitting ? (
-                    <>
-                      <Loader2 size={15} className="btn-spinner-icon" />
-                      <span>SENDING RSVP...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Send size={14} strokeWidth={2} />
-                      <span>SEND RSVP CONFIRMATION</span>
-                    </>
+                  <h3
+                    className="rsvp-step-question"
+                    id={`funQuestion${quizIndex}`}
+                    ref={stepHeadingRef}
+                    tabIndex={-1}
+                  >
+                    {FUN_QUESTIONS[quizIndex].question}
+                  </h3>
+
+                  <div
+                    className="rsvp-quiz-options"
+                    role="radiogroup"
+                    aria-labelledby={`funQuestion${quizIndex}`}
+                  >
+                    {FUN_QUESTIONS[quizIndex].options.map((option) => {
+                      const selected = funAnswers[quizIndex] === option;
+                      return (
+                        <button
+                          key={option}
+                          type="button"
+                          role="radio"
+                          aria-checked={selected}
+                          className={`rsvp-quiz-option${selected ? ' selected' : ''}`}
+                          onClick={() => chooseFunAnswer(option)}
+                        >
+                          <span className="rsvp-quiz-radio" aria-hidden="true">
+                            {selected && <Check size={12} strokeWidth={3} />}
+                          </span>
+                          <span>{option}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  <div className="rsvp-step-nav">
+                    <button
+                      type="button"
+                      className="rsvp-step-back"
+                      onClick={() => (quizIndex === 0 ? goTo('attend') : goTo('quiz', quizIndex - 1))}
+                    >
+                      <ArrowLeft size={14} strokeWidth={2.2} aria-hidden="true" />
+                      <span>Back</span>
+                    </button>
+                    {funAnswers[quizIndex] && (
+                      <button
+                        type="button"
+                        className="rsvp-step-next"
+                        onClick={() =>
+                          quizIndex < FUN_QUESTIONS.length - 1 ? goTo('quiz', quizIndex + 1) : goTo('details')
+                        }
+                      >
+                        <span>Next</span>
+                        <ArrowRight size={14} strokeWidth={2.2} aria-hidden="true" />
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* STEP 3: Original RSVP details */}
+              {step === 'details' && (
+                <div className="rsvp-step rsvp-fade-enter" key="details">
+                  <div className="rsvp-details-head">
+                    <h3 className="rsvp-step-question rsvp-step-question--small" ref={stepHeadingRef} tabIndex={-1}>
+                      {isAttending ? 'Wonderful! A few details for us' : 'Just your details, please'}
+                    </h3>
+                    <button
+                      type="button"
+                      className={`rsvp-attend-chip ${isAttending ? 'accept' : 'decline'}`}
+                      onClick={() => goTo('attend')}
+                      aria-label={`Attending: ${formData.attending}. Change answer`}
+                    >
+                      {isAttending ? <Check size={12} strokeWidth={2.6} /> : <X size={12} strokeWidth={2.6} />}
+                      <span>{formData.attending}</span>
+                      <span className="rsvp-attend-chip-change">Change</span>
+                    </button>
+                  </div>
+
+                  {/* Full Name & WhatsApp / Mobile */}
+                  <div className="form-row-duo">
+                    <div className="form-control-pod">
+                      <label htmlFor="fullName">Full Name *</label>
+                      <input
+                        type="text"
+                        id="fullName"
+                        name="fullName"
+                        required
+                        placeholder="Enter your full name"
+                        value={formData.fullName}
+                        onChange={handleChange}
+                        disabled={isSubmitting}
+                        autoComplete="name"
+                      />
+                    </div>
+
+                    <div className="form-control-pod">
+                      <label htmlFor="phoneNumber">WhatsApp / Mobile Number *</label>
+                      <input
+                        type="tel"
+                        id="phoneNumber"
+                        name="phoneNumber"
+                        required
+                        placeholder="+91 XXXXX XXXXX"
+                        value={formData.phoneNumber}
+                        onChange={handleChange}
+                        disabled={isSubmitting}
+                        autoComplete="tel"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Number of Guests & Events (YES only) */}
+                  {isAttending && (
+                    <div className="form-row-duo">
+                      <div className="form-control-pod">
+                        <label htmlFor="guestCount">Number of Guests *</label>
+                        <input
+                          type="number"
+                          id="guestCount"
+                          name="guestCount"
+                          min="1"
+                          max="25"
+                          inputMode="numeric"
+                          placeholder="Enter number of guests"
+                          value={formData.guestCount}
+                          onChange={handleChange}
+                          disabled={isSubmitting}
+                          required
+                        />
+                      </div>
+
+                      <div className="form-control-pod">
+                        <label htmlFor="eventsAttending">Events You Will Attend *</label>
+                        <div className="select-wrapper">
+                          <select
+                            id="eventsAttending"
+                            name="eventsAttending"
+                            value={formData.eventsAttending}
+                            onChange={handleChange}
+                            disabled={isSubmitting}
+                            className="rsvp-select-control"
+                          >
+                            <option value="All Events">All Events</option>
+                            <option value="Pre-Wedding Reception — 27 Jan">Pre-Wedding Reception — 27 Jan</option>
+                            <option value="Wedding Ceremony — 28 Jan">Wedding Ceremony — 28 Jan</option>
+                            <option value="Post-Wedding Reception — 7 Feb">Post-Wedding Reception — 7 Feb</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
                   )}
-                </button>
 
-                <a
-                  id="whatsappDirectLink"
-                  href={`https://wa.me/919025228713?text=${whatsappDirectMsg}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="whatsapp-action-btn"
-                >
-                  <WhatsAppIcon size={16} />
-                  <span>WhatsApp RSVP</span>
-                </a>
-              </div>
+                  {/* Warm Wishes & Blessings (optional, as before) */}
+                  <div className="form-control-pod">
+                    <label htmlFor="wishesMessage">Warm Wishes &amp; Blessings</label>
+                    <textarea
+                      id="wishesMessage"
+                      name="wishesMessage"
+                      rows="2"
+                      placeholder="Write your heartfelt wishes for Prithvi Raj & Harshini..."
+                      value={formData.wishesMessage}
+                      onChange={handleChange}
+                      disabled={isSubmitting}
+                    />
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="form-actions-row">
+                    <button
+                      type="submit"
+                      className="submit-action-btn"
+                      id="submitRsvpBtn"
+                      disabled={isSubmitting}
+                      aria-busy={isSubmitting}
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <Loader2 size={15} className="btn-spinner-icon" />
+                          <span>SENDING RSVP...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Send size={14} strokeWidth={2} />
+                          <span>SEND RSVP CONFIRMATION</span>
+                        </>
+                      )}
+                    </button>
+
+                    <a
+                      id="whatsappDirectLink"
+                      href={`https://wa.me/919025228713?text=${whatsappDirectMsg}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="whatsapp-action-btn"
+                    >
+                      <WhatsAppIcon size={16} />
+                      <span>WhatsApp RSVP</span>
+                    </a>
+                  </div>
+
+                  <button
+                    type="button"
+                    className="rsvp-step-back rsvp-step-back--details"
+                    onClick={() => (isAttending ? goTo('quiz', FUN_QUESTIONS.length - 1) : goTo('attend'))}
+                    disabled={isSubmitting}
+                  >
+                    <ArrowLeft size={14} strokeWidth={2.2} aria-hidden="true" />
+                    <span>Back</span>
+                  </button>
+                </div>
+              )}
 
               {formStatus && (
                 <div
@@ -442,24 +779,20 @@ export default function RSVP() {
                 <span className="flourish-line" />
               </div>
 
-              <h3 className="rsvp-confirmation-heading">
-                Thank You, <span className="rsvp-guest-name">{submittedData?.fullName}</span>
+              <p className="rsvp-confirmation-greeting">
+                Dear <span className="rsvp-guest-name">{submittedData?.fullName}</span>,
+              </p>
+
+              <h3 className="rsvp-confirmation-heading" ref={stepHeadingRef} tabIndex={-1}>
+                {submittedData?.attendance === 'Joyfully Accept'
+                  ? "Yay! Can't wait to celebrate with you!"
+                  : "We'll miss you! Thank you for letting us know."}
               </h3>
 
               <p className="rsvp-confirmation-text">
-                {submittedData?.attendance === 'Joyfully Accept' ? (
-                  <>
-                    Your RSVP has been received.
-                    <br />
-                    We look forward to celebrating with you.
-                  </>
-                ) : (
-                  <>
-                    Your response has been received.
-                    <br />
-                    Thank you for your warm wishes and blessings.
-                  </>
-                )}
+                {submittedData?.attendance === 'Joyfully Accept'
+                  ? 'Your RSVP has been received.'
+                  : 'Your response has been received.'}
               </p>
 
               {/* RSVP Receipt Details */}
@@ -490,6 +823,14 @@ export default function RSVP() {
                   <div className="summary-wishes-quote">
                     &ldquo;{submittedData.wishes}&rdquo;
                   </div>
+                )}
+
+                {submittedData?.attendance === 'Joyfully Accept' && (
+                  <ul className="summary-fun-answers">
+                    {FUN_QUESTIONS.map((q) =>
+                      submittedData?.[q.key] ? <li key={q.key}>{submittedData[q.key]}</li> : null
+                    )}
+                  </ul>
                 )}
               </div>
 

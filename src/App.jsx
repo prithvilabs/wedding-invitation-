@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { MusicProvider, useMusic } from './context/MusicContext';
 import StaticBackground from './components/invitation/StaticBackground';
@@ -57,6 +57,8 @@ function WeddingApp() {
     window.addEventListener('pageshow', onPageShow);
     return () => window.removeEventListener('pageshow', onPageShow);
   }, [pauseMusic]);
+  const handleEntered = useCallback(() => setEntrance('none'), []);
+
   const startMusic = () => {
     if (musicStartedRef.current) return;
     musicStartedRef.current = true;
@@ -83,7 +85,9 @@ function WeddingApp() {
   return (
     <>
       {/* The existing website is rendered from the start, behind the curtains */}
-      <MainWebsite entrance={entrance} onEntered={() => setEntrance('none')} />
+      {/* onEntered must be stable: a new function on every music-state change used to
+          defeat MainWebsite's memo and re-render the whole site as the music started */}
+      <MainWebsite entrance={entrance} onEntered={handleEntered} />
 
       {/* Silk curtain overlay on every load: waits for a touch, then opens.
           Its completion callback starts the camera push into the homepage. */}
@@ -113,19 +117,42 @@ const MainWebsite = React.memo(function MainWebsite({ entrance = 'none', onEnter
   // Scale around the centre of the visible viewport (main is much taller than the screen)
   const [origin] = useState(() => `50% ${Math.round(window.innerHeight / 2)}px`);
 
+  // Everything that doesn't depend on the entrance step is built once, so the curtain
+  // steps (held -> zoom -> none) only re-render <main>'s transform and the hero names,
+  // never the whole site (a full re-render cost ~100-150ms on a mid-range phone).
+  const fixedLayers = useMemo(
+    () => (
+      <>
+        {/* 1. Persistent Background Artwork Layer */}
+        <StaticBackground />
+        {/* 2. Romantic Ambient Falling Rose Petals */}
+        <FloatingRosePetals />
+        {/* 3. Top Navigation Bar (Always visible) */}
+        <Navigation />
+        {/* 4. Floating Music Controller (Bottom Right) */}
+        <MusicPlayer />
+      </>
+    ),
+    []
+  );
+  const sections = useMemo(
+    () => (
+      <>
+        <ScratchCard />
+        <Countdown />
+        <Families />
+        <Story />
+        <Events />
+        <RSVP />
+        <Footer />
+      </>
+    ),
+    []
+  );
+
   return (
     <div className="wedding-app-root">
-      {/* 1. Persistent Background Artwork Layer */}
-      <StaticBackground />
-
-      {/* 2. Romantic Ambient Falling Rose Petals */}
-      <FloatingRosePetals />
-
-      {/* 3. Top Navigation Bar (Always visible) */}
-      <Navigation />
-
-      {/* 4. Floating Music Controller (Bottom Right) */}
-      <MusicPlayer />
+      {fixedLayers}
 
       {/* 5. Main Invitation Content */}
       <motion.main
@@ -143,14 +170,9 @@ const MainWebsite = React.memo(function MainWebsite({ entrance = 'none', onEnter
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6 }}
         >
-          <Hero />
-          <ScratchCard />
-          <Countdown />
-          <Families />
-          <Story />
-          <Events />
-          <RSVP />
-          <Footer />
+          {/* Names wait behind the curtains and play their entrance as the camera pushes in */}
+          <Hero ready={entrance !== 'held'} />
+          {sections}
         </motion.div>
       </motion.main>
     </div>

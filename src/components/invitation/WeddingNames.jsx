@@ -10,7 +10,7 @@ import {
   detailsVariants
 } from '../../animations/variants';
 
-export default function WeddingNames({ onExplore, onReplay }) {
+export default function WeddingNames({ ready = true }) {
   return (
     <div className="home-floating-composition">
       {/* 1. Floral Gold Crest Logo (Top Center) */}
@@ -18,7 +18,7 @@ export default function WeddingNames({ onExplore, onReplay }) {
         className="home-actual-logo-dock"
         variants={heraldVariants}
         initial="hidden"
-        animate="visible"
+        animate={ready ? 'visible' : 'hidden'}
       >
         <img
           src={weddingLogo}
@@ -34,7 +34,7 @@ export default function WeddingNames({ onExplore, onReplay }) {
           className="name-capsule-script groom-script-capsule"
           variants={groomNameVariants}
           initial="hidden"
-          animate="visible"
+          animate={ready ? 'visible' : 'hidden'}
         >
           <span className="reference-script-name">Prithvi Raj</span>
         </motion.span>
@@ -44,7 +44,7 @@ export default function WeddingNames({ onExplore, onReplay }) {
           className="name-capsule-script weds-script-capsule"
           variants={wedsVariants}
           initial="hidden"
-          animate="visible"
+          animate={ready ? 'visible' : 'hidden'}
         >
           <span className="reference-weds-calligraphy">weds</span>
         </motion.span>
@@ -54,7 +54,7 @@ export default function WeddingNames({ onExplore, onReplay }) {
           className="name-capsule-script bride-script-capsule"
           variants={brideNameVariants}
           initial="hidden"
-          animate="visible"
+          animate={ready ? 'visible' : 'hidden'}
         >
           <span className="reference-script-name">Harshini</span>
         </motion.span>
@@ -65,7 +65,7 @@ export default function WeddingNames({ onExplore, onReplay }) {
         className="home-reference-details-block"
         variants={detailsVariants}
         initial="hidden"
-        animate="visible"
+        animate={ready ? 'visible' : 'hidden'}
       >
         {/* Ornamental Lotus Divider */}
         <div className="home-lotus-divider" aria-hidden="true">
@@ -165,7 +165,7 @@ export default function WeddingNames({ onExplore, onReplay }) {
         className="home-couple-caricature-dock"
         variants={detailsVariants}
         initial="hidden"
-        animate="visible"
+        animate={ready ? 'visible' : 'hidden'}
       >
         <img
           src={coupleCaricature}

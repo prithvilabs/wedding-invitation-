@@ -67,6 +67,10 @@ function doPost(e) {
     let events = String(data.events || 'All Events').trim();
     const wishes = String(data.wishes || data.wishesMessage || '').trim();
     const source = String(data.source || 'Wedding Website').trim();
+    // Fun answers (YES guests only) -> new columns I, J, K
+    let funSuperpower = String(data.funSuperpower || '').trim();
+    let funStayDuration = String(data.funStayDuration || '').trim();
+    let funFirstThing = String(data.funFirstThing || '').trim();
 
     // 3. Validate required fields
     if (!fullName || fullName.length < 2) {
@@ -91,6 +95,10 @@ function doPost(e) {
     if (attendance === 'Regretfully Decline') {
       guestCount = 0;
       events = 'Not Attending';
+      // Columns I, J, K stay blank for NO responses
+      funSuperpower = '';
+      funStayDuration = '';
+      funFirstThing = '';
     } else {
       if (isNaN(guestCount) || guestCount < 1) {
         guestCount = 1;
@@ -118,17 +126,33 @@ function doPost(e) {
       'Number of Guests',
       'Events',
       'Wishes',
-      'Source'
+      'Source',
+      // New columns I, J, K: appended after the original A–H, which are unchanged
+      'Guest Superpower',
+      'Staying Until',
+      'First Thing At Wedding'
     ];
+
+    const styleHeaders = (range) => {
+      range.setFontWeight('bold');
+      range.setBackground('#4d0a16');
+      range.setFontColor('#ffffff');
+      range.setHorizontalAlignment('center');
+    };
 
     if (sheet.getLastRow() === 0) {
       sheet.appendRow(headers);
-      const headerRange = sheet.getRange(1, 1, 1, headers.length);
-      headerRange.setFontWeight('bold');
-      headerRange.setBackground('#4d0a16');
-      headerRange.setFontColor('#ffffff');
-      headerRange.setHorizontalAlignment('center');
+      styleHeaders(sheet.getRange(1, 1, 1, headers.length));
       sheet.setFrozenRows(1);
+    } else {
+      // Existing sheet: never touch A–H. Only fill in a header for I, J, K if that cell is empty.
+      for (let c = 9; c <= headers.length; c++) {
+        const cell = sheet.getRange(1, c);
+        if (cell.getValue() === '') {
+          cell.setValue(headers[c - 1]);
+          styleHeaders(cell);
+        }
+      }
     }
 
     // 6. Generate server-side formatted timestamp (IST / Script Timezone)
@@ -151,7 +175,10 @@ function doPost(e) {
       guestCount,
       events,
       wishes,
-      source
+      source,
+      funSuperpower,
+      funStayDuration,
+      funFirstThing
     ];
 
     sheet.appendRow(newRow);

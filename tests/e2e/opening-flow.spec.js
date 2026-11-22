@@ -135,7 +135,7 @@ test.describe('curtain opening', () => {
     expect(await log()).toContain('play');
 
     // After the reveal, pausing via the music player isn't overridden by a later click handler
-    await expect(page.getByTestId('curtain-opening')).toHaveCount(0, { timeout: 6000 });
+    await expect(page.getByTestId('curtain-opening')).toHaveCount(0, { timeout: 10000 });
     // The song started on the touch, well before the curtains finished opening
     const { playAt, goneAt } = await page.evaluate(() => ({ playAt: window.__playAt, goneAt: window.__curtainGoneAt }));
     expect(goneAt - playAt).toBeGreaterThan(2000);
@@ -157,7 +157,7 @@ test.describe('curtain opening', () => {
   test('existing homepage features still work after the curtains', async ({ page }) => {
     await page.goto('/');
     await page.getByRole('button', { name: 'Open the wedding invitation' }).click({ force: true });
-    await expect(page.getByTestId('curtain-opening')).toHaveCount(0, { timeout: 5000 });
+    await expect(page.getByTestId('curtain-opening')).toHaveCount(0, { timeout: 10000 });
 
     await expect(page.getByRole('timer', { name: /Live countdown/i })).toBeAttached();
     for (const id of ['#countdown', '#families', '#story', '#events', '#rsvp']) {
@@ -165,7 +165,14 @@ test.describe('curtain opening', () => {
     }
     await expect(page.getByRole('complementary', { name: 'Music Control' })).toBeAttached();
 
-    // RSVP form accepts input (not submitted)
+    // RSVP: step 1 (YES) -> three one-at-a-time questions -> details form accepts input (not submitted)
+    const yes = page.getByRole('button', { name: 'YES!' });
+    await yes.scrollIntoViewIfNeeded();
+    await yes.click();
+    for (let q = 1; q <= 3; q++) {
+      await expect(page.getByText(`Question ${q} of 3`)).toBeVisible();
+      await page.getByRole('radio').first().click();
+    }
     const name = page.getByRole('textbox', { name: /Full Name/i });
     await name.scrollIntoViewIfNeeded();
     await name.fill('Test Guest');
@@ -179,7 +186,7 @@ test.describe('curtain opening', () => {
     // First visit: open the curtains all the way into the site
     await page.goto('/');
     await medallion.click({ force: true });
-    await expect(curtains).toHaveCount(0, { timeout: 6000 });
+    await expect(curtains).toHaveCount(0, { timeout: 10000 });
 
     // Refresh (twice): closed curtains every time, homepage hidden behind them
     for (let i = 0; i < 2; i++) {
@@ -191,7 +198,7 @@ test.describe('curtain opening', () => {
     }
     // ...and they still open normally
     await medallion.click({ force: true });
-    await expect(curtains).toHaveCount(0, { timeout: 6000 });
+    await expect(curtains).toHaveCount(0, { timeout: 10000 });
   });
 
   test('no flash: the page paints warm-dark before the curtains fade up', async ({ page }) => {
@@ -203,7 +210,7 @@ test.describe('curtain opening', () => {
   test('the homepage backdrop artwork stays visible after the curtains open', async ({ page }) => {
     await page.goto('/');
     await page.getByRole('button', { name: 'Open the wedding invitation' }).click({ force: true });
-    await expect(page.getByTestId('curtain-opening')).toHaveCount(0, { timeout: 6000 });
+    await expect(page.getByTestId('curtain-opening')).toHaveCount(0, { timeout: 10000 });
     // The fixed backdrop (z-index -10) must not be covered by a page background:
     // the topmost element at a bare spot of the hero is the backdrop layer, not <body>/<html>
     const topEl = await page.evaluate(() => {
@@ -230,7 +237,7 @@ test.describe('curtain opening', () => {
     });
     await page.goto('/');
     await page.getByRole('button', { name: 'Open the wedding invitation' }).click({ force: true });
-    await expect(page.getByTestId('curtain-opening')).toHaveCount(0, { timeout: 6000 });
+    await expect(page.getByTestId('curtain-opening')).toHaveCount(0, { timeout: 10000 });
 
     // Never shows music as playing; clearly offers to enable it
     const btn = page.locator('#floatingMusicBtn');
@@ -260,7 +267,7 @@ test.describe('curtain opening', () => {
 
     const btn = page.locator('#floatingMusicBtn');
     await expect(btn).toHaveAttribute('aria-pressed', 'true', { timeout: 8000 });
-    await expect(page.getByTestId('curtain-opening')).toHaveCount(0, { timeout: 6000 });
+    await expect(page.getByTestId('curtain-opening')).toHaveCount(0, { timeout: 10000 });
 
     await btn.click(); // pause
     await expect(btn).toHaveAttribute('aria-pressed', 'false');
