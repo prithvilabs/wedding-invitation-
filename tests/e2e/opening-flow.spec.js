@@ -165,18 +165,17 @@ test.describe('curtain opening', () => {
     }
     await expect(page.getByRole('complementary', { name: 'Music Control' })).toBeAttached();
 
-    // RSVP: step 1 (YES) -> three one-at-a-time questions -> details form accepts input (not submitted)
-    const yes = page.getByRole('button', { name: 'YES!' });
+    // RSVP: question 1 (Yes) -> question 2 asks for the name, one question at a time (not submitted)
+    const yes = page.getByRole('button', { name: 'Yes, absolutely!' });
     await yes.scrollIntoViewIfNeeded();
     await yes.click();
-    for (let q = 1; q <= 3; q++) {
-      await expect(page.getByText(`Question ${q} of 3`)).toBeVisible();
-      await page.getByRole('radio').first().click();
-    }
-    const name = page.getByRole('textbox', { name: /Full Name/i });
+    await expect(page.getByText('Question 2 of 7')).toBeVisible();
+    const name = page.getByRole('textbox', { name: 'What should we call you?' });
     await name.scrollIntoViewIfNeeded();
     await name.fill('Test Guest');
     await expect(name).toHaveValue('Test Guest');
+    await page.getByRole('button', { name: 'Continue', exact: true }).click();
+    await expect(page.getByText('Question 3 of 7')).toBeVisible();
   });
 
   test('every refresh starts with the curtains fully closed again', async ({ page }) => {

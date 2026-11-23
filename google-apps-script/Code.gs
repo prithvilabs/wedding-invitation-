@@ -67,10 +67,8 @@ function doPost(e) {
     let events = String(data.events || 'All Events').trim();
     const wishes = String(data.wishes || data.wishesMessage || '').trim();
     const source = String(data.source || 'Wedding Website').trim();
-    // Fun answers (YES guests only) -> new columns I, J, K
-    let funSuperpower = String(data.funSuperpower || '').trim();
-    let funStayDuration = String(data.funStayDuration || '').trim();
-    let funFirstThing = String(data.funFirstThing || '').trim();
+    // Blessing choice (YES guests only) -> new column I
+    let blessing = String(data.blessing || '').trim();
 
     // 3. Validate required fields
     if (!fullName || fullName.length < 2) {
@@ -82,11 +80,12 @@ function doPost(e) {
       ).setMimeType(ContentService.MimeType.JSON);
     }
 
-    if (!mobileNumber || mobileNumber.length < 8) {
+    // Phone number is optional; if one is given it must look like a real number
+    if (mobileNumber && mobileNumber.length < 8) {
       return ContentService.createTextOutput(
         JSON.stringify({
           success: false,
-          message: 'A valid Mobile Number is required.'
+          message: 'Please enter a valid Mobile Number, or leave it blank.'
         })
       ).setMimeType(ContentService.MimeType.JSON);
     }
@@ -95,10 +94,7 @@ function doPost(e) {
     if (attendance === 'Regretfully Decline') {
       guestCount = 0;
       events = 'Not Attending';
-      // Columns I, J, K stay blank for NO responses
-      funSuperpower = '';
-      funStayDuration = '';
-      funFirstThing = '';
+      blessing = ''; // column I stays blank for guests who can't come
     } else {
       if (isNaN(guestCount) || guestCount < 1) {
         guestCount = 1;
@@ -127,10 +123,8 @@ function doPost(e) {
       'Events',
       'Wishes',
       'Source',
-      // New columns I, J, K: appended after the original A–H, which are unchanged
-      'Guest Superpower',
-      'Staying Until',
-      'First Thing At Wedding'
+      // New column I: appended after the original A–H, which are unchanged
+      'Blessing Choice'
     ];
 
     const styleHeaders = (range) => {
@@ -145,7 +139,7 @@ function doPost(e) {
       styleHeaders(sheet.getRange(1, 1, 1, headers.length));
       sheet.setFrozenRows(1);
     } else {
-      // Existing sheet: never touch A–H. Only fill in a header for I, J, K if that cell is empty.
+      // Existing sheet: never touch A–H. Only fill in the header for I if that cell is empty.
       for (let c = 9; c <= headers.length; c++) {
         const cell = sheet.getRange(1, c);
         if (cell.getValue() === '') {
@@ -165,7 +159,7 @@ function doPost(e) {
 
     // 7. Append RSVP row to Google Sheet
     // Use apostrophe prefix on mobileNumber to force Google Sheets to treat it as text (preventing leading zero loss)
-    const storedMobile = mobileNumber.startsWith('+') ? mobileNumber : `'${mobileNumber}`;
+    const storedMobile = !mobileNumber ? '' : mobileNumber.startsWith('+') ? mobileNumber : `'${mobileNumber}`;
 
     const newRow = [
       formattedTimestamp,
@@ -176,9 +170,7 @@ function doPost(e) {
       events,
       wishes,
       source,
-      funSuperpower,
-      funStayDuration,
-      funFirstThing
+      blessing
     ];
 
     sheet.appendRow(newRow);
