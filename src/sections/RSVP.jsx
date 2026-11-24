@@ -1,8 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import {
   Send,
-  MapPin,
   ArrowUpRight,
   ArrowLeft,
   ArrowRight,
@@ -15,6 +14,9 @@ import {
   PartyPopper
 } from 'lucide-react';
 import AnimatedSection from '../animations/AnimatedSection';
+import petalSoft from '../../assets/petal_2.png';
+import petalDeep from '../../assets/petal_4.png';
+import './rsvp.css';
 import weddingLogo from '../assets/wedding-logo.png';
 
 // Google Apps Script Web App Endpoint for RSVP Submissions
@@ -95,6 +97,111 @@ const BLESSING_OPTIONS = [
 ];
 const blessingIcon = (value) => BLESSING_OPTIONS.find((b) => b.value === value)?.Icon;
 
+/** Venue direction links (same destinations as before) */
+const VENUES = [
+  { name: 'Shri Umadri Mahal', city: 'Chennai', place: 'Chennai, Tamil Nadu', url: 'https://maps.google.com/?q=Shri+Umadri+Mahal+Chennai' },
+  { name: 'Anand Grand Palace', city: 'Hosur', place: 'Hosur, Tamil Nadu', url: 'https://maps.google.com/?q=Anand+Grand+Palace+Hosur+Tamil+Nadu' }
+];
+
+/** A gilded map pin with a small lotus inside: the venue buttons' icon */
+function VenuePinIcon() {
+  const uid = React.useId().replace(/:/g, '');
+  return (
+    <svg className="rsvp-venue-pin-svg" viewBox="0 0 24 30" width="20" height="25" aria-hidden="true" focusable="false">
+      <defs>
+        <linearGradient id={`vpGold${uid}`} x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="#f7e2a6" />
+          <stop offset="48%" stopColor="#d2a74e" />
+          <stop offset="100%" stopColor="#9a6b1f" />
+        </linearGradient>
+        <radialGradient id={`vpIvory${uid}`} cx="40%" cy="35%" r="70%">
+          <stop offset="0%" stopColor="#fffdf7" />
+          <stop offset="100%" stopColor="#f6e6c8" />
+        </radialGradient>
+      </defs>
+      <ellipse cx="12" cy="28.2" rx="4.2" ry="1.1" fill="rgba(80,30,20,0.22)" />
+      <path
+        d="M12 1.2C6.6 1.2 2.6 5.3 2.6 10.5c0 6.4 7.4 13.9 8.7 15.2a1 1 0 0 0 1.4 0c1.3-1.3 8.7-8.8 8.7-15.2 0-5.2-4-9.3-9.4-9.3Z"
+        fill={`url(#vpGold${uid})`}
+        stroke="#8a5d17"
+        strokeWidth="0.6"
+      />
+      <path d="M6 6.2c1.3-1.9 3.4-3 6-3" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="0.9" strokeLinecap="round" />
+      <circle cx="12" cy="10.4" r="5.4" fill={`url(#vpIvory${uid})`} stroke="rgba(138,93,23,0.55)" strokeWidth="0.5" />
+      {/* lotus */}
+      <path d="M12 6.9c1.1 1.1 1.5 2.5 0 4.6-1.5-2.1-1.1-3.5 0-4.6Z" fill="#7a1c2c" />
+      <path d="M8.6 9.4c1.5-.1 2.6.6 3.1 2.3-1.9.3-2.8-.6-3.1-2.3Z" fill="#a8324a" />
+      <path d="M15.4 9.4c-1.5-.1-2.6.6-3.1 2.3 1.9.3 2.8-.6 3.1-2.3Z" fill="#a8324a" />
+      <path d="M8.7 12.6h6.6" stroke="#c9a24a" strokeWidth="0.8" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+const pad2 = (n) => String(n).padStart(2, '0');
+const ASSET_BASE = import.meta.env.BASE_URL;
+const EASE_SOFT = [0.22, 1, 0.36, 1];
+
+/** A small rose sprig, the YES button's floral accent */
+function RoseSprig({ className }) {
+  return (
+    <svg className={className} viewBox="0 0 40 28" aria-hidden="true">
+      <path d="M4 24 C12 18 20 16 30 10" fill="none" stroke="#7f9a62" strokeWidth="1.3" strokeLinecap="round" />
+      <ellipse cx="13" cy="18" rx="4.4" ry="2" fill="#8fab70" transform="rotate(-32 13 18)" />
+      <ellipse cx="21" cy="17.5" rx="4" ry="1.8" fill="#7f9a62" transform="rotate(24 21 17.5)" />
+      <circle cx="31" cy="9" r="5" fill="#f2b8c3" />
+      <circle cx="31" cy="9" r="2.6" fill="#de7f95" />
+      <circle cx="24" cy="12" r="2.4" fill="#fffaf0" />
+    </svg>
+  );
+}
+
+/** Hanging lantern for the ambient background (its glow flickers softly) */
+function AmbientLantern({ className }) {
+  return (
+    <svg className={className} viewBox="0 0 60 200" aria-hidden="true">
+      <path d="M30 0 L30 128" stroke="rgba(164,117,36,0.55)" strokeWidth="1.2" />
+      <circle className="rsvp-amb-flame-glow" cx="30" cy="156" r="30" fill="url(#rsvpLanternGlow)" />
+      <defs>
+        <radialGradient id="rsvpLanternGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="rgba(255,222,150,0.9)" />
+          <stop offset="100%" stopColor="rgba(255,222,150,0)" />
+        </radialGradient>
+      </defs>
+      <path d="M22 128 L38 128 L35 136 L25 136 Z" fill="#c9a24a" />
+      <path d="M21 136 L39 136 C42 150 42 164 39 176 L21 176 C18 164 18 150 21 136 Z" fill="rgba(255,236,190,0.92)" stroke="#a47524" strokeWidth="1.2" />
+      <path d="M30 136 L30 176 M24 136 C22 150 22 164 24 176 M36 136 C38 150 38 164 36 176" stroke="rgba(164,117,36,0.45)" strokeWidth="0.8" fill="none" />
+      <path className="rsvp-amb-flame" d="M30 166 C26 160 28 154 30 150 C32 154 34 160 30 166 Z" fill="#f4a340" />
+      <path d="M23 176 L37 176 L33 184 L27 184 Z" fill="#c9a24a" />
+    </svg>
+  );
+}
+
+/** Ambient background: soft light, restrained bokeh, lanterns and a few drifting petals */
+function RsvpAmbience({ targetRef, reduceMotion }) {
+  const { scrollYProgress } = useScroll({ target: targetRef, offset: ['start end', 'end start'] });
+  const yFar = useTransform(scrollYProgress, [0, 1], [36, -36]);
+  const yNear = useTransform(scrollYProgress, [0, 1], [80, -80]);
+  return (
+    <div className="rsvp-ambience" aria-hidden="true">
+      <div className="rsvp-amb-light" />
+      <motion.div className="rsvp-amb-layer" style={reduceMotion ? undefined : { y: yFar }}>
+        {Array.from({ length: 6 }, (_, i) => (
+          <span key={i} className={`rsvp-amb-bokeh rsvp-amb-bokeh--${i}`} />
+        ))}
+      </motion.div>
+      <motion.div className="rsvp-amb-layer" style={reduceMotion ? undefined : { y: yNear }}>
+        <AmbientLantern className="rsvp-amb-lantern rsvp-amb-lantern--left" />
+        <AmbientLantern className="rsvp-amb-lantern rsvp-amb-lantern--right" />
+      </motion.div>
+      <div className="rsvp-amb-petals">
+        {Array.from({ length: 5 }, (_, i) => (
+          <img key={i} src={i % 2 ? petalDeep : petalSoft} alt="" className={`rsvp-amb-petal rsvp-amb-petal--${i}`} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 /*
  * Playful NO button: the first time a guest reaches for NO it dodges around a
  * small playground under the buttons for NO_JOKE_MS, then returns home and
@@ -137,11 +244,14 @@ export default function RSVP() {
   const current = flow[Math.min(qIndex, flow.length - 1)];
   const isLastQuestion = qIndex === flow.length - 1;
 
-  // Move keyboard / screen-reader focus to the new question's heading (not on first render)
+  // After sending, move keyboard / screen-reader focus to the confirmation heading.
+  // (Between questions, focus moves when the new question has animated in: see onAnimationStart.)
   useEffect(() => {
     if (!hasNavigatedRef.current) return;
     stepHeadingRef.current?.focus({ preventScroll: true });
-  }, [qIndex, isSuccess]);
+  }, [isSuccess]);
+
+  const shellRef = useRef(null);
 
   // Runaway NO button state
   const reduceMotion = useReducedMotion();
@@ -444,51 +554,114 @@ export default function RSVP() {
   );
 
   const headingId = `rsvpQuestion-${current}`;
+  // Numbered progress with ornamental markers; it reflects the current flow (7 for Yes, 3 for No)
+  const progressFraction = flow.length > 1 ? qIndex / (flow.length - 1) : 1;
   const progress = (
-    <div className="rsvp-quiz-progress">
-      <span className="rsvp-quiz-count">
-        Question {qIndex + 1} of {flow.length}
+    <div
+      className="rsvp-progress"
+      role="progressbar"
+      aria-label="RSVP progress"
+      aria-valuemin={1}
+      aria-valuemax={flow.length}
+      aria-valuenow={qIndex + 1}
+      aria-valuetext={`Question ${qIndex + 1} of ${flow.length}`}
+    >
+      <span className="rsvp-progress-count" aria-hidden="true">
+        <span className="rsvp-progress-label">Question</span>
+        <span className="rsvp-progress-now">{pad2(qIndex + 1)}</span>
+        <span className="rsvp-progress-of">/ {pad2(flow.length)}</span>
       </span>
-      <span className="rsvp-quiz-dots" aria-hidden="true">
+      <span className="rsvp-progress-track" aria-hidden="true">
+        <span className="rsvp-progress-line">
+          <span className="rsvp-progress-fill" style={{ transform: `scaleX(${progressFraction})` }} />
+        </span>
         {flow.map((id, i) => (
-          <span key={id} className={`rsvp-quiz-dot${i === qIndex ? ' current' : ''}${i < qIndex ? ' done' : ''}`} />
+          <span
+            key={id}
+            className={`rsvp-progress-marker${i === qIndex ? ' is-current' : ''}${i < qIndex ? ' is-done' : ''}`}
+            style={{ left: `${flow.length > 1 ? (i / (flow.length - 1)) * 100 : 50}%` }}
+          />
         ))}
       </span>
     </div>
   );
 
+  // Each question fades and rises in, and lifts away quickly on the way out
+  const stepVariants = reduceMotion
+    ? { enter: { opacity: 0 }, show: { opacity: 1, transition: { duration: 0.15 } }, leave: { opacity: 0, transition: { duration: 0.1 } } }
+    : {
+        enter: { opacity: 0, y: 14 },
+        show: { opacity: 1, y: 0, transition: { duration: 0.34, ease: EASE_SOFT } },
+        leave: { opacity: 0, y: -10, transition: { duration: 0.16, ease: 'easeIn' } }
+      };
+  const stepMotion = {
+    variants: stepVariants,
+    initial: 'enter',
+    animate: 'show',
+    exit: 'leave',
+    onAnimationStart: (label) => {
+      if (label === 'show' && hasNavigatedRef.current) stepHeadingRef.current?.focus({ preventScroll: true });
+    }
+  };
+
+  // Header: logo, eyebrow, title, script line, divider and note arrive in turn
+  const headerItem = reduceMotion
+    ? { hide: { opacity: 0 }, show: { opacity: 1, transition: { duration: 0.3 } } }
+    : { hide: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE_SOFT } } };
+  const headerContainer = { hide: {}, show: { transition: { staggerChildren: reduceMotion ? 0 : 0.09, delayChildren: 0.1 } } };
+
   return (
-    <AnimatedSection className="section-block rsvp-section" id="rsvp">
-      <div className="section-container rsvp-compact-shell">
+    <AnimatedSection className="section-block rsvp-section rsvp-lux" id="rsvp">
+      <RsvpAmbience targetRef={shellRef} reduceMotion={reduceMotion} />
+      <div className="section-container rsvp-compact-shell" ref={shellRef}>
         <div className="rsvp-editorial-card">
+          {/* Stationery details: hairline inner frame and floral corners */}
+          <span className="rsvp-card-frame" aria-hidden="true" />
+          {['tl', 'tr', 'bl', 'br'].map((corner) => (
+            <img
+              key={corner}
+              src={`${ASSET_BASE}assets/card-corner-floral.png`}
+              alt=""
+              aria-hidden="true"
+              className={`rsvp-corner rsvp-corner--${corner}`}
+            />
+          ))}
+
           {/* RSVP Header */}
-          <div className="editorial-heading-stack text-center rsvp-header-compact">
-            <div className="rsvp-crest-dock">
+          <motion.div
+            className="editorial-heading-stack text-center rsvp-header-compact"
+            variants={headerContainer}
+            initial="hide"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.4 }}
+          >
+            <motion.div className="rsvp-crest-dock" variants={headerItem}>
               <img
                 src={weddingLogo}
                 alt="Prithvi Raj & Harshini Wedding Logo"
                 className="rsvp-crest-logo"
               />
-            </div>
-            <p className="editorial-eyebrow">A LITTLE NOTE BEFORE THE CELEBRATION</p>
-            <h2 className="editorial-main-title rsvp-title-compact">RSVP</h2>
-            <span className="editorial-script-accent rsvp-script-compact">your gracious presence requested</span>
-            <div className="gold-divider-flourish flourish-compact" aria-hidden="true">
+            </motion.div>
+            <motion.p className="editorial-eyebrow" variants={headerItem}>A LITTLE NOTE BEFORE THE CELEBRATION</motion.p>
+            <motion.h2 className="editorial-main-title rsvp-title-compact" variants={headerItem}>RSVP</motion.h2>
+            <motion.span className="editorial-script-accent rsvp-script-compact" variants={headerItem}>your gracious presence requested</motion.span>
+            <motion.div className="gold-divider-flourish flourish-compact" aria-hidden="true" variants={headerItem}>
               <span className="flourish-line" />
               <span className="flourish-node">❈ ❖ ❈</span>
               <span className="flourish-line" />
-            </div>
-            <p className="rsvp-gentle-note">
+            </motion.div>
+            <motion.p className="rsvp-gentle-note" variants={headerItem}>
               Kindly confirm your presence by 15th January 2027 to help us welcome you with traditional hospitality.
-            </p>
-          </div>
+            </motion.p>
+          </motion.div>
 
           {/* Form or Confirmation State */}
           {!isSuccess ? (
             <form id="rsvpForm" className="rsvp-form-grid" onSubmit={handleSubmit} noValidate>
+              <AnimatePresence mode="wait" initial={false}>
               {/* Question 1: attendance (YES / NO with the playful NO) */}
               {current === 'attend' && (
-                <div className="rsvp-step rsvp-fade-enter" key="attend">
+                <motion.div className="rsvp-step" key="attend" {...stepMotion}>
                   {progress}
                   <h3 className="rsvp-step-question" id={headingId} ref={stepHeadingRef} tabIndex={-1}>
                     {QUESTIONS.attend}
@@ -506,8 +679,11 @@ export default function RSVP() {
                       onClick={() => chooseAttendance('Joyfully Accept')}
                       aria-pressed={formData.attending === 'Joyfully Accept'}
                     >
-                      <Check size={16} strokeWidth={2.6} aria-hidden="true" />
-                      <span>Yes, absolutely!</span>
+                      <span className="rsvp-choice-icon" aria-hidden="true">
+                        <Check size={13} strokeWidth={2.6} />
+                      </span>
+                      <span className="rsvp-choice-label">Yes, absolutely!</span>
+                      <RoseSprig className="rsvp-choice-floral" />
                     </button>
                     <motion.button
                       type="button"
@@ -520,8 +696,10 @@ export default function RSVP() {
                       animate={{ x: noOffset.x, y: noOffset.y }}
                       transition={{ type: 'spring', stiffness: 240, damping: 20, mass: 0.8 }}
                     >
-                      <X size={16} strokeWidth={2.6} aria-hidden="true" />
-                      <span>Sorry, I&apos;ll miss it.</span>
+                      <span className="rsvp-choice-icon" aria-hidden="true">
+                        <X size={13} strokeWidth={2.6} />
+                      </span>
+                      <span className="rsvp-choice-label">Sorry, I&apos;ll miss it.</span>
                     </motion.button>
                     {noJoke === 'running' && (
                       <p className="rsvp-yesno-hint" aria-hidden="true">
@@ -529,12 +707,12 @@ export default function RSVP() {
                       </p>
                     )}
                   </div>
-                </div>
+                </motion.div>
               )}
 
               {/* Questions 2 onwards: one at a time, Back / Continue */}
               {current !== 'attend' && (
-                <div className="rsvp-step rsvp-fade-enter" key={current}>
+                <motion.div className="rsvp-step" key={current} {...stepMotion}>
                   {progress}
                   <h3 className="rsvp-step-question" id={headingId} ref={stepHeadingRef} tabIndex={-1}>
                     {QUESTIONS[current]}
@@ -655,7 +833,6 @@ export default function RSVP() {
                           rows="3"
                           aria-labelledby={headingId}
                           aria-describedby="rsvpNoteHelp"
-                          placeholder="Optional"
                           value={formData.wishesMessage}
                           onChange={handleChange}
                           disabled={isSubmitting}
@@ -720,8 +897,9 @@ export default function RSVP() {
                       </button>
                     </div>
                   )}
-                </div>
+                </motion.div>
               )}
+              </AnimatePresence>
 
               {formStatus && (
                 <div
@@ -833,31 +1011,35 @@ export default function RSVP() {
             </div>
           )}
 
-          {/* Venue Directions Guide (Remains visible) */}
-          <div className="venue-route-box">
-            <div className="route-lead-row">
-              <MapPin size={13} strokeWidth={2} className="route-pin-icon" />
-              <span className="route-guide-title">Venue Directions</span>
-            </div>
-            <div className="route-pill-list">
-              <a
-                href="https://maps.google.com/?q=Shri+Umadri+Mahal+Chennai"
-                target="_blank"
-                rel="noreferrer"
-                className="venue-pill-link"
-              >
-                <span>Shri Umadri Mahal · Chennai</span>
-                <ArrowUpRight size={12} strokeWidth={2} />
-              </a>
-              <a
-                href="https://maps.google.com/?q=Anand+Grand+Palace+Hosur+Tamil+Nadu"
-                target="_blank"
-                rel="noreferrer"
-                className="venue-pill-link"
-              >
-                <span>Anand Grand Palace · Hosur</span>
-                <ArrowUpRight size={12} strokeWidth={2} />
-              </a>
+          {/* Venue directions (always visible, same destinations as before) */}
+          <div className="rsvp-venues">
+            <p className="rsvp-venues-eyebrow">
+              <span className="rsvp-venues-line" aria-hidden="true" />
+              Venue Directions
+              <span className="rsvp-venues-line" aria-hidden="true" />
+            </p>
+            <div className="rsvp-venue-list">
+              {VENUES.map((venue) => (
+                <a
+                  key={venue.url}
+                  href={venue.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="rsvp-venue-btn"
+                  aria-label={`${venue.name} · ${venue.city}: open directions in Google Maps`}
+                >
+                  <span className="rsvp-venue-pin" aria-hidden="true">
+                    <VenuePinIcon />
+                  </span>
+                  <span className="rsvp-venue-text">
+                    <span className="rsvp-venue-name">{venue.name}</span>
+                    <span className="rsvp-venue-city">{venue.place}</span>
+                  </span>
+                  <span className="rsvp-venue-arrow" aria-hidden="true">
+                    <ArrowUpRight size={12} strokeWidth={1.8} />
+                  </span>
+                </a>
+              ))}
             </div>
           </div>
         </div>

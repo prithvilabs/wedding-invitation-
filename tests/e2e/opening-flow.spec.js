@@ -169,13 +169,13 @@ test.describe('curtain opening', () => {
     const yes = page.getByRole('button', { name: 'Yes, absolutely!' });
     await yes.scrollIntoViewIfNeeded();
     await yes.click();
-    await expect(page.getByText('Question 2 of 7')).toBeVisible();
+    await expect(page.getByRole('progressbar', { name: 'RSVP progress' })).toHaveAttribute('aria-valuetext', 'Question 2 of 7');
     const name = page.getByRole('textbox', { name: 'What should we call you?' });
     await name.scrollIntoViewIfNeeded();
     await name.fill('Test Guest');
     await expect(name).toHaveValue('Test Guest');
     await page.getByRole('button', { name: 'Continue', exact: true }).click();
-    await expect(page.getByText('Question 3 of 7')).toBeVisible();
+    await expect(page.getByRole('progressbar', { name: 'RSVP progress' })).toHaveAttribute('aria-valuetext', 'Question 3 of 7');
   });
 
   test('every refresh starts with the curtains fully closed again', async ({ page }) => {

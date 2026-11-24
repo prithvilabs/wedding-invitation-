@@ -1,0 +1,674 @@
+/* ==========================================================================
+   RSVP: LUXURY STATIONERY REDESIGN
+   Scoped to .rsvp-lux (the RSVP section) and loaded after styles.css, so it
+   refines the existing RSVP rules without touching any other section.
+   ========================================================================== */
+
+.rsvp-lux {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.rsvp-lux .rsvp-compact-shell {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- Ambient background ---------- */
+.rsvp-lux .rsvp-ambience {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.rsvp-lux .rsvp-amb-light {
+  position: absolute;
+  inset: -10% -10% 0;
+  background:
+    radial-gradient(ellipse 45% 38% at 50% 34%, rgba(255, 232, 196, 0.55), transparent 72%),
+    radial-gradient(ellipse 30% 30% at 18% 70%, rgba(255, 206, 180, 0.28), transparent 70%),
+    radial-gradient(ellipse 30% 30% at 84% 64%, rgba(255, 214, 170, 0.28), transparent 70%);
+  animation: rsvp-amb-breathe 9s ease-in-out infinite alternate;
+}
+
+@keyframes rsvp-amb-breathe {
+  from { opacity: 0.75; }
+  to { opacity: 1; }
+}
+
+.rsvp-lux .rsvp-amb-layer {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+}
+
+.rsvp-lux .rsvp-amb-bokeh {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 238, 200, 0.55) 0%, rgba(255, 238, 200, 0) 70%);
+  animation: rsvp-amb-drift 12s ease-in-out infinite alternate;
+}
+
+.rsvp-lux .rsvp-amb-bokeh--0 { width: 90px; height: 90px; left: 6%; top: 18%; }
+.rsvp-lux .rsvp-amb-bokeh--1 { width: 56px; height: 56px; left: 16%; top: 62%; animation-delay: -4s; }
+.rsvp-lux .rsvp-amb-bokeh--2 { width: 120px; height: 120px; right: 5%; top: 26%; animation-delay: -7s; }
+.rsvp-lux .rsvp-amb-bokeh--3 { width: 44px; height: 44px; right: 18%; top: 72%; animation-delay: -2s; }
+.rsvp-lux .rsvp-amb-bokeh--4 { width: 70px; height: 70px; left: 30%; top: 8%; animation-delay: -9s; }
+.rsvp-lux .rsvp-amb-bokeh--5 { width: 64px; height: 64px; right: 30%; top: 86%; animation-delay: -5s; }
+
+@keyframes rsvp-amb-drift {
+  from { transform: translate3d(0, 0, 0); opacity: 0.55; }
+  to { transform: translate3d(14px, -18px, 0); opacity: 0.9; }
+}
+
+.rsvp-lux .rsvp-amb-lantern {
+  position: absolute;
+  top: -4%;
+  width: 44px;
+  height: 150px;
+  opacity: 0.9;
+}
+
+.rsvp-lux .rsvp-amb-lantern--left { left: max(2%, calc(50% - 470px)); }
+.rsvp-lux .rsvp-amb-lantern--right { right: max(2%, calc(50% - 470px)); top: 2%; height: 130px; }
+
+.rsvp-lux .rsvp-amb-flame,
+.rsvp-lux .rsvp-amb-flame-glow {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: rsvp-amb-flicker 1.4s ease-in-out infinite alternate;
+}
+
+.rsvp-lux .rsvp-amb-flame-glow {
+  transform-origin: 50% 50%;
+  animation-duration: 2.2s;
+}
+
+@keyframes rsvp-amb-flicker {
+  0% { transform: scale(0.92); opacity: 0.8; }
+  60% { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(0.97); opacity: 0.88; }
+}
+
+.rsvp-lux .rsvp-amb-petals {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.rsvp-lux .rsvp-amb-petal {
+  position: absolute;
+  top: -40px;
+  width: 20px;
+  height: auto;
+  opacity: 0;
+  animation: rsvp-amb-petal 18s linear infinite;
+}
+
+.rsvp-lux .rsvp-amb-petal--0 { left: 6%; animation-delay: -3s; }
+.rsvp-lux .rsvp-amb-petal--1 { left: 24%; width: 15px; animation-duration: 22s; animation-delay: -11s; }
+.rsvp-lux .rsvp-amb-petal--2 { left: 72%; animation-duration: 20s; animation-delay: -6s; }
+.rsvp-lux .rsvp-amb-petal--3 { left: 88%; width: 16px; animation-duration: 24s; animation-delay: -15s; }
+.rsvp-lux .rsvp-amb-petal--4 { left: 48%; width: 14px; animation-duration: 26s; animation-delay: -19s; }
+
+@keyframes rsvp-amb-petal {
+  0% { transform: translate3d(0, 0, 0) rotate(0deg); opacity: 0; }
+  8% { opacity: 0.75; }
+  50% { transform: translate3d(36px, 480px, 0) rotate(150deg); }
+  92% { opacity: 0.6; }
+  100% { transform: translate3d(-18px, 980px, 0) rotate(300deg); opacity: 0; }
+}
+
+/* ---------- The card: translucent ivory-blush stationery ---------- */
+.rsvp-lux .rsvp-editorial-card {
+  position: relative;
+  padding: 26px 34px 20px;
+  /* the same frosted glass as the family cards */
+  border-radius: 18px;
+  background: rgba(255, 245, 240, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow: 0 8px 25px rgba(80, 35, 35, 0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.rsvp-lux .rsvp-card-frame {
+  position: absolute;
+  inset: 8px;
+  border: 1px solid rgba(201, 162, 74, 0.28);
+  border-radius: 12px;
+  pointer-events: none;
+}
+
+.rsvp-lux .rsvp-corner {
+  position: absolute;
+  width: 46px;
+  height: 46px;
+  object-fit: contain;
+  pointer-events: none;
+  opacity: 0.92;
+  z-index: 1;
+}
+
+.rsvp-lux .rsvp-corner--tl { top: 3px; left: 3px; }
+.rsvp-lux .rsvp-corner--tr { top: 3px; right: 3px; transform: scaleX(-1); }
+.rsvp-lux .rsvp-corner--bl { bottom: 3px; left: 3px; transform: scaleY(-1); }
+.rsvp-lux .rsvp-corner--br { bottom: 3px; right: 3px; transform: scale(-1, -1); }
+
+/* ---------- Header hierarchy ---------- */
+.rsvp-lux .rsvp-crest-logo {
+  width: 50px;
+}
+
+.rsvp-lux .editorial-eyebrow {
+  font-size: 0.64rem;
+  letter-spacing: 0.3em;
+  color: var(--gold-dark);
+  margin-bottom: 4px;
+}
+
+.rsvp-lux .rsvp-title-compact {
+  font-size: clamp(1.7rem, 3.2vw, 2.1rem);
+  letter-spacing: 0.14em;
+  color: var(--crimson-deep);
+}
+
+.rsvp-lux .rsvp-script-compact {
+  font-size: clamp(1.3rem, 2.4vw, 1.55rem);
+}
+
+.rsvp-lux .rsvp-gentle-note {
+  font-size: 0.88rem;
+  color: var(--ink-secondary);
+}
+
+/* ---------- Progress: numbered, with ornamental markers ---------- */
+.rsvp-lux .rsvp-progress {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 300px;
+  margin: 2px auto 4px;
+}
+
+.rsvp-lux .rsvp-progress-count {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.rsvp-lux .rsvp-progress-label {
+  font-family: var(--font-sans);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--gold-dark);
+}
+
+.rsvp-lux .rsvp-progress-now {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--crimson-maroon);
+}
+
+.rsvp-lux .rsvp-progress-of {
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--ink-muted);
+}
+
+.rsvp-lux .rsvp-progress-track {
+  position: relative;
+  width: 100%;
+  height: 12px;
+}
+
+.rsvp-lux .rsvp-progress-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: rgba(201, 162, 74, 0.35);
+}
+
+.rsvp-lux .rsvp-progress-fill {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #c9a24a, var(--crimson-maroon));
+  transform-origin: 0 50%;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* small diamonds: done = gold, current = burgundy and larger, upcoming = outline */
+.rsvp-lux .rsvp-progress-marker {
+  position: absolute;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  margin: -3.5px 0 0 -3.5px;
+  transform: rotate(45deg);
+  background: #fffaf3;
+  border: 1px solid rgba(201, 162, 74, 0.75);
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.rsvp-lux .rsvp-progress-marker.is-done {
+  background: #c9a24a;
+  border-color: #c9a24a;
+}
+
+.rsvp-lux .rsvp-progress-marker.is-current {
+  background: var(--crimson-maroon);
+  border-color: var(--crimson-maroon);
+  transform: rotate(45deg) scale(1.45);
+  box-shadow: 0 0 0 3px rgba(110, 19, 35, 0.12);
+}
+
+/* ---------- Question heading with a small ornament ---------- */
+.rsvp-lux .rsvp-step-question {
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.rsvp-lux .rsvp-step-question::after {
+  content: '❦';
+  position: absolute;
+  left: 50%;
+  bottom: -6px;
+  transform: translateX(-50%) rotate(90deg);
+  font-size: 0.8rem;
+  font-style: normal;
+  color: rgba(201, 162, 74, 0.8);
+}
+
+/* ---------- YES / NO ---------- */
+.rsvp-lux .rsvp-yesno-row {
+  gap: 14px;
+}
+
+.rsvp-lux .rsvp-yesno-btn {
+  position: relative;
+  min-height: 50px;
+  padding: 8px 16px;
+  gap: 9px;
+  border-radius: 12px;
+  border: 1px solid rgba(201, 162, 74, 0.5);
+  background: rgba(255, 250, 245, 0.5);
+  color: var(--crimson-maroon);
+  font-size: 0.8rem;
+  box-shadow: 0 6px 16px -10px rgba(80, 22, 30, 0.35);
+  overflow: visible;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+}
+
+.rsvp-lux .rsvp-yesno-btn:hover {
+  transform: translateY(-2px);
+  border-color: rgba(164, 117, 36, 0.8);
+  background: rgba(255, 250, 245, 0.72);
+  box-shadow: 0 12px 24px -12px rgba(80, 22, 30, 0.4);
+}
+
+.rsvp-lux .rsvp-yesno-btn:focus-visible {
+  outline: 2px solid rgba(110, 19, 35, 0.45);
+  outline-offset: 3px;
+}
+
+.rsvp-lux .rsvp-choice-icon {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(201, 162, 74, 0.7);
+  color: var(--crimson-maroon);
+  background: #fffaf2;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.rsvp-lux .rsvp-yesno-btn.yes:hover .rsvp-choice-icon,
+.rsvp-lux .rsvp-yesno-btn.yes.selected .rsvp-choice-icon {
+  background: var(--crimson-maroon);
+  color: #fffaf2;
+  border-color: var(--crimson-maroon);
+}
+
+.rsvp-lux .rsvp-choice-floral {
+  position: absolute;
+  top: -11px;
+  right: -6px;
+  width: 34px;
+  height: 24px;
+  transform: rotate(8deg);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+.rsvp-lux .rsvp-yesno-btn.yes:hover .rsvp-choice-floral {
+  transform: rotate(-4deg) translateY(-2px);
+}
+
+/* the selected answer settles into burgundy */
+.rsvp-lux .rsvp-yesno-btn.yes.selected {
+  background: linear-gradient(180deg, #7a1c2c 0%, var(--crimson-maroon) 100%);
+  color: #fff8ef;
+  border-color: var(--crimson-maroon);
+}
+
+.rsvp-lux .rsvp-yesno-btn.no.selected {
+  background: #f6e7dc;
+  border-color: rgba(110, 19, 35, 0.4);
+}
+
+.rsvp-lux .rsvp-yesno-hint {
+  font-family: "Alex Brush", "Great Vibes", cursive;
+  font-style: normal;
+  font-size: 1.2rem;
+  color: var(--gold-dark);
+  bottom: 0;
+}
+
+/* ---------- Answer tiles: selection feedback ---------- */
+.rsvp-lux .rsvp-quiz-option {
+  border-radius: 10px;
+  border-color: rgba(201, 162, 74, 0.45);
+  background: rgba(255, 250, 245, 0.55);
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+}
+
+.rsvp-lux .rsvp-quiz-option:hover {
+  transform: translateY(-1px);
+  border-color: rgba(164, 117, 36, 0.75);
+}
+
+.rsvp-lux .rsvp-quiz-option:active {
+  transform: scale(0.985);
+}
+
+.rsvp-lux .rsvp-quiz-option.selected {
+  background: linear-gradient(180deg, rgba(255, 246, 240, 0.98), rgba(250, 232, 226, 0.96));
+  border-color: var(--crimson-maroon);
+  box-shadow: 0 0 0 2px rgba(110, 19, 35, 0.1), 0 8px 18px -12px rgba(80, 22, 30, 0.35);
+}
+
+.rsvp-lux .rsvp-quiz-option.selected .rsvp-quiz-radio svg {
+  animation: rsvp-pop 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes rsvp-pop {
+  from { transform: scale(0.3); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* Inputs: softer ivory fields with a champagne focus ring */
+.rsvp-lux .form-control-pod input,
+.rsvp-lux .form-control-pod textarea {
+  background: rgba(255, 253, 249, 0.95);
+  border-color: rgba(201, 162, 74, 0.5);
+}
+
+.rsvp-lux .form-control-pod input:focus,
+.rsvp-lux .form-control-pod textarea:focus {
+  border-color: rgba(164, 117, 36, 0.9);
+  box-shadow: 0 0 0 3px rgba(201, 162, 74, 0.18);
+}
+
+.rsvp-lux .rsvp-step-next {
+  background: linear-gradient(180deg, #7a1c2c 0%, var(--crimson-maroon) 100%);
+  box-shadow: 0 8px 18px -10px rgba(80, 22, 30, 0.55);
+}
+
+.rsvp-lux .rsvp-step-next:hover {
+  transform: translateY(-1px);
+}
+
+/* ---------- Venue directions: two location buttons ---------- */
+.rsvp-lux .rsvp-venues {
+  position: relative;
+  margin-top: 12px;
+  padding-top: 10px;
+}
+
+.rsvp-lux .rsvp-venues::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 12%;
+  right: 12%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201, 162, 74, 0.55), transparent);
+}
+
+.rsvp-lux .rsvp-venues-eyebrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 0 0 7px;
+  font-family: var(--font-sans);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--gold-dark);
+}
+
+.rsvp-lux .rsvp-venues-line {
+  width: 26px;
+  height: 1px;
+  background: rgba(201, 162, 74, 0.6);
+}
+
+.rsvp-lux .rsvp-venue-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.rsvp-lux .rsvp-venue-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 5px 10px 5px 6px;
+  border-radius: 10px;
+  border: 1px solid rgba(201, 162, 74, 0.45);
+  background: rgba(255, 250, 245, 0.5);
+  text-decoration: none;
+  color: var(--ink-primary);
+  text-align: left;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.rsvp-lux .rsvp-venue-btn:hover,
+.rsvp-lux .rsvp-venue-btn:focus-visible {
+  transform: translateY(-2px);
+  border-color: rgba(164, 117, 36, 0.8);
+  background: rgba(255, 250, 245, 0.75);
+  box-shadow: 0 12px 22px -14px rgba(80, 22, 30, 0.4);
+}
+
+.rsvp-lux .rsvp-venue-pin {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  filter: drop-shadow(0 2px 3px rgba(122, 70, 20, 0.25));
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.rsvp-lux .rsvp-venue-pin-svg {
+  display: block;
+}
+
+.rsvp-lux .rsvp-venue-btn:hover .rsvp-venue-pin {
+  transform: translateY(-2px);
+}
+
+.rsvp-lux .rsvp-venue-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+  min-width: 0;
+}
+
+.rsvp-lux .rsvp-venue-name {
+  font-family: var(--font-serif);
+  font-size: 0.86rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--crimson-deep);
+}
+
+.rsvp-lux .rsvp-venue-city {
+  margin-top: 1px;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--gold-dark);
+  white-space: nowrap;
+}
+
+.rsvp-lux .rsvp-venue-arrow {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid rgba(201, 162, 74, 0.55);
+  color: var(--gold-dark);
+  transition: transform 0.3s ease, background 0.3s ease, color 0.3s ease;
+}
+
+.rsvp-lux .rsvp-venue-btn:hover .rsvp-venue-arrow {
+  background: var(--crimson-maroon);
+  border-color: var(--crimson-maroon);
+  color: #fff8ef;
+}
+
+.rsvp-lux .rsvp-venue-btn:hover .rsvp-venue-arrow {
+  transform: translate(2px, -2px);
+}
+
+/* ---------- Phones ---------- */
+@media (max-width: 767px) {
+  /* no live blur on phones (smooth scrolling); a slightly more opaque card instead */
+  .rsvp-lux .rsvp-editorial-card {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(255, 247, 242, 0.58); /* same as the family cards on phones */
+    padding: 22px 16px 16px;
+    border-radius: 18px;
+  }
+
+  .rsvp-lux .rsvp-corner {
+    width: 36px;
+    height: 36px;
+  }
+
+  .rsvp-lux .rsvp-card-frame {
+    inset: 6px;
+    border-radius: 13px;
+  }
+
+  .rsvp-lux .rsvp-amb-bokeh--1,
+  .rsvp-lux .rsvp-amb-bokeh--4,
+  .rsvp-lux .rsvp-amb-bokeh--5,
+  .rsvp-lux .rsvp-amb-petal--3,
+  .rsvp-lux .rsvp-amb-petal--4 {
+    display: none;
+  }
+
+  .rsvp-lux .rsvp-amb-lantern {
+    width: 30px;
+    height: 104px;
+    opacity: 0.75;
+  }
+
+  .rsvp-lux .rsvp-yesno-btn {
+    min-height: 52px;
+    padding: 8px 10px;
+  }
+
+  .rsvp-lux .rsvp-choice-floral {
+    width: 28px;
+    height: 20px;
+    top: -9px;
+  }
+
+  /* stay side by side on phones too, just tighter */
+  .rsvp-lux .rsvp-venue-list {
+    gap: 6px;
+  }
+
+  .rsvp-lux .rsvp-venue-btn {
+    min-height: 44px; /* comfortable tap target */
+    gap: 6px;
+    padding: 4px 8px 4px 5px;
+  }
+
+  .rsvp-lux .rsvp-venue-pin {
+    width: 19px;
+  }
+
+  .rsvp-lux .rsvp-venue-pin-svg {
+    width: 17px;
+    height: 21px;
+  }
+
+  .rsvp-lux .rsvp-venue-city {
+    font-size: 0.74rem;
+  }
+
+  .rsvp-lux .rsvp-venue-name {
+    font-size: 0.8rem;
+  }
+
+  .rsvp-lux .rsvp-venue-arrow {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rsvp-lux .rsvp-amb-light,
+  .rsvp-lux .rsvp-amb-bokeh,
+  .rsvp-lux .rsvp-amb-flame,
+  .rsvp-lux .rsvp-amb-flame-glow,
+  .rsvp-lux .rsvp-quiz-option.selected .rsvp-quiz-radio svg {
+    animation: none;
+  }
+
+  .rsvp-lux .rsvp-amb-petals {
+    display: none;
+  }
+
+  .rsvp-lux .rsvp-yesno-btn,
+  .rsvp-lux .rsvp-quiz-option,
+  .rsvp-lux .rsvp-venue-btn,
+  .rsvp-lux .rsvp-progress-fill,
+  .rsvp-lux .rsvp-progress-marker {
+    transition: none;
+  }
+}
