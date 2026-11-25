@@ -2,6 +2,7 @@ import React from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowUpRight, Clock3, MapPin, Navigation2 } from 'lucide-react';
 import EventIllustration from './EventIllustrations';
+import SaveToCalendar from './SaveToCalendar';
 import { readDate } from './calendarDates';
 import hibiscus from '../../assets/events/hibiscus-spray.webp';
 
@@ -26,7 +27,7 @@ function EventMetadata({ event }) {
 function DirectionsButton({ event }) {
   return (
     <a
-      className="evt-directions"
+      className="evt-btn evt-directions"
       href={event.directionsUrl}
       target="_blank"
       rel="noreferrer"
@@ -34,7 +35,7 @@ function DirectionsButton({ event }) {
     >
       <Navigation2 size={15} strokeWidth={1.6} className="evt-directions-icon" aria-hidden="true" />
       <span>Get Directions</span>
-      <ArrowUpRight size={15} strokeWidth={1.8} aria-hidden="true" />
+      <ArrowUpRight size={15} strokeWidth={1.8} className="evt-directions-arrow" aria-hidden="true" />
     </a>
   );
 }
@@ -53,7 +54,10 @@ function EventBody({ event, ghost = false }) {
       <EventMetadata event={event} />
       {ghost ? <div className="evt-art evt-art--ghost" /> : <EventIllustration art={event.art} className="evt-art" />}
       <p className="evt-description">{event.description}</p>
-      <DirectionsButton event={event} />
+      <div className="evt-actions">
+        <DirectionsButton event={event} />
+        <SaveToCalendar event={event} />
+      </div>
     </>
   );
 }

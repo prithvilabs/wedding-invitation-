@@ -716,17 +716,28 @@
   color: #4a1a24;
 }
 
-.evt-directions {
+.evt-actions {
   grid-area: go;
-  justify-self: center;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.evt-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 9px;
   min-height: 46px;
-  padding: 0 24px;
+  padding: 0 20px;
   border-radius: 999px;
   border: 1px solid rgba(160, 84, 80, 0.4);
+  cursor: pointer;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
   background: linear-gradient(180deg, #f3cfc4, #e6b1a8);
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset, 0 10px 18px -10px rgba(90, 20, 30, 0.5);
   font-family: var(--font-sans);
@@ -739,17 +750,103 @@
 
 .evt-directions-icon { transform: rotate(45deg); }
 
-.evt-directions:hover {
+.evt-btn:hover,
+.evt-save-btn[aria-expanded='true'] {
   transform: translateY(-2px);
   color: #fff6ea;
   background: linear-gradient(180deg, #7d2234, #5a0f20);
   box-shadow: 0 14px 22px -12px rgba(90, 20, 30, 0.7);
 }
 
-.evt-directions:focus-visible,
+.evt-btn:focus-visible,
 .evt-nav-btn:focus-visible {
   outline: 2px solid var(--burgundy);
   outline-offset: 3px;
+}
+
+/* ---------- Save to Calendar ---------- */
+.evt-save {
+  position: relative;
+}
+
+.evt-save-btn {
+  background: linear-gradient(180deg, #fffaf3, #fbeadb);
+  border-color: rgba(201, 162, 74, 0.8);
+}
+
+.evt-save-chevron {
+  transition: transform 0.25s ease;
+}
+
+.evt-save-btn[aria-expanded='true'] .evt-save-chevron {
+  transform: rotate(180deg);
+}
+
+.evt-save-menu {
+  position: absolute;
+  z-index: 6;
+  right: 0;
+  bottom: calc(100% + 10px);
+  width: 250px;
+  max-width: calc(100vw - 48px);
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  border-radius: 16px;
+  border: 1px solid rgba(201, 162, 74, 0.75);
+  background: linear-gradient(170deg, #fffbf5, #fdf0e4);
+  box-shadow: 0 20px 36px -14px rgba(70, 15, 22, 0.55);
+  transform-origin: 80% 100%;
+}
+
+.evt-save-menu.is-open {
+  animation: evt-menu 0.22s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes evt-menu {
+  from { opacity: 0; transform: translateY(8px) scale(0.97); }
+}
+
+.evt-save-menu li + li {
+  border-top: 1px solid rgba(201, 162, 74, 0.3);
+}
+
+.evt-save-menu a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 52px;
+  padding: 7px 12px;
+  border-radius: 11px;
+  font-family: var(--font-sans);
+  font-size: 0.93rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--burgundy-deep);
+  text-decoration: none;
+}
+
+.evt-save-menu small {
+  display: block;
+  font-size: 0.77rem;
+  font-weight: 500;
+  color: #74404a;
+}
+
+.evt-save-menu svg {
+  flex-shrink: 0;
+  color: var(--gold-ink);
+}
+
+.evt-save-menu a:hover,
+.evt-save-menu a:focus-visible {
+  background: rgba(240, 200, 185, 0.55);
+}
+
+.evt-save-menu a:focus-visible {
+  outline: 2px solid var(--burgundy);
+  outline-offset: -2px;
 }
 
 /* ---------- 27 Jan | 28 Jan | 07 Feb ---------- */
@@ -809,6 +906,8 @@
   .evt-body { grid-template-columns: auto minmax(0, 1fr) 112px; column-gap: 14px; }
   .evt-date { padding-right: 14px; }
   .evt-date-day { font-size: 2.9rem; }
+  .evt-btn { padding: 0 14px; gap: 7px; font-size: 0.88rem; }
+  .evt-actions { gap: 8px; }
   .cal-flower--foot { width: 104px; left: -26px; }
   .cal-flower--top { width: 92px; left: -58px; top: -38px; }
 }
@@ -899,6 +998,22 @@
   .evt-description { margin: 6px 0 14px; padding: 0; font-size: 1.1rem; min-height: 2.7em; }
 }
 
+/* phones: the two buttons share one row */
+@media (max-width: 639px) {
+  .evt-actions { gap: 8px; }
+  .evt-directions,
+  .evt-save { flex: 1 1 0; }
+  .evt-btn { width: 100%; padding: 0 8px; gap: 7px; font-size: 0.86rem; }
+  .evt-directions-arrow,
+  .evt-save-chevron { display: none; }
+}
+
+@media (max-width: 359px) {
+  .evt-actions { flex-direction: column; }
+  .evt-directions,
+  .evt-save { flex: none; width: 100%; }
+}
+
 @media (max-width: 345px) {
   .evt-section { padding-inline: 10px; }
   .cal-stage { padding-inline: 16px 8px; }
@@ -909,13 +1024,15 @@
 @media (prefers-reduced-motion: reduce) {
   .cal-date:not(.is-selected) .cal-date-disc::after,
   .cal-date-sweep,
+  .evt-save-menu.is-open,
   .evt-flame {
     animation: none;
   }
 
   .cal-date-disc,
   .cal-date-chip,
-  .evt-directions,
+  .evt-btn,
+  .evt-save-chevron,
   .evt-nav-btn {
     transition: none;
   }
