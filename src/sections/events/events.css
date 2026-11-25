@@ -721,18 +721,24 @@
   position: relative;
   z-index: 2;
   display: flex;
-  flex-wrap: wrap;
+  align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 8px;
+  padding-left: 66px; /* keeps the buttons clear of the hibiscus in the corner */
+}
+
+.evt-btn svg {
+  width: 13px;
+  height: 13px;
 }
 
 .evt-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 9px;
-  min-height: 46px;
-  padding: 0 20px;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 14px;
   border-radius: 999px;
   border: 1px solid rgba(160, 84, 80, 0.4);
   cursor: pointer;
@@ -741,7 +747,7 @@
   background: linear-gradient(180deg, #f3cfc4, #e6b1a8);
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset, 0 10px 18px -10px rgba(90, 20, 30, 0.5);
   font-family: var(--font-sans);
-  font-size: 0.95rem;
+  font-size: 0.82rem;
   font-weight: 600;
   color: var(--burgundy-deep);
   text-decoration: none;
@@ -767,6 +773,7 @@
 /* ---------- Save to Calendar ---------- */
 .evt-save {
   position: relative;
+  display: flex;
 }
 
 .evt-save-btn {
@@ -906,8 +913,9 @@
   .evt-body { grid-template-columns: auto minmax(0, 1fr) 112px; column-gap: 14px; }
   .evt-date { padding-right: 14px; }
   .evt-date-day { font-size: 2.9rem; }
-  .evt-btn { padding: 0 14px; gap: 7px; font-size: 0.88rem; }
-  .evt-actions { gap: 8px; }
+  .evt-btn { padding: 0 11px; gap: 5px; font-size: 0.78rem; }
+  .evt-actions { gap: 6px; padding-left: 58px; }
+  .evt-panel-flower { width: 82px; }
   .cal-flower--foot { width: 104px; left: -26px; }
   .cal-flower--top { width: 92px; left: -58px; top: -38px; }
 }
@@ -974,7 +982,7 @@
   }
 
   .evt-panel::before { display: none; }
-  .evt-panel-flower { width: 72px; left: -10px; bottom: -8px; }
+  .evt-panel-flower { width: 62px; left: -14px; bottom: -12px; }
   .evt-panel-eyebrow { margin-bottom: 8px; font-size: 0.66rem; }
 
   .evt-body {
@@ -1000,18 +1008,21 @@
 
 /* phones: the two buttons share one row */
 @media (max-width: 639px) {
-  .evt-actions { gap: 8px; }
-  .evt-directions,
-  .evt-save { flex: 1 1 0; }
-  .evt-btn { width: 100%; padding: 0 8px; gap: 7px; font-size: 0.86rem; }
+  .evt-actions { gap: 7px; padding-left: 32px; }
+  .evt-btn { min-height: 40px; padding: 0 12px; font-size: 0.78rem; } /* still easy to tap */
   .evt-directions-arrow,
   .evt-save-chevron { display: none; }
 }
 
-@media (max-width: 359px) {
-  .evt-actions { flex-direction: column; }
-  .evt-directions,
-  .evt-save { flex: none; width: 100%; }
+@media (max-width: 400px) {
+  .evt-actions { gap: 5px; }
+  .evt-btn { padding: 0 8px; gap: 5px; font-size: 0.76rem; }
+}
+
+@media (max-width: 374px) {
+  .evt-actions { flex-direction: column; align-items: center; padding-inline: 32px; }
+  .evt-btn { min-width: 150px; }
+  .evt-save-menu { right: -50px; }
 }
 
 @media (max-width: 345px) {
