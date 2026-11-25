@@ -3,7 +3,12 @@ import { motion } from 'framer-motion';
 import { MapPin, Clock3 } from 'lucide-react';
 import AnimatedSection from '../animations/AnimatedSection';
 import FlowerConfetti from '../components/invitation/FlowerConfetti';
-import coverPlaqueSrc from '../assets/scratch_blush_card_cover.png';
+import wideCoverSrc from '../assets/scratch_blush_card_cover.png';
+import phoneCoverSrc from '../assets/scratch_phone_cover.webp';
+
+// Phones have their own plaque artwork, so the lettering is never squeezed to fit
+const PHONE_QUERY = '(max-width: 600px)';
+const coverSrc = () => (window.matchMedia(PHONE_QUERY).matches ? phoneCoverSrc : wideCoverSrc);
 
 export default function ScratchCard() {
   const canvasRef = useRef(null);
@@ -36,13 +41,26 @@ export default function ScratchCard() {
 
   // Preload blush cover plaque image
   useEffect(() => {
-    const img = new Image();
-    img.src = coverPlaqueSrc;
-    img.onload = () => {
-      coverImageRef.current = img;
-      if (scratchStateRef.current === 'idle') {
-        initCanvas();
-      }
+    let current = null;
+    const load = () => {
+      const img = new Image();
+      current = img;
+      img.onload = () => {
+        if (current !== img) return;
+        coverImageRef.current = img;
+        if (scratchStateRef.current === 'idle') {
+          initCanvas();
+        }
+      };
+      img.src = coverSrc();
+    };
+    load();
+    // Rotating a phone or resizing the window can switch artwork
+    const query = window.matchMedia(PHONE_QUERY);
+    query.addEventListener('change', load);
+    return () => {
+      current = null;
+      query.removeEventListener('change', load);
     };
   }, []);
 
@@ -89,7 +107,7 @@ export default function ScratchCard() {
       renderCover(coverImageRef.current);
     } else {
       const tempImg = new Image();
-      tempImg.src = coverPlaqueSrc;
+      tempImg.src = coverSrc();
       tempImg.onload = () => {
         coverImageRef.current = tempImg;
         if (scratchStateRef.current === 'idle' && canvasRef.current) {
@@ -382,7 +400,7 @@ export default function ScratchCard() {
                 }}
               >
                 <h3 className="revealed-main-date">
-                  Thursday, 28th January 2027
+                  Thursday, <span className="revealed-date-rest">28th January 2027</span>
                 </h3>
 
                 <div className="revealed-muhurtham-row">

@@ -1169,9 +1169,12 @@ body {
 
   .luxury-stationery-card,
   .scratch-card-box {
-    aspect-ratio: auto !important;
-    height: 190px !important;
-    min-height: 185px !important;
+    /* the phone plaque has its own artwork and always keeps its own shape */
+    aspect-ratio: 350 / 240 !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-width: 420px;
+    margin: 0 auto;
     border-radius: 0 !important;
     border: none !important;
     box-shadow: none !important;
@@ -1179,7 +1182,8 @@ body {
 
   .luxury-revealed-parchment,
   .scratch-revealed-layer {
-    padding: 12px 16px !important;
+    padding: 12px 16px 16px !important;
+    background-image: url('./src/assets/scratch_phone_revealed.webp');
   }
 
   .parchment-inner-border {
@@ -1194,10 +1198,15 @@ body {
 
   .revealed-main-date,
   .revealed-date-title {
-    font-size: clamp(0.92rem, 3.8vw, 1.05rem) !important;
+    font-size: clamp(1.05rem, 5vw, 1.36rem) !important;
+    line-height: 1.22 !important;
     letter-spacing: 0.01em !important;
     margin: 1px 0 2px !important;
     white-space: nowrap !important;
+  }
+
+  .revealed-date-rest {
+    display: block;
   }
 
   .revealed-muhurtham-row,
@@ -1229,6 +1238,25 @@ body {
 
   .std-bottom-line {
     max-width: 35px !important;
+  }
+}
+
+/* smallest phones: keep the venue line clear of the corner flowers */
+@media (max-width: 345px) {
+  .parchment-content-stack {
+    gap: 5px !important;
+  }
+
+  .revealed-muhurtham-row,
+  .revealed-venue-row {
+    font-size: 0.78rem !important;
+    letter-spacing: 0 !important;
+    gap: 4px !important;
+  }
+
+  .luxury-revealed-parchment,
+  .scratch-revealed-layer {
+    padding-bottom: 34px !important;
   }
 }
 
@@ -3608,13 +3636,6 @@ body {
   .family-stationery-card,
   .family-card {
     --peek-width: 74px;
-  }
-
-  .luxury-stationery-card,
-  .scratch-card-box {
-    height: 185px !important;
-    min-height: 180px !important;
-    aspect-ratio: auto !important;
   }
 
   .muhurtham-time-pod,
